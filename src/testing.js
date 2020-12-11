@@ -11,4 +11,4 @@ export default class Testing extends Component{
   }
 }
 
-React.render(<Testing />, document.getElementById('root'));
+ReactDOM.render(<Testing />, document.getElementById('root'));

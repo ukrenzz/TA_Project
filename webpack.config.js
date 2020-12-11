@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 module.exports = {
@@ -11,6 +12,7 @@ module.exports = {
   },
 
   output: {
+    filename:'[name].js',
     path: path.resolve(__dirname, 'public/bundle')
   },
 
@@ -25,20 +27,14 @@ module.exports = {
   },
 
   optimization: {
-    minimizer: [new TerserPlugin()],
-
     splitChunks: {
+      chunks: 'all',
+      automaticNameDelimiter : '.',
       cacheGroups: {
         vendors: {
-          priority: -10,
           test: /[\\/]node_modules[\\/]/
         }
-      },
-
-      chunks: 'async',
-      minChunks: 1,
-      minSize: 30000,
-      name: false
+      }
     }
   }
 }

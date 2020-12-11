@@ -7,8 +7,7 @@ module.exports = {
   mode: 'development',
 
   entry: {
-    1: './src/1.js',
-    2: './src/2.js'
+    testing: './src/Testing.js'
   },
 
   output: {

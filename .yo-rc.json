@@ -15,7 +15,7 @@
         "webpackOptions": {
           "mode": "'development'",
           "entry": {
-            "testing": "'./src/testing.js'"
+            "testing": "'./src/Testing.js'"
           },
           "output": {
             "path": "path.resolve(__dirname, 'public/bundle')"

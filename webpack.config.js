@@ -5,7 +5,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
+  optimization: {
+    minimizer: [new TerserPlugin({ /* additional options here */ })],
+  },
 
   entry: {
     testing: './src/Testing.js'
@@ -16,7 +19,14 @@ module.exports = {
     path: path.resolve(__dirname, 'public/bundle')
   },
 
-  plugins: [new webpack.ProgressPlugin()],
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin({
+      template: __dirname + '/public/bundle/index.html',
+      filename: 'index.html',
+      inject  : 'body'
+    })
+  ],
 
   module: {
     rules: [{
@@ -24,6 +34,9 @@ module.exports = {
       include: [path.resolve(__dirname, 'src')],
       loader: 'babel-loader'
     }]
+  },
+  performance: {
+    hints: false
   },
 
   optimization: {

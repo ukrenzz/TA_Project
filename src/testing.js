@@ -5,7 +5,7 @@ export default class Testing extends Component{
   render() {
     return (
       <div>
-        Testing
+        Testing Project Neko
       </div>
     )
   }

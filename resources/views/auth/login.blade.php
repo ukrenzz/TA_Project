@@ -58,7 +58,7 @@
 
                                       <span class="font-size-13 text-muted">
                                           Don't have an account?
-                                          <a class="small" href=""> Signup</a>
+                                          <a class="" href="{{ route('register')}}"> Signup</a>
                                       </span>
 
                                       <button type="submit" class="btn btn-primary">{{ __('Log in') }}</button>

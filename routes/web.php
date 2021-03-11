@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('ecommerce.index');
+});
+
+Route::get('/logs', function () {
+    return view('auth/logs');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

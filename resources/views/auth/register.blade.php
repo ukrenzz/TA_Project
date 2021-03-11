@@ -24,25 +24,25 @@
                                 @csrf
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="name">{{ __('Name') }}</label>
-                                    <input type="text" class="form-control" name="name" id="name" :value="old('name')" placeholder="Full Name" required autofocus autocomplete="name">
+                                    <input type="text" class="form-control" name="name" id="name" :value="old('name')" placeholder="Full Name" required autofocus autocomplete="name" tabindex="1">
                                 </div>
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="email">{{ __('Email') }}</label>
-                                    <input type="email" class="form-control" name="email" id="email" :value="old('email')" placeholder="Email" required>
+                                    <input type="email" class="form-control" name="email" id="email" :value="old('email')" placeholder="Email" required tabindex="2">
                                 </div>
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="password">{{ __('Password') }}</label>
-                                    <input type="password" class="form-control" name="password" id="password" required autocomplete="new-password" placeholder="Password">
+                                    <input type="password" class="form-control" name="password" id="password" required autocomplete="new-password" placeholder="Password" tabindex="3">
                                 </div>
                                 <div class="form-group">
                                     <label class="font-weight-semibold" for="confirmPassword">{{ __('Confirm Password') }}</label>
-                                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password">
+                                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" tabindex="4">
                                 </div>
                                 <div class="form-group">
                                     <div class="d-flex align-items-center justify-content-between p-t-15">
                                         @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                                             <div class="checkbox">
-                                                <input id="checkbox" type="checkbox" name="terms" id="terms">
+                                                <input id="checkbox" type="checkbox" name="terms" id="terms" tabindex="5">
                                                 <label for="checkbox">
                                                     {!! __('I agree to the :terms_of_service and :privacy_policy', [
                                                             'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms').'</a>',
@@ -56,7 +56,7 @@
                                 <div class="form-group">
                                     <div class="d-flex align-items-center justify-content-between p-t-15">
                                         <span class="text-muted"><a href="{{ route('login') }}" class="text-muted">Already registered?</a></span>
-                                        <button class="btn btn-primary" type="submit">{{ __('Register') }}</button>
+                                        <button class="btn btn-primary" type="submit" tabindex="6">{{ __('Register') }}</button>
                                     </div>
                                 </div>
                             </form>

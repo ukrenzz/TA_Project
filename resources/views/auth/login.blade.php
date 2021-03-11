@@ -32,7 +32,7 @@
                                   <label class="font-weight-semibold" for="email">{{ __('Email') }}</label>
                                   <div class="input-affix">
                                       <i class="prefix-icon anticon anticon-user"></i>
-                                      <input type="email" class="form-control" name="email" id="email" :value="old('email')" placeholder="Username">
+                                      <input type="email" class="form-control" name="email" id="email" :value="old('email')" placeholder="Username" tabindex="1">
                                   </div>
                               </div>
                               <div class="form-group">
@@ -44,12 +44,12 @@
                                   @endif
                                   <div class="input-affix m-b-10">
                                       <i class="prefix-icon anticon anticon-lock"></i>
-                                      <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                      <input type="password" class="form-control" name="password" id="password" placeholder="Password" tabindex="2">
                                   </div>
                               </div>
                               <div class="form-group">
                                   <label for="remember_me">
-                                      <input type="checkbox" name="remember" id="remember_me">
+                                      <input type="checkbox" name="remember" id="remember_me" tabindex="3">
                                       <span class="text-muted">{{ __('Remember me') }}</span>
                                   </label>
                               </div>
@@ -61,7 +61,7 @@
                                           <a class="" href="{{ route('register')}}"> Signup</a>
                                       </span>
 
-                                      <button type="submit" class="btn btn-primary">{{ __('Log in') }}</button>
+                                      <button type="submit" class="btn btn-primary" tabindex="4">{{ __('Log in') }}</button>
                                   </div>
                               </div>
                           </form>

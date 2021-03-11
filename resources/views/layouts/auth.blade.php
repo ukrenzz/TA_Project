@@ -11,10 +11,10 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <link rel="shortcut icon" href="assets/admin/images/logo/favicon.png">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="assets/css/app.min.css">
+        <link rel="stylesheet" href="assets/admin/css/app.min.css">
 
         <!-- Scripts -->
         {{-- <script src="{{ mix('js/app.js') }}" defer></script> --}}
@@ -25,11 +25,11 @@
         </div>
 
         <!-- Core Vendors JS -->
-        <script src="assets/js/vendors.min.js"></script>
+        <script src="assets/admin/js/vendors.min.js"></script>
 
         <!-- page js -->
 
         <!-- Core JS -->
-        <script src="assets/js/app.min.js"></script>
+        <script src="assets/admin/js/app.min.js"></script>
     </body>
 </html>

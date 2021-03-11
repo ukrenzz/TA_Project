@@ -1,7 +1,7 @@
 @extends('layouts/auth')
 
 @section('auth-content')
-<div class="container-fluid p-h-0 p-v-20 bg full-height d-flex" style="background-image: url('assets/images/others/login-3.png')">
+<div class="container-fluid p-h-0 p-v-20 bg full-height d-flex" style="background-image: url('assets/admin/images/others/login-3.png')">
     <div class="d-flex flex-column justify-content-between w-100">
         <div class="container d-flex h-100">
             <div class="row align-items-center w-100">
@@ -9,7 +9,7 @@
                     <div class="card shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between m-b-30">
-                                <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
+                                <img class="img-fluid" alt="" src="assets/admin/images/logo/logo.png">
                                 <h2 class="m-b-0">Sign Up</h2>
                             </div>
                             @if ($errors->any())

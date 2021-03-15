@@ -12,14 +12,35 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// index e-commerce
 Route::get('/', function () {
     return view('ecommerce.index');
-});
+})->name('product.index');
 
-Route::get('/logs', function () {
-    return view('auth/logs');
-});
+// categories
+Route::get('/category', function () {
+    return view('ecommerce.categories');
+})->name('product.category');
+
+// product detail
+Route::get('/p/slug-produk-id-produk', function () {
+    return view('ecommerce.detail');
+})->name('product.detail');
+
+// cart
+Route::get('/cart', function () {
+    return view('ecommerce.cart');
+})->name('cart');
+
+// wishlist
+Route::get('/payment', function () {
+    return view('ecommerce.payment');
+})->name('payment');
+
+// wishlist
+Route::get('/wishlist', function () {
+    return view('ecommerce.wishlist');
+})->name('wishlist');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

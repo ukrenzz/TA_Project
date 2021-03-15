@@ -1,3 +1,3 @@
 <!-- COMMON SCRIPTS -->
-<script src="assets/ecommerce/js/common_scripts.min.js"></script>
-<script src="assets/ecommerce/js/main.js"></script>
+<script src="{{ asset('ecommerce/js/common_scripts.min.js') }}"></script>
+<script src="{{ asset('ecommerce/js/main.js') }}"></script>

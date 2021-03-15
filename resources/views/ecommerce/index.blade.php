@@ -3,8 +3,8 @@
 @section('title', "Neko eCommerce - Best solution for Accessories")
 
 @section('user_defined_style')
-  <link href="assets/ecommerce/css/home_1.css" rel="stylesheet">
-  <link href="assets/ecommerce/css/custom.css" rel="stylesheet">
+  <link href="{{ asset('ecommerce/css/home_1.css') }}" rel="stylesheet">
+  <link href="{{ asset('ecommerce/css/custom.css') }}" rel="stylesheet">
 @endsection
 
 
@@ -12,7 +12,7 @@
   <main>
 		<div id="carousel-home">
 			<div class="owl-carousel owl-theme">
-				<div class="owl-slide cover" style="background-image: url(assets/ecommerce/img/slides/slide_home_2.jpg);">
+				<div class="owl-slide cover" style="background-image: url({{ asset('ecommerce/img/slides/slide_home_2.jpg') }});">
 					<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 						<div class="container">
 							<div class="row justify-content-center justify-content-md-end">
@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<!--/owl-slide-->
-				<div class="owl-slide cover" style="background-image: url(assets/ecommerce/img/slides/slide_home_1.jpg);">
+				<div class="owl-slide cover" style="background-image: url({{ asset('ecommerce/img/slides/slide_home_1.jpg') }});">
 					<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 						<div class="container">
 							<div class="row justify-content-center justify-content-md-start">
@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<!--/owl-slide-->
-				<div class="owl-slide cover" style="background-image: url(assets/ecommerce/img/slides/slide_home_3.jpg);">
+				<div class="owl-slide cover" style="background-image: url({{ asset('ecommerce/img/slides/slide_home_3.jpg') }});">
 					<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(255, 255, 255, 0.5)">
 						<div class="container">
 							<div class="row justify-content-center justify-content-md-start">
@@ -74,7 +74,7 @@
 		<ul id="banners_grid" class="clearfix">
 			<li>
 				<a href="#0" class="img_container">
-					<img src="assets/ecommerce/img/banners_cat_placeholder.jpg" data-src="assets/ecommerce/img/banner_1.jpg" alt="" class="lazy">
+					<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/banner_1.jpg') }}" alt="" class="lazy">
 					<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 						<h3>Men's Collection</h3>
 						<div><span class="btn_1">Shop Now</span></div>
@@ -83,7 +83,7 @@
 			</li>
 			<li>
 				<a href="#0" class="img_container">
-					<img src="assets/ecommerce/img/banners_cat_placeholder.jpg" data-src="assets/ecommerce/img/banner_2.jpg" alt="" class="lazy">
+					<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/banner_2.jpg') }}" alt="" class="lazy">
 					<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 						<h3>Womens's Collection</h3>
 						<div><span class="btn_1">Shop Now</span></div>
@@ -92,7 +92,7 @@
 			</li>
 			<li>
 				<a href="#0" class="img_container">
-					<img src="assets/ecommerce/img/banners_cat_placeholder.jpg" data-src="assets/ecommerce/img/banner_3.jpg" alt="" class="lazy">
+					<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/banner_3.jpg') }}" alt="" class="lazy">
 					<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 						<h3>Kids's Collection</h3>
 						<div><span class="btn_1">Shop Now</span></div>
@@ -113,14 +113,14 @@
 					<div class="grid_item">
 						<figure>
 							<span class="ribbon off">-30%</span>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/1.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/1_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1_b.jpg') }}" alt="">
 							</a>
 							<div data-countdown="2019/05/15" class="countdown"></div>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Air x Fear</h3>
 						</a>
 						<div class="price_box">
@@ -140,14 +140,14 @@
 					<div class="grid_item">
 						<span class="ribbon off">-30%</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/2.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/2_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/2.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/2_b.jpg') }}" alt="">
 							</a>
 							<div data-countdown="2019/05/10" class="countdown"></div>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Okwahn II</h3>
 						</a>
 						<div class="price_box">
@@ -167,14 +167,14 @@
 					<div class="grid_item">
 						<span class="ribbon off">-50%</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/3.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/3_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/3.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/3_b.jpg') }}" alt="">
 							</a>
 							<div data-countdown="2019/05/21" class="countdown"></div>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Air Wildwood ACG</h3>
 						</a>
 						<div class="price_box">
@@ -194,13 +194,13 @@
 					<div class="grid_item">
 						<span class="ribbon new">New</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/4.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/4_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/4.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/4_b.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor ACG React Terra</h3>
 						</a>
 						<div class="price_box">
@@ -219,13 +219,13 @@
 					<div class="grid_item">
 						<span class="ribbon new">New</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/5.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/5_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/5.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/5_b.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Air Zoom Alpha</h3>
 						</a>
 						<div class="price_box">
@@ -244,13 +244,13 @@
 					<div class="grid_item">
 						<span class="ribbon new">New</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/6.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/6_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/6.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/6_b.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Air Alpha</h3>
 						</a>
 						<div class="price_box">
@@ -269,13 +269,13 @@
 					<div class="grid_item">
 						<span class="ribbon hot">Hot</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/7.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/7_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/7.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/7_b.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Air Max 98</h3>
 						</a>
 						<div class="price_box">
@@ -294,13 +294,13 @@
 					<div class="grid_item">
 						<span class="ribbon hot">Hot</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/8.jpg" alt="">
-								<img class="img-fluid lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/8_b.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/8.jpg') }}" alt="">
+								<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/8_b.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Armor Air Max 720</h3>
 						</a>
 						<div class="price_box">
@@ -320,7 +320,7 @@
 		</div>
 		<!-- /container -->
 
-		<div class="featured lazy" data-bg="url(assets/ecommerce/img/featured_home.jpg)">
+		<div class="featured lazy" data-bg="url({{ asset('ecommerce/img/featured_home.jpg') }})">
 			<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 				<div class="container margin_60">
 					<div class="row justify-content-center justify-content-md-start">
@@ -345,28 +345,28 @@
       <div class="container margin_30">
         <div id="brands" class="owl-carousel owl-theme">
           <div class="item">
-            <a href="#0"><img src="assets/ecommerce/img/brands/placeholder_brands.png" data-src="assets/ecommerce/img/brands/logo_1.png" alt="" class="owl-lazy"></a>
+            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_1.png') }}" alt="" class="owl-lazy"></a>
           </div><!-- /item -->
           <div class="item">
-            <a href="#0"><img src="assets/ecommerce/img/brands/placeholder_brands.png" data-src="assets/ecommerce/img/brands/logo_2.png" alt="" class="owl-lazy"></a>
+            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_2.png') }}" alt="" class="owl-lazy"></a>
           </div><!-- /item -->
           <div class="item">
-            <a href="#0"><img src="assets/ecommerce/img/brands/placeholder_brands.png" data-src="assets/ecommerce/img/brands/logo_3.png" alt="" class="owl-lazy"></a>
+            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_3.png') }}" alt="" class="owl-lazy"></a>
           </div><!-- /item -->
           <div class="item">
-            <a href="#0"><img src="assets/ecommerce/img/brands/placeholder_brands.png" data-src="assets/ecommerce/img/brands/logo_4.png" alt="" class="owl-lazy"></a>
+            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_4.png') }}" alt="" class="owl-lazy"></a>
           </div><!-- /item -->
           <div class="item">
-            <a href="#0"><img src="assets/ecommerce/img/brands/placeholder_brands.png" data-src="assets/ecommerce/img/brands/logo_5.png" alt="" class="owl-lazy"></a>
+            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_5.png') }}" alt="" class="owl-lazy"></a>
           </div><!-- /item -->
           <div class="item">
-            <a href="#0"><img src="assets/ecommerce/img/brands/placeholder_brands.png" data-src="assets/ecommerce/img/brands/logo_6.png" alt="" class="owl-lazy"></a>
+            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_6.png') }}" alt="" class="owl-lazy"></a>
           </div><!-- /item -->
         </div><!-- /carousel -->
       </div><!-- /container -->
     </div>
     <!-- /bg_gray -->
-    
+
 		<div class="container margin_60_35">
 			<div class="main_title">
 				<h2>Featured</h2>
@@ -378,12 +378,12 @@
 					<div class="grid_item">
 						<span class="ribbon new">New</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="owl-lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/4.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="owl-lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/4.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>ACG React Terra</h3>
 						</a>
 						<div class="price_box">
@@ -402,12 +402,12 @@
 					<div class="grid_item">
 						<span class="ribbon new">New</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="owl-lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/5.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="owl-lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/5.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Air Zoom Alpha</h3>
 						</a>
 						<div class="price_box">
@@ -426,12 +426,12 @@
 					<div class="grid_item">
 						<span class="ribbon hot">Hot</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="owl-lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/8.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="owl-lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/8.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Air Color 720</h3>
 						</a>
 						<div class="price_box">
@@ -450,12 +450,12 @@
 					<div class="grid_item">
 						<span class="ribbon off">-30%</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="owl-lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/2.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="owl-lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/2.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Okwahn II</h3>
 						</a>
 						<div class="price_box">
@@ -475,12 +475,12 @@
 					<div class="grid_item">
 						<span class="ribbon off">-50%</span>
 						<figure>
-							<a href="product-detail-1.html">
-								<img class="owl-lazy" src="assets/ecommerce/img/products/product_placeholder_square_medium.jpg" data-src="assets/ecommerce/img/products/shoes/3.jpg" alt="">
+							<a href="{{ route('product.detail') }}">
+								<img class="owl-lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/3.jpg') }}" alt="">
 							</a>
 						</figure>
 						<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-						<a href="product-detail-1.html">
+						<a href="{{ route('product.detail') }}">
 							<h3>Air Wildwood ACG</h3>
 						</a>
 						<div class="price_box">
@@ -507,5 +507,5 @@
 
 
 @section('user_defined_script')
-  <script src="assets/ecommerce/js/carousel-home.min.js"></script>
+  <script src="{{ asset('ecommerce/js/carousel-home.min.js') }}"></script>
 @endsection

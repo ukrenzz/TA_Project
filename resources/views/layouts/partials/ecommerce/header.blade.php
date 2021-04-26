@@ -141,18 +141,18 @@
               @if (Route::has('login'))
                     @auth
                       <div class="dropdown dropdown-cart">
-                        <a href="{{ route('cart') }}" class="cart_bt"><strong>2</strong></a>
+                        <a href="{{ route('cart.index') }}" class="cart_bt"><strong>2</strong></a>
                         <div class="dropdown-menu">
                           <ul>
                             <li>
-                              <a href="{{ route('product.detail') }}">
+                              <a href="{{ route('product.show') }}">
                                 <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/1.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
                                 <strong><span>1x Armor Air x Fear</span>$90.00</strong>
                               </a>
                               <a href="#0" class="action"><i class="ti-trash"></i></a>
                             </li>
                             <li>
-                              <a href="{{ route('product.detail') }}">
+                              <a href="{{ route('product.show') }}">
                                 <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/2.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
                                 <strong><span>1x Armor Okwahn II</span>$110.00</strong>
                               </a>
@@ -161,7 +161,7 @@
                           </ul>
                           <div class="total_drop">
                             <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
-                            <a href="{{ route('cart') }}" class="btn_1 outline">View Cart</a><a href="{{ route('payment') }}" class="btn_1">Checkout</a>
+                            <a href="{{ route('cart.index') }}" class="btn_1 outline">View Cart</a><a href="{{ route('transaction.payment') }}" class="btn_1">Checkout</a>
                           </div>
                         </div>
                       </div>
@@ -172,7 +172,7 @@
             <li>
               @if (Route::has('login'))
                 @auth
-                  <a href="{{ route('wishlist') }}" class="wishlist"><span>Wishlist</span></a>
+                  <a href="{{ route('wishlist.index') }}" class="wishlist"><span>Wishlist</span></a>
                 @endauth
               @endif
             </li>

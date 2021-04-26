@@ -35,7 +35,7 @@
       				<div class="thumb_cart">
       					<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
       				</div>
-      				<span class="item_cart"><a href="{{ route('product.detail') }}" class="product-link">Armor Air x Fear</a></span>
+      				<span class="item_cart"><a href="{{ route('product.show') }}" class="product-link">Armor Air x Fear</a></span>
       			</td>
       			<td>
       				<strong>$140.00</strong>
@@ -50,7 +50,7 @@
       				<div class="thumb_cart">
       					<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/2.jpg') }}" class="lazy" alt="Image">
       				</div>
-      				<span class="item_cart"><a href="{{ route('product.detail') }}" class="product-link">Armor Okwahn II</a></span>
+      				<span class="item_cart"><a href="{{ route('product.show') }}" class="product-link">Armor Okwahn II</a></span>
       			</td>
       			<td>
       				<strong>$110.00</strong>
@@ -65,7 +65,7 @@
       				<div class="thumb_cart">
       					<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/3.jpg') }}" class="lazy" alt="Image">
       				</div>
-      				<span class="item_cart"><a href="{{ route('product.detail') }}" class="product-link">Armor Air Wildwood ACG</a></span>
+      				<span class="item_cart"><a href="{{ route('product.show') }}" class="product-link">Armor Air Wildwood ACG</a></span>
       			</td>
       			<td>
       				<strong>$90.00</strong>

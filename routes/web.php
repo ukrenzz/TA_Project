@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,31 +20,59 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('ecommerce.index');
 })->name('product.index');
+Route::name('admin.')->group(function()
+{
+  Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('dashboard');
+});
 
-// categories
-Route::get('/category', function () {
-    return view('ecommerce.categories');
-})->name('product.category');
+Route::name('category.')->group(function()
+{
+  Route::get('/manage/category', [CategoryController::class, 'index'])->name('manage');
+  Route::get('/manage/category/create', [CategoryController::class, 'create'])->name('create');
+  Route::get('/manage/category/edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+  Route::post('/manage/category/store', [CategoryController::class, 'store'])->name('store');
+  Route::put('/manage/category/update', [CategoryController::class, 'update'])->name('update');
+  Route::delete('/manage/category/delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
+});
 
-// product detail
-Route::get('/p/slug-produk-id-produk', function () {
-    return view('ecommerce.detail');
-})->name('product.detail');
+Route::name('product.')->group(function()
+{
+  Route::get('/', [ProductController::class, 'index'])->name('index');
+  Route::get('/category', [ProductController::class, 'index'])->name('category');
+  Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
+  Route::get('/product/create', [ProductController::class, 'create'])->name('create');
+  Route::get('/product/edit', [ProductController::class, 'edit'])->name('edit');
+  Route::post('/product/store', [ProductController::class, 'store'])->name('store');
+  Route::put('/product/update', [ProductController::class, 'update'])->name('update');
+  Route::delete('/product/delete', [ProductController::class, 'delete'])->name('delete');
+});
 
-// cart
-Route::get('/cart', function () {
-    return view('ecommerce.cart');
-})->name('cart');
+Route::name('wishlist.')->group(function()
+{
+  Route::get('/wishlist', [WishlistController::class, 'index'])->name('index');
+  Route::get('/wishlist/create', [WishlistController::class, 'create'])->name('create');
+  Route::get('/wishlist/edit', [WishlistController::class, 'edit'])->name('edit');
+  Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('store');
+  Route::put('/wishlist/update', [WishlistController::class, 'update'])->name('update');
+  Route::delete('/wishlist/delete', [WishlistController::class, 'delete'])->name('delete');
+});
 
-// wishlist
-Route::get('/payment', function () {
-    return view('ecommerce.payment');
-})->name('payment');
+Route::name('cart.')->group(function()
+{
+  Route::get('/cart', [CartController::class, 'index'])->name('index');
+  Route::get('/cart/create', [CartController::class, 'create'])->name('create');
+  Route::get('/cart/edit', [CartController::class, 'edit'])->name('edit');
+  Route::post('/cart/store', [CartController::class, 'store'])->name('store');
+  Route::put('/cart/update', [CartController::class, 'update'])->name('update');
+  Route::delete('/cart/delete', [CartController::class, 'delete'])->name('delete');
+});
 
-// wishlist
-Route::get('/wishlist', function () {
-    return view('ecommerce.wishlist');
-})->name('wishlist');
+Route::name('transaction.')->group(function()
+{
+  Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
+  Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
+  Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

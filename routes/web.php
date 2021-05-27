@@ -22,7 +22,7 @@ Route::get('/', function () {
 })->name('product.index');
 Route::name('admin.')->group(function()
 {
-  Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('dashboard');
+  Route::get('/manage/dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
 
 Route::name('category.')->group(function()
@@ -38,13 +38,14 @@ Route::name('category.')->group(function()
 Route::name('product.')->group(function()
 {
   Route::get('/', [ProductController::class, 'index'])->name('index');
+  Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
   Route::get('/category', [ProductController::class, 'index'])->name('category');
   Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
-  Route::get('/product/create', [ProductController::class, 'create'])->name('create');
-  Route::get('/product/edit', [ProductController::class, 'edit'])->name('edit');
-  Route::post('/product/store', [ProductController::class, 'store'])->name('store');
-  Route::put('/product/update', [ProductController::class, 'update'])->name('update');
-  Route::delete('/product/delete', [ProductController::class, 'delete'])->name('delete');
+  Route::get('/manage/product/create', [ProductController::class, 'create'])->name('create');
+  Route::get('/manage/product/edit', [ProductController::class, 'edit'])->name('edit');
+  Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');
+  Route::put('/manage/product/update', [ProductController::class, 'update'])->name('update');
+  Route::delete('/manage/product/delete', [ProductController::class, 'delete'])->name('delete');
 });
 
 Route::name('wishlist.')->group(function()

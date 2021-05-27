@@ -18,6 +18,21 @@ class CategoryController extends Controller
       return view('admin.categories.index', compact('data'));
     }
 
+    public static function getCategories($id = null)
+    {
+      $data = null;
+
+      if($id == null)
+      {
+        $data = Category::select('id', 'name', 'description')->orderBy('name', 'asc')->get();
+      }
+      else
+      {
+        $data = Category::select('id', 'name', 'description')->where('id', $id)->first();
+      }
+      return($data);
+    }
+
     function create()
     {
       $mode = "create";

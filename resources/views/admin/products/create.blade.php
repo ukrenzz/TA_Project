@@ -25,61 +25,42 @@
 
 @section('content')
 
-  {{-- <div class="card">
-    <div class="card-body">
-      @if ($errors->any())
-        <div class="row">
-          <div class="alert alert-danger">
-              <ul class="list-unstyled">
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-        </div>
-      @endif
-      <form id="form-validation" action="{{$mode == 'edit' ? route('product.update') : route('product.store')}}" method="post">
-        @csrf
-        @if(isset($data))
-          @method('PUT')
-        @endif
-        <input type="hidden" name="id" value="{{isset($data) ? $data->id : ''}}">
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label control-label">Nama kategori <span class="text-danger">*</span></label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="name" placeholder="Contoh : Kamera, Laptop, Lensa" value="{{ isset($data) ? $data->name : '' }}">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label control-label">Deskripsi</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="description" rows="3" style="resize:none" placeholder="Contoh : Hanya untuk baran berukuran kecil">{{ isset($data) ? $data->description : '' }}</textarea>
-            </div>
-        </div>
-        <div class="form-group text-right">
-              <button class="btn btn-primary">{!! $mode == "edit" ? '<i class="anticon anticon-form"></i> Edit' : '<i class="anticon anticon-plus"></i> Tambah' !!}</button>
-          </div>
-      </form>
-    </div>
-  </div> --}}
-  <form>
+  <form id="form_product" method="POST" enctype="multipart/form-data">
+      @csrf
       <div class="page-header no-gutters has-tab">
           <div class="d-md-flex m-b-15 align-items-center justify-content-between">
               <div class="media align-items-center m-b-15">
-                  <div class="avatar avatar-image rounded" style="height: 70px; width: 70px">
-                      <img src="{{asset('admin/images/others/thumb-16.jpg')}}" alt="">
-                  </div>
+                  @if($mode != "edit")
+                    <i class="anticon anticon-file-add display-4"></i>
+                  @else
+                    <div class="avatar avatar-image rounded" style="height: 70px; width: 70px">
+                        <img src="{{asset('admin/images/others/thumb-16.jpg')}}" alt="">
+                    </div>
+                  @endif
                   <div class="m-l-15">
-                      <h4 class="m-b-0">Skinny Men Blazer</h4>
-                      <p class="text-muted m-b-0">Code: #5325</p>
+                      @if($mode != "edit")
+                        <h4 class="m-b-0">Produk baru</h4>
+                      @else
+                        <h4 class="m-b-0">Skinny Men Blazer</h4>
+                        <p class="text-muted m-b-0">Code: #5325</p>
+                      @endif
                   </div>
               </div>
               <div class="m-b-15">
-                  <button class="btn btn-primary" type="submit">
+                  <button class="btn btn-primary" id="btn_save" type="submit">
                       <i class="anticon anticon-save"></i>
                       <span>Save</span>
                   </button>
               </div>
+          </div>
+          <div class="alert alert-danger" id="error-area" style="display:none;">
+            <h5>Error</h5>
+            <hr>
+            <ul id="error">
+              @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+              @endforeach
+            </ul>
           </div>
           <ul class="nav nav-tabs" >
               <li class="nav-item">
@@ -203,6 +184,48 @@
       $(document).ready(function () {
         new Quill('#productDescription', {
           theme: 'snow'
+        });
+      });
+
+      $('#btn_save').click((e) => {
+        e.preventDefault();
+        var formData = new FormData(document.getElementById('form_product'));
+
+        formData.append('description', $('#productDescription .ql-editor').html());
+
+        $.ajax({
+          url: "{{ (isset($data->product)) ? Route('product.update') : Route('product.store') }}",
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          beforeSend: () => {
+            $('#btn_save').html('<i class="anticon anticon-loading-3-quarters"></i> <span>Waiting...</span>');
+            // $('#btn_save').prop('disabled', true);
+            console.log("masuk");
+          },
+          success: (data) => {
+            $('#btn_save').html('<i class="anticon anticon-save"></i> <span>Save</span>');
+            $('#btn_save').prop('disabled', false);
+            if (data.success) {
+              swal("Sukses", "Logbook berhasil {{ isset($logData) ? 'diperbarui' : 'ditambahkan' }}!", "success")
+                .then(() => {
+                  location.href = "/logbook";
+                });
+            } else {
+              swal("Error", data.msg, "error");
+            }
+          },
+          error: function(err) {
+            console.log("Meninggoy");
+            console.warn(err.responseJSON.errors);
+            $('#error-area').css('display', 'block');
+            if (err.status == 422)
+              $.each(err.responseJSON.errors, function(key, item) {
+                $("#error").append("<li>" + key + ": " + item[0] + "</li>")
+                console.log(key);
+              });
+          }
         });
       });
   </script>

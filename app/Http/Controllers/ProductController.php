@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
 
@@ -39,7 +41,7 @@ class ProductController extends Controller
   function store(Request $req)
   {
     $this->validation($req);
-    dd($req);
+    // dd($req);
     try{
       Product::create([
         'name'        => $req->name,
@@ -49,16 +51,18 @@ class ProductController extends Controller
         'category_id' => $req->category,
         'unit'        => $req->unit,
         'user_id'     => Auth::id(),
-        // 'description' => $req->description,
+        'description' => $req->description,
         'color'       => $req->color,
         'status'      => $req->status,
         'discount'    => $req->discount
       ]);
+
+      return response()->json(['success' => true]);
     }
     catch(Exception $ex) {
-      return 'error';
+      return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
     }
-    return view('ecommerce.categories');
+    // return view('ecommerce.categories');
   }
 
   function update()
@@ -82,7 +86,7 @@ class ProductController extends Controller
       'description' => ['required', 'string'],
       'color'       => ['required', 'string'],
       'status'      => ['required', 'string'],
-      'discount'    => ['integer','digits_between:0,100'],
+      'discount'    => ['nullable', 'integer','digits_between:0,100'],
       // 'images.*' => 'mimes:jpg,png,jpeg,gif,svg'
     ]);
   }

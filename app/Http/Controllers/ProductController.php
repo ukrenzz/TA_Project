@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
+use Storage;
 
 class ProductController extends Controller
 {
@@ -17,7 +18,11 @@ class ProductController extends Controller
 
   function manage()
   {
-    return view('admin.products.index');
+    $data = (object)[
+      'categories' => Product::all(),
+    ];
+
+    return view('admin.products.index', ['data' => $data]);
   }
 
   function show()
@@ -27,8 +32,13 @@ class ProductController extends Controller
 
   function create()
   {
+    $_color = json_decode(Storage::disk('local')->get('colors.json'), true);
+
     $mode = "create";
-    $data = (object)['categories' => CategoryController::getCategories()];
+    $data = (object)[
+      'categories' => CategoryController::getCategories(),
+      'colors'     => $_color
+    ];
 
     return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }

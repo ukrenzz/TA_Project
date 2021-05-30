@@ -24,7 +24,7 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->text('color');
             $table->string('status', 25);
-            $table->bigInteger('discount');
+            $table->bigInteger('discount')->nullable()->default(0);
             $table->timestamps();
             $table->foreign('category_id')->reference('id')->on('categories');
         });

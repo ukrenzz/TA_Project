@@ -132,10 +132,10 @@
                       </div>
                       <div class="form-group">
                           <label class="font-weight-semibold" for="productColors">Colors</label>
-                          <select class="select2 w-100" name="color" id="productColors" multiple="multiple" required>
-                              <option value="db" selected>Dark Blue</option>
-                              <option value="g" selected>Gray</option>
-                              <option value="gb" selected>Gray Blue</option>
+                          <select class="select2 w-100" name="colors" id="productColors" multiple="multiple" required>
+                            @foreach ($data->colors as $color)
+                              <option value="{{$color['id']}}">{{$color['name']}}</option>
+                            @endforeach
                           </select>
                       </div>
                   </div>
@@ -189,9 +189,22 @@
 
       $('#btn_save').click((e) => {
         e.preventDefault();
+
+        // Color selection to text
+        var _colors = $('#productColors').val();
+        var _colorString = "";
+        for (var i = 0; i < _colors.length; i++) {
+          if(i != _colors.length -1){
+            _colorString += _colors[i] + ';';
+          } else {
+            _colorString += _colors[i];
+          }
+        }
+
         var formData = new FormData(document.getElementById('form_product'));
 
         formData.append('description', $('#productDescription .ql-editor').html());
+        formData.append('color', _colorString);
 
         $.ajax({
           url: "{{ (isset($data->product)) ? Route('product.update') : Route('product.store') }}",
@@ -208,9 +221,9 @@
             $('#btn_save').html('<i class="anticon anticon-save"></i> <span>Save</span>');
             $('#btn_save').prop('disabled', false);
             if (data.success) {
-              swal("Sukses", "Logbook berhasil {{ isset($logData) ? 'diperbarui' : 'ditambahkan' }}!", "success")
+              swal("Sukses", "Produk berhasil {{ isset($data->product) ? 'diperbarui' : 'ditambahkan' }}!", "success")
                 .then(() => {
-                  location.href = "/logbook";
+                  location.href = "/manage/product";
                 });
             } else {
               swal("Error", data.msg, "error");

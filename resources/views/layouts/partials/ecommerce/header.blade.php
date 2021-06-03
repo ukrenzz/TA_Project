@@ -73,55 +73,17 @@
                 </span>
                 <div id="menu">
                   <ul>
-                    <li><span><a href="#0">Collections</a></span>
-                      <ul>
-                        <li><a href="#">Trending</a></li>
-                        <li><a href="#">Life style</a></li>
-                        <li><a href="#">Running</a></li>
-                        <li><a href="#">Training</a></li>
-                        <li><a href="#">View all Collections</a></li>
-                      </ul>
+                    <li><span><a href="#0">Camera</a></span>
                     </li>
-                    <li><span><a href="#">Men</a></span>
-                      <ul>
-                        <li><a href="#">Offers</a></li>
-                        <li><a href="#">Shoes</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Equipment</a></li>
-                      </ul>
+                    <li><span><a href="#">Keyboard</a></span>
                     </li>
-                    <li><span><a href="#">Women</a></span>
-                      <ul>
-                        <li><a href="#">Best Sellers</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Shoes</a></li>
-                      </ul>
+                    <li><span><a href="#">Mouse</a></span>
                     </li>
-                    <li><span><a href="#">Boys</a></span>
-                      <ul>
-                        <li><a href="#">Easy On Shoes</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Must Have</a></li>
-                        <li><a href="#">All Boys</a></li>
-                      </ul>
+                    <li><span><a href="#">Tablet</a></span>
                     </li>
-                    <li><span><a href="#">Girls</a></span>
-                      <ul>
-                        <li><a href="#">New Releases</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Sale</a></li>
-                        <li><a href="#">Best Sellers</a></li>
-                      </ul>
+                    <li><span><a href="#">Printer</a></span>
                     </li>
-                    <li><span><a href="#">Customize</a></span>
-                      <ul>
-                        <li><a href="#">For Men</a></li>
-                        <li><a href="#">For Women</a></li>
-                        <li><a href="#">For Boys</a></li>
-                        <li><a href="#">For Girls</a></li>
-                      </ul>
+                    <li><span><a href="#">Laptop</a></span>
                     </li>
                   </ul>
                 </div>
@@ -131,7 +93,7 @@
         </div>
         <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
           <div class="custom-search-input">
-            <input type="text" placeholder="Search over 10.000 products">
+            <input type="text" placeholder="Search products">
             <button type="submit"><i class="header-icon_search_custom"></i></button>
           </div>
         </div>

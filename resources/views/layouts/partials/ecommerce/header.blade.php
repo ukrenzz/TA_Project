@@ -29,25 +29,13 @@
               <li>
                 <a href="{{ route('product.category') }}">All Categories</a>
               </li>
-              <li class="submenu">
-                <a href="javascript:void(0);" class="show-submenu">Service</a>
-                <ul>
-                  <li><a href="#">Track your orders</a></li>
-                  <li><a href="#">FAQ</a></li>
-                </ul>
-              </li>
-              <li>
-                <a href="#">About Us</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
-              </li>
             </ul>
           </div>
           <!--/main-menu -->
         </nav>
         <div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-right">
-          <a class="phone_top" href="tel://9438843343"><strong><span>Need Help?</span>+94 423-23-221</strong></a>
+        <ul class="top_tools">
+        </ul>
         </div>
       </div>
       <!-- /row -->
@@ -62,7 +50,7 @@
           <nav class="categories">
             <ul class="clearfix">
               <li><span>
-                  <a href="{{ route('product.category') }}">
+                  <a href="#">
                     <span class="hamburger hamburger--spin">
                       <span class="hamburger-box">
                         <span class="hamburger-inner"></span>
@@ -146,14 +134,14 @@
                     @if (Route::has('login'))
                       @auth
                         <li>
-  												<a href="#"><i class="ti-truck"></i>Track your Order</a>
-  											</li>
-  											<li>
-  												<a href="#"><i class="ti-package"></i>My Orders</a>
-  											</li>
-  											<li>
-  												<a href="{{ route('profile.show') }}"><i class="ti-user"></i>My Profile</a>
-  											</li>
+                          <a href="#"><i class="ti-truck"></i>Track your Order</a>
+                        </li>
+                        <li>
+                          <a href="#"><i class="ti-package"></i>My Orders</a>
+                        </li>
+                        <li>
+                          <a href="{{ route('profile.show') }}"><i class="ti-user"></i>My Profile</a>
+                        </li>
                         <li>
                           <!-- Authentication -->
                           <form method="POST" action="{{ route('logout') }}">
@@ -162,7 +150,7 @@
                               <i class="ti-user"></i>Log Out
                             </a>
                           </form>
-  											</li>
+                        </li>
                       @else
                         <li>
                           <a href="{{ route('login') }}"><i class="ri-login-box-line" style="margin-top:-5px!important"></i>Login</a>
@@ -175,7 +163,7 @@
                   </ul>
                 </div>
               </div>
-              <!-- /dropdown-access-->
+            <!-- /dropdown-access-->
             </li>
             <li>
               <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
@@ -196,7 +184,7 @@
       <!-- /row -->
     </div>
     <div class="search_mob_wp">
-      <input type="text" class="form-control" placeholder="Search over 10.000 products">
+      <input type="text" class="form-control" placeholder="Search products">
       <input type="submit" class="btn_1 full-width" value="Search">
     </div>
     <!-- /search_mobile -->

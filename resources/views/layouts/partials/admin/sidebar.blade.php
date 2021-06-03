@@ -19,6 +19,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('category.manage') }}" class="">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-appstore"></i>
+                    </span>
+                    <span class="title">Categories</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('admin.dashboard') }}" class="">
                     <span class="icon-holder">
                         <i class="anticon anticon-dashboard"></i>

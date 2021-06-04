@@ -6366,7 +6366,7 @@ footer hr {
   }
 }
 footer .contacts ul {
-  margin: 0 0 25px 0;
+  margin: 0 0 10px 0;
   padding: 0;
   list-style: none;
 }
@@ -6563,11 +6563,11 @@ footer .links ul li a:after {
 .follow_us h5 {
   font-size: 16px;
   font-size: 1rem;
-  margin: 35px 0 10px 0;
+  margin: 10px 0 10px 0;
   color: #fff;
 }
 .follow_us ul {
-  margin: 0 0 25px 0;
+  margin: 0 0 10px 0;
   padding: 0;
   list-style: none;
 }

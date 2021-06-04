@@ -28,7 +28,7 @@
     <ul class="additional_links">
       <li><a href="#0">Terms and conditions</a></li>
       <li><a href="#0">Privacy</a></li>
-      <li><span>© 2020 NekoProject</span></li>
+      <li><span>© 2021 NekoProject</span></li>
     </ul>
   </div>
 </footer>

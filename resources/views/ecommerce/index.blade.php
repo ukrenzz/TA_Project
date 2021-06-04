@@ -76,7 +76,7 @@
 				<a href="#0" class="img_container">
 					<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/banner_1.jpg') }}" alt="" class="lazy">
 					<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-						<h3>Men's Collection</h3>
+						<h3>Mouse and Keyboard's Collection</h3>
 						<div><span class="btn_1">Shop Now</span></div>
 					</div>
 				</a>
@@ -85,7 +85,7 @@
 				<a href="#0" class="img_container">
 					<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/banner_2.jpg') }}" alt="" class="lazy">
 					<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-						<h3>Womens's Collection</h3>
+						<h3>Laptop and Tablet's Collection</h3>
 						<div><span class="btn_1">Shop Now</span></div>
 					</div>
 				</a>
@@ -94,7 +94,7 @@
 				<a href="#0" class="img_container">
 					<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/banner_3.jpg') }}" alt="" class="lazy">
 					<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-						<h3>Kids's Collection</h3>
+						<h3>Camera's Collection</h3>
 						<div><span class="btn_1">Shop Now</span></div>
 					</div>
 				</a>
@@ -104,9 +104,8 @@
 
 		<div class="container margin_60_35">
 			<div class="main_title">
-				<h2>Top Selling</h2>
+				<h2>Flash Sale</h2>
 				<span>Products</span>
-				<p>Cum doctus civibus efficiantur in imperdiet deterruisset</p>
 			</div>
 			<div class="row small-gutters">
 				<div class="col-6 col-md-4 col-xl-3">
@@ -320,58 +319,10 @@
 		</div>
 		<!-- /container -->
 
-		<div class="featured lazy" data-bg="url({{ asset('ecommerce/img/featured_home.jpg') }})">
-			<div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-				<div class="container margin_60">
-					<div class="row justify-content-center justify-content-md-start">
-						<div class="col-lg-6 wow" data-wow-offset="150">
-							<h3>Armor<br>Air Color 720</h3>
-							<p>Lightweight cushioning and durable support with a Phylon midsole</p>
-							<div class="feat_text_block">
-								<div class="price_box">
-									<span class="new_price">$90.00</span>
-									<span class="old_price">$170.00</span>
-								</div>
-								<a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /featured -->
-
-    <div class="bg_gray">
-      <div class="container margin_30">
-        <div id="brands" class="owl-carousel owl-theme">
-          <div class="item">
-            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_1.png') }}" alt="" class="owl-lazy"></a>
-          </div><!-- /item -->
-          <div class="item">
-            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_2.png') }}" alt="" class="owl-lazy"></a>
-          </div><!-- /item -->
-          <div class="item">
-            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_3.png') }}" alt="" class="owl-lazy"></a>
-          </div><!-- /item -->
-          <div class="item">
-            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_4.png') }}" alt="" class="owl-lazy"></a>
-          </div><!-- /item -->
-          <div class="item">
-            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_5.png') }}" alt="" class="owl-lazy"></a>
-          </div><!-- /item -->
-          <div class="item">
-            <a href="#0"><img src="{{ asset('ecommerce/img/brands/placeholder_brands.png') }}" data-src="{{ asset('ecommerce/img/brands/logo_6.png') }}" alt="" class="owl-lazy"></a>
-          </div><!-- /item -->
-        </div><!-- /carousel -->
-      </div><!-- /container -->
-    </div>
-    <!-- /bg_gray -->
-
 		<div class="container margin_60_35">
 			<div class="main_title">
-				<h2>Featured</h2>
+				<h2>Top Selling</h2>
 				<span>Products</span>
-				<p>Cum doctus civibus efficiantur in imperdiet deterruisset</p>
 			</div>
 			<div class="owl-carousel owl-theme products_carousel">
 				<div class="item">

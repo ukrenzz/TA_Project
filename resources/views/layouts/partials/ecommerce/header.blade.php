@@ -3,6 +3,7 @@
   <div class="main_header">
     <div class="container">
       <div class="row small-gutters">
+        <!-- Logo -->
         <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
           <div id="logo">
             <a href="{{ route('product.index') }}"><img src="{{ asset('ecommerce/img/logo.svg') }}" alt="" width="100" height="35"></a>
@@ -81,51 +82,14 @@
         </div>
         <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
           <div class="custom-search-input">
-            <input type="text" placeholder="Search products">
+            <input type="text" placeholder="Search product">
             <button type="submit"><i class="header-icon_search_custom"></i></button>
           </div>
+          <button type="submit" ><i class="fas fa-camera" style="color: #dd710e; width: 10px; height : 10px"></i></button>
         </div>
         <div class="col-xl-3 col-lg-2 col-md-3">
           <ul class="top_tools">
-            <li>
-              @if (Route::has('login'))
-                    @auth
-                      <div class="dropdown dropdown-cart">
-                        <a href="{{ route('cart.index') }}" class="cart_bt"><strong>2</strong></a>
-                        <div class="dropdown-menu">
-                          <ul>
-                            <li>
-                              <a href="{{ route('product.show') }}">
-                                <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/1.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
-                                <strong><span>1x Armor Air x Fear</span>$90.00</strong>
-                              </a>
-                              <a href="#0" class="action"><i class="ti-trash"></i></a>
-                            </li>
-                            <li>
-                              <a href="{{ route('product.show') }}">
-                                <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/2.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
-                                <strong><span>1x Armor Okwahn II</span>$110.00</strong>
-                              </a>
-                              <a href="0" class="action"><i class="ti-trash"></i></a>
-                            </li>
-                          </ul>
-                          <div class="total_drop">
-                            <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
-                            <a href="{{ route('cart.index') }}" class="btn_1 outline">View Cart</a><a href="{{ route('transaction.payment') }}" class="btn_1">Checkout</a>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- /dropdown-cart-->
-                    @endauth
-              @endif
-            </li>
-            <li>
-              @if (Route::has('login'))
-                @auth
-                  <a href="{{ route('wishlist.index') }}" class="wishlist"><span>Wishlist</span></a>
-                @endauth
-              @endif
-            </li>
+              <!-- Account -->
             <li>
               <div class="dropdown dropdown-access">
                 <a href="{{ route('login') }}" class="access_link"><span>Account</span></a>
@@ -165,6 +129,47 @@
               </div>
             <!-- /dropdown-access-->
             </li>
+            <!-- Wishlist -->
+            <li>
+              @if (Route::has('login'))
+                @auth
+                  <a href="{{ route('wishlist.index') }}" class="wishlist"><span>Wishlist</span></a>
+                @endauth
+              @endif
+            </li>
+             <!-- Cart  -->
+            <li>
+              @if (Route::has('login'))
+                    @auth
+                      <div class="dropdown dropdown-cart">
+                        <a href="{{ route('cart.index') }}" class="cart_bt"><strong>2</strong></a>
+                        <div class="dropdown-menu">
+                          <ul>
+                            <li>
+                              <a href="{{ route('product.show') }}">
+                                <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/1.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
+                                <strong><span>1x Armor Air x Fear</span>$90.00</strong>
+                              </a>
+                              <a href="#0" class="action"><i class="ti-trash"></i></a>
+                            </li>
+                            <li>
+                              <a href="{{ route('product.show') }}">
+                                <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/2.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
+                                <strong><span>1x Armor Okwahn II</span>$110.00</strong>
+                              </a>
+                              <a href="0" class="action"><i class="ti-trash"></i></a>
+                            </li>
+                          </ul>
+                          <div class="total_drop">
+                            <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
+                            <a href="{{ route('cart.index') }}" class="btn_1 outline">View Cart</a><a href="{{ route('transaction.payment') }}" class="btn_1">Checkout</a>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /dropdown-cart-->
+                    @endauth
+              @endif
+            </li>
             <li>
               <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
             </li>
@@ -184,7 +189,7 @@
       <!-- /row -->
     </div>
     <div class="search_mob_wp">
-      <input type="text" class="form-control" placeholder="Search products">
+      <input type="text" class="form-control" placeholder="Search product">
       <input type="submit" class="btn_1 full-width" value="Search">
     </div>
     <!-- /search_mobile -->

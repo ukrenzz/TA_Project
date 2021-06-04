@@ -41,7 +41,7 @@ a.text-hover-secondary-danger:hover, a.text-hover-secondary-danger:focus {
   color: #dc3545 !important;
 }
 .product-link {
-  color: #004dda !important;
+  color: #DD710E !important;
 }
 a.product-link:hover, a.product-link:focus {
   color: #00389e !important;
@@ -75,7 +75,7 @@ a.badge:hover, a.badge:focus {
 }
 .badge-info {
   color: #fff;
-  background-color: #004dda;
+  background-color: #DD710E;
 }
 .shipping-method-filter{
   transform: translateX(0)!important;

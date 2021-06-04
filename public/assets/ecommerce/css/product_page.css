@@ -433,8 +433,8 @@
 
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-  border-bottom: 2px solid #004dda;
-  color: #004dda;
+  border-bottom: 2px solid #DD710E;
+  color: #DD710E;
   background-color: transparent;
 }
 
@@ -509,7 +509,7 @@
   color: #444;
 }
 .product_actions ul li a:hover {
-  color: #004dda;
+  color: #DD710E;
 }
 .product_actions ul li a i {
   margin-right: 5px;

@@ -3,6 +3,7 @@
   <div class="main_header">
     <div class="container">
       <div class="row small-gutters">
+        <!-- Logo -->
         <div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
           <div id="logo">
             <a href="{{ route('product.index') }}"><img src="{{ asset('ecommerce/img/logo.svg') }}" alt="" width="100" height="35"></a>
@@ -29,25 +30,13 @@
               <li>
                 <a href="{{ route('product.category') }}">All Categories</a>
               </li>
-              <li class="submenu">
-                <a href="javascript:void(0);" class="show-submenu">Service</a>
-                <ul>
-                  <li><a href="#">Track your orders</a></li>
-                  <li><a href="#">FAQ</a></li>
-                </ul>
-              </li>
-              <li>
-                <a href="#">About Us</a>
-              </li>
-              <li>
-                <a href="#">Contact</a>
-              </li>
             </ul>
           </div>
           <!--/main-menu -->
         </nav>
         <div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-right">
-          <a class="phone_top" href="tel://9438843343"><strong><span>Need Help?</span>+94 423-23-221</strong></a>
+        <ul class="top_tools">
+        </ul>
         </div>
       </div>
       <!-- /row -->
@@ -62,7 +51,7 @@
           <nav class="categories">
             <ul class="clearfix">
               <li><span>
-                  <a href="{{ route('product.category') }}">
+                  <a href="#">
                     <span class="hamburger hamburger--spin">
                       <span class="hamburger-box">
                         <span class="hamburger-inner"></span>
@@ -73,55 +62,17 @@
                 </span>
                 <div id="menu">
                   <ul>
-                    <li><span><a href="#0">Collections</a></span>
-                      <ul>
-                        <li><a href="#">Trending</a></li>
-                        <li><a href="#">Life style</a></li>
-                        <li><a href="#">Running</a></li>
-                        <li><a href="#">Training</a></li>
-                        <li><a href="#">View all Collections</a></li>
-                      </ul>
+                    <li><span><a href="#0">Camera</a></span>
                     </li>
-                    <li><span><a href="#">Men</a></span>
-                      <ul>
-                        <li><a href="#">Offers</a></li>
-                        <li><a href="#">Shoes</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Equipment</a></li>
-                      </ul>
+                    <li><span><a href="#">Keyboard</a></span>
                     </li>
-                    <li><span><a href="#">Women</a></span>
-                      <ul>
-                        <li><a href="#">Best Sellers</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Accessories</a></li>
-                        <li><a href="#">Shoes</a></li>
-                      </ul>
+                    <li><span><a href="#">Mouse</a></span>
                     </li>
-                    <li><span><a href="#">Boys</a></span>
-                      <ul>
-                        <li><a href="#">Easy On Shoes</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Must Have</a></li>
-                        <li><a href="#">All Boys</a></li>
-                      </ul>
+                    <li><span><a href="#">Tablet</a></span>
                     </li>
-                    <li><span><a href="#">Girls</a></span>
-                      <ul>
-                        <li><a href="#">New Releases</a></li>
-                        <li><a href="#">Clothing</a></li>
-                        <li><a href="#">Sale</a></li>
-                        <li><a href="#">Best Sellers</a></li>
-                      </ul>
+                    <li><span><a href="#">Printer</a></span>
                     </li>
-                    <li><span><a href="#">Customize</a></span>
-                      <ul>
-                        <li><a href="#">For Men</a></li>
-                        <li><a href="#">For Women</a></li>
-                        <li><a href="#">For Boys</a></li>
-                        <li><a href="#">For Girls</a></li>
-                      </ul>
+                    <li><span><a href="#">Laptop</a></span>
                     </li>
                   </ul>
                 </div>
@@ -131,12 +82,62 @@
         </div>
         <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
           <div class="custom-search-input">
-            <input type="text" placeholder="Search over 10.000 products">
+            <input type="text" placeholder="Search product">
             <button type="submit"><i class="header-icon_search_custom"></i></button>
           </div>
+          <button type="submit" ><i class="fas fa-camera" style="color: #dd710e; width: 10px; height : 10px"></i></button>
         </div>
         <div class="col-xl-3 col-lg-2 col-md-3">
           <ul class="top_tools">
+              <!-- Account -->
+            <li>
+              <div class="dropdown dropdown-access">
+                <a href="{{ route('login') }}" class="access_link"><span>Account</span></a>
+                <div class="dropdown-menu">
+                  <ul>
+                    @if (Route::has('login'))
+                      @auth
+                        <li>
+                          <a href="#"><i class="ti-truck"></i>Track your Order</a>
+                        </li>
+                        <li>
+                          <a href="#"><i class="ti-package"></i>My Orders</a>
+                        </li>
+                        <li>
+                          <a href="{{ route('profile.show') }}"><i class="ti-user"></i>My Profile</a>
+                        </li>
+                        <li>
+                          <!-- Authentication -->
+                          <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <a href="{{ route('logout') }}" class="text-danger" onclick="event.preventDefault();this.closest('form').submit();">
+                              <i class="ti-user"></i>Log Out
+                            </a>
+                          </form>
+                        </li>
+                      @else
+                        <li>
+                          <a href="{{ route('login') }}"><i class="ri-login-box-line" style="margin-top:-5px!important"></i>Login</a>
+                        </li>
+                        <li>
+                          <a href="{{ route('register') }}"><i class="ri-user-add-line" style="margin-top:-5px!important"></i>Create new account</a>
+                        </li>
+                      @endauth
+                    @endif
+                  </ul>
+                </div>
+              </div>
+            <!-- /dropdown-access-->
+            </li>
+            <!-- Wishlist -->
+            <li>
+              @if (Route::has('login'))
+                @auth
+                  <a href="{{ route('wishlist.index') }}" class="wishlist"><span>Wishlist</span></a>
+                @endauth
+              @endif
+            </li>
+             <!-- Cart  -->
             <li>
               @if (Route::has('login'))
                     @auth
@@ -170,52 +171,6 @@
               @endif
             </li>
             <li>
-              @if (Route::has('login'))
-                @auth
-                  <a href="{{ route('wishlist.index') }}" class="wishlist"><span>Wishlist</span></a>
-                @endauth
-              @endif
-            </li>
-            <li>
-              <div class="dropdown dropdown-access">
-                <a href="{{ route('login') }}" class="access_link"><span>Account</span></a>
-                <div class="dropdown-menu">
-                  <ul>
-                    @if (Route::has('login'))
-                      @auth
-                        <li>
-  												<a href="#"><i class="ti-truck"></i>Track your Order</a>
-  											</li>
-  											<li>
-  												<a href="#"><i class="ti-package"></i>My Orders</a>
-  											</li>
-  											<li>
-  												<a href="{{ route('profile.show') }}"><i class="ti-user"></i>My Profile</a>
-  											</li>
-                        <li>
-                          <!-- Authentication -->
-                          <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <a href="{{ route('logout') }}" class="text-danger" onclick="event.preventDefault();this.closest('form').submit();">
-                              <i class="ti-user"></i>Log Out
-                            </a>
-                          </form>
-  											</li>
-                      @else
-                        <li>
-                          <a href="{{ route('login') }}"><i class="ri-login-box-line" style="margin-top:-5px!important"></i>Login</a>
-                        </li>
-                        <li>
-                          <a href="{{ route('register') }}"><i class="ri-user-add-line" style="margin-top:-5px!important"></i>Create new account</a>
-                        </li>
-                      @endauth
-                    @endif
-                  </ul>
-                </div>
-              </div>
-              <!-- /dropdown-access-->
-            </li>
-            <li>
               <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
             </li>
             <li>
@@ -234,7 +189,7 @@
       <!-- /row -->
     </div>
     <div class="search_mob_wp">
-      <input type="text" class="form-control" placeholder="Search over 10.000 products">
+      <input type="text" class="form-control" placeholder="Search product">
       <input type="submit" class="btn_1 full-width" value="Search">
     </div>
     <!-- /search_mobile -->

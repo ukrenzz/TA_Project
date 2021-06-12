@@ -28,7 +28,14 @@
                 <a href="{{ route('product.index') }}">Home</a>
               </li>
               <li>
-                <a href="{{ route('product.category') }}">All Categories</a>
+              <!-- TODO : perlu ganti href -->
+                <a href="{{ route('product.index') }}">Order</a>
+              </li>
+              <li>
+                <a href="{{ route('product.category') }}">Profile</a>
+              </li>
+              <li>
+                <a href="{{ route('login')  }}">Log in</a>
               </li>
             </ul>
           </div>

@@ -9,6 +9,13 @@ use App\Http\Controllers\CategoryController;
 use App\Models\Product;
 use Storage;
 
+
+
+use CV\CascadeClassifier, CV\Face\FacemarkLBF;
+use function CV\{circle, imread, imwrite, cvtColor, equalizeHist};
+use CV\Scalar;
+use const CV\{COLOR_BGR2GRAY};
+
 class colorInfo
 {
   public $mean_IR;
@@ -215,4 +222,131 @@ class ProductController extends Controller
 
     // @endforeach
   }
+
+  // Perlu install dulu Open CV PHP, lihat di slack untuk pesan lebih lanjut 
+
+  function LPB()
+  {
+    // src : https://www.geeksforgeeks.org/create-local-binary-pattern-of-an-image-using-opencv-python/
+
+    // https://github.com/php-opencv/php-opencv-examples/blob/master/detect_facemarks_by_lbf.php
+
+
+    // $src = imread("images/faces.jpg");
+    // $gray = cvtColor($src, COLOR_BGR2GRAY);
+    // equalizeHist($gray, $gray);
+
+    // // face by lbpcascade_frontalface
+    // $faceClassifier = new CascadeClassifier();
+    // $faceClassifier->load('models/lbpcascades/lbpcascade_frontalface.xml');
+    // $faces = null;
+    // $faceClassifier->detectMultiScale($gray, $faces);
+    // //var_export($faces);
+
+    // $facemark = FacemarkLBF::create();
+    // $facemark->loadModel('models/opencv-facemark-lbf/lbfmodel.yaml');
+
+    // $facemark->fit($src, $faces, $landmarks);
+    // //var_export($landmarks);
+    // if ($landmarks) {
+    //   $scalar = new Scalar(0, 0, 255);
+    //   foreach ($landmarks as $face) {
+    //     foreach ($face as $k => $point) { //var_export($point);
+    //       circle($src, $point, 2, $scalar, 2);
+    //     }
+    //   }
+    // }
+
+
+    // imwrite("results/_detect_facemarks_by_lbf.jpg", $src);
+  }
+
+  // input: r,g,b in range 0..255
+  function RGBtoHSV($r, $g, $b)
+  {
+    $r = $r / 255.; // convert to range 0..1
+    $g = $g / 255.;
+    $b = $b / 255.;
+    $cols = array("r" => $r, "g" => $g, "b" => $b);
+    asort($cols, SORT_NUMERIC);
+    $min = key(array_slice($cols, 1)); // "r", "g" or "b"
+    $max = key(array_slice($cols, -1)); // "r", "g" or "b"
+
+    // hue
+    if ($cols[$min] == $cols[$max]) {
+      $h = 0;
+    } else {
+      if ($max == "r") {
+        $h = 60. * (0 + (($cols["g"] - $cols["b"]) / ($cols[$max] - $cols[$min])));
+      } elseif ($max == "g") {
+        $h = 60. * (2 + (($cols["b"] - $cols["r"]) / ($cols[$max] - $cols[$min])));
+      } elseif ($max == "b") {
+        $h = 60. * (4 + (($cols["r"] - $cols["g"]) / ($cols[$max] - $cols[$min])));
+      }
+      if ($h < 0) {
+        $h += 360;
+      }
+    }
+
+    // saturation
+    if ($cols[$max] == 0) {
+      $s = 0;
+    } else {
+      $s = (($cols[$max] - $cols[$min]) / $cols[$max]);
+      $s = $s * 255;
+    }
+
+    // lightness
+    $v = $cols[$max];
+    $v = $v * 255;
+
+    return (array($h, $s, $v));
+  }
+
+  // Input filename, cth : D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg
+  // Hasil uji: udah bisa sampai HSV, namun, belum tau gimana pakai hasil akhirnya ... 
+  function edgeDescriptor($filename) {
+    $filename = "D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg";
+    $dimensions = getimagesize($filename);
+    $w = $dimensions[0]; // width
+    $h = $dimensions[1]; // height
+
+    $im = imagecreatefromjpeg($filename);
+
+    for ($hi = 0; $hi < $h; $hi++) {
+      for ($wi = 0; $wi < $w; $wi++) {
+        $rgb = imagecolorat($im, $wi, $hi);
+        
+        
+        $r = ($rgb >> 16) & 0xFF;
+        $g = ($rgb >> 8) & 0xFF;
+        $b = $rgb & 0xFF;
+        $hsv = RGBtoHSV($r, $g, $b);
+        
+        if ($hi < $h - 1) {
+          // compare pixel below with current pixel
+          $brgb = imagecolorat($im, $wi, $hi + 1);
+          $br = ($brgb >> 16) & 0xFF;
+          $bg = ($brgb >> 8) & 0xFF;
+          $bb = $brgb & 0xFF;
+          $bhsv = RGBtoHSV($br, $bg, $bb);
+          
+          // if difference in hue is bigger than 20, make this pixel white (edge), otherwise black
+          if ($bhsv[2] - $hsv[2] > 20) {
+            imagesetpixel($im, $wi, $hi, imagecolorallocate($im, 255, 255, 255));
+          } else {
+            imagesetpixel($im, $wi, $hi, imagecolorallocate($im, 0, 0, 0));
+          }
+        }
+      }
+    }
+    
+    header('Content-Type: image/jpeg');
+    // TODO : Bagaimana cara memanfaatkan hasil ini ? 
+    imagejpeg($im);
+    imagedestroy($im);
+  }
+
+
+
 }

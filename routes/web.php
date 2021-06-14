@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CtebirController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -21,6 +22,13 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('ecommerce.index');
 })->name('product.index');
+
+Route::name('ctebir.')->group(function()
+{
+  Route::get('/ctebir', [CtebirController::class, 'index'])->name('manage');
+  // Route::post('/ctebir/store', [CtebirController::class, 'store'])->name('store');
+});
+
 Route::name('admin.')->group(function()
 {
   Route::get('/manage/dashboard', [AdminController::class, 'index'])->name('dashboard');

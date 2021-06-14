@@ -21,8 +21,6 @@
     $IR = $imagick->getImageChannelMean(1); // Red
     $IG = $imagick->getImageChannelMean(4); // Green
     $IB = $imagick->getImageChannelMean(2); // Blue 
-
-
     // Mean, perlu direturn untuk citra dari DB
     $mean_IR =  $IR["mean"];
     $mean_IG =  $IG["mean"];

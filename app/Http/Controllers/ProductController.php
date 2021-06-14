@@ -23,6 +23,8 @@ class colorInfo
   public $ht_IB;
 }
 
+$img = new Imagick('D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg');
+
 class ProductController extends Controller
 {
   function index()
@@ -117,33 +119,23 @@ class ProductController extends Controller
   // -------------------------
   // CTEBIR Algo 
 
-
-
-  function colorDescriptor($img)
+  // Parameter input dalam bentuk URL (Ambil dari DB)
+  // contoh : 'D:\New Neko Code\TA_Project\public\assets\image\contohgambar.jpg'
+  function db_colorDescriptor($db_img)
   {
     // Color Descriptor
     // Imagick untuk dapat Mean dan STDV 
-    $img = new Imagick('D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg');
+    $img = new Imagick($db_img);
 
     // Mean and Std method from Imagick
-    $IR = $img->getImageChannelMean(1); // Red
-    $IG = $img->getImageChannelMean(4); // Green
-    $IB = $img->getImageChannelMean(2); // Blue 
+    $IR = $db_img->getImageChannelMean(1); // Red
+    $IG = $db_img->getImageChannelMean(4); // Green
+    $IB = $db_img->getImageChannelMean(2); // Blue 
 
     // Mean, perlu direturn untuk citra dari DB
     $mean_IR =  $IR["mean"];
     $mean_IG =  $IG["mean"];
     $mean_IB =  $IB["mean"];
-
-    // LT dan HT untuk ketiga channel warna RGB
-    $lt_IR =  $mean_IR - $IR["standardDeviation"];
-    $ht_IR =  $mean_IR + $IR["standardDeviation"];
-
-    $lt_IG =  $mean_IG - $IG["standardDeviation"];
-    $ht_IG =  $mean_IG + $IG["standardDeviation"];
-
-    $lt_IB =  $mean_IB - $IB["standardDeviation"];
-    $ht_IB =  $mean_IB + $IB["standardDeviation"];
 
     $colorObj = new colorInfo();
 
@@ -151,19 +143,8 @@ class ProductController extends Controller
     $colorObj->mean_IG = $mean_IG;
     $colorObj->mean_IB = $mean_IB;
 
-    $colorObj->lt_IR = $lt_IR;
-    $colorObj->ht_IR = $ht_IR;
-    $colorObj->lt_IG = $lt_IG;
-    $colorObj->ht_IG = $ht_IG;
-    $colorObj->lt_IB = $lt_IB;
-    $colorObj->ht_IB = $ht_IB;
-    dd($colorObj);
 
-
-    // TODO : Mau buat jadi object, baru bisa di return  
-    // return ($IR, $IG, $IB, $lt_IR, $ht_IR, $lt_IG, $ht_IG, $lt_IB, $ht_IB);
-
-    // TODO : mau dicoba, bagaimana cara akses properti $colorObj.  
+    // cara akses properti : $colorObj->mean_IR, dll 
     return $colorObj;
 
     // Source : 
@@ -171,5 +152,67 @@ class ProductController extends Controller
     // https://www.php.net/manual/en/imagick.constants.php#imagick.constants.channel
     // https://www.geeksforgeeks.org/php-imagick-getimagechannelmean-function/
 
+  }
+
+  // Parameter input dalam bentuk URL (Ambil dari DB)
+  // contoh : 'D:\New Neko Code\TA_Project\public\assets\image\contohgambar.jpg'
+  function query_colorDescriptor($query_img)
+  {
+    // Color Descriptor
+    // Imagick untuk dapat Mean dan STDV 
+    $query_img = new Imagick($query_img);
+
+    // Mean and Std method from Imagick
+    $IR = $query_img->getImageChannelMean(1); // Red
+    $IG = $query_img->getImageChannelMean(4); // Green
+    $IB = $query_img->getImageChannelMean(2); // Blue 
+
+    // LT dan HT untuk ketiga channel warna RGB
+    $lt_IR =  $IR["mean"] - $IR["standardDeviation"];
+    $ht_IR =  $IR["mean"] + $IR["standardDeviation"];
+
+    $lt_IG =  $IG["mean"] - $IG["standardDeviation"];
+    $ht_IG =  $IG["mean"] + $IG["standardDeviation"];
+
+    $lt_IB =  $IB["mean"] - $IB["standardDeviation"];
+    $ht_IB =  $IB["mean"] + $IB["standardDeviation"];
+
+    $colorObj = new colorInfo();
+
+    $colorObj->lt_IR = $lt_IR;
+    $colorObj->ht_IR = $ht_IR;
+    $colorObj->lt_IG = $lt_IG;
+    $colorObj->ht_IG = $ht_IG;
+    $colorObj->lt_IB = $lt_IB;
+    $colorObj->ht_IB = $ht_IB;
+
+    // cara akses properti : $colorObj->mean_IR, dll 
+    return $colorObj;
+  }
+
+  function makeSubset()
+  {
+    // subset untuk menampung gambar yang berada di dalam range RGB query_img
+    $subset = [];
+    // Image Example 
+    global $img;
+    $query_img =  $img;
+
+    // Ambil nilai mean IChannel (color_feature) dari tiap produk dari DB 
+    // @foreach($productImage as) 
+    $mean_IR = '//IR dari DB';
+    $mean_IB = '//IB dari DB';
+    $mean_IG = '//IG dari DB';
+
+    if (
+      ($mean_IR  < $this->query_colorDescriptor($query_img)->ht_IR && $mean_IR  > $this->query_colorDescriptor($query_img)->lt_IR) &&
+      ($mean_IG  < $this->query_colorDescriptor($query_img)->ht_IG && $mean_IG  > $this->query_colorDescriptor($query_img)->lt_IG) &&
+      ($mean_IB  < $this->query_colorDescriptor($query_img)->ht_IB && $mean_IB  > $this->query_colorDescriptor($query_img)->lt_IB)
+    ) {
+      // masukkan ke Array Subset 
+      // $subset[] = $db_image;
+    }
+
+    // @endforeach
   }
 }

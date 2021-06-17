@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page_title', "Products")
+@section('page_title', "Users")
 
 @section('extend_style')
   <!-- page style -->
@@ -9,8 +9,7 @@
 
 @section('breadcrumb_item')
   <a href="{{ route('admin.dashboard')}}" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-  {{-- <a class="breadcrumb-item" href="#">Tables</a> --}}
-  <span class="breadcrumb-item active">Product</span>
+  <span class="breadcrumb-item active">Users</span>
 @endsection
 
 @section('content')
@@ -34,48 +33,45 @@
         <div class="col-sm-12 col-md-3 col-lg-3">
           <div class="input-affix m-b-10">
               <i class="prefix-icon anticon anticon-search"></i>
-              <input type="text" class="form-control" id="products-name-search" placeholder="Search by name">
+              <input type="text" class="form-control" id="categories-name-search" placeholder="Search by name">
           </div>
         </div>
 
         <div class="col-sm-12 col-md-9 col-lg-9 text-right">
-          <a href="{{route('product.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Product</a>
+          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Categories</a>
         </div>
       </div>
       <div class="table-responsive">
-        <table id="products-data-table" class="table">
+        <table id="categories-data-table" class="table">
           <thead>
             <tr>
               <th>No</th>
-              <th>Product Name </th>
-              <th>Brand</th>
-              <th>Category</th>
-              <th>Unit</th>
-              <th>Color</th>
+              <th>Category Name</th>
               <th>Description</th>
               <th>Created at</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {{-- @foreach ($data->products as $product)
+            @foreach ($data->categories_data as $categories_item)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $product->name }}</td>
-                <td>{{ $product->brand }}</td>
-                <td>{{ $product->category_id }}</td>
-                <td>{{ $product->unit }}</td>
-                <td>{{ $product->color }}</td>
-                <td>{{ $product->description }}</td>
-                <td>{{ $product->created_at }}</td>
+                <td>{{ $categories_item->name }}</td>
+                <td>{{ $categories_item->description }}</td>
+                <td>{{ $categories_item->created_at }}</td>
                 <td>
-                  <a href="{{route('product.edit', ['id' => $product->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                  <a href="{{route('category.edit', ['id' => $categories_item->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                   <meta name="csrf-token" content="{{ csrf_token() }}">
-                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$product->id}}"><i class="far fa-trash-alt"></i></button>
+                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$categories_item->id}}"><i class="far fa-trash-alt"></i></button>
+                  {{-- <form class="d-inline-block" action="{{route('category.delete', $categories_item->id) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>
+                  </form> --}}
                 </td>
               </tr>
-            @endforeach --}}
+            @endforeach
           </tbody>
         </table>
       </div>
@@ -90,10 +86,9 @@
   <script src="{{ asset('vendors/datatables/dataTables.bootstrap.min.js') }}"></script>
 
   <script type="text/javascript">
-  // TODO : Perlu diganti dari Categories jadi Product 
     $.fn.dataTable.ext.search.push(
       function( settings, data, dataIndex ) {
-        var _search = $('#products-name-search').val();
+        var _search = $('#categories-name-search').val();
         var _dataName = data[1]; // use data for the age column
         var _dataDesc = data[2]; // use data for the age column
         console.log([_search, _dataName, _dataDesc]);
@@ -143,8 +138,8 @@
       } );
       $('.btn-delete').click(function(){
         swal({
-          title: "Anda yakin ingin menghapus data ini?",
-          text: "Setelah dihapus, data tidak dapat dikembalikan!",
+          title: "Are you sure want to delete this data?",
+          text: "Data is lost forever after delete",
           icon: "warning",
           buttons: true,
           dangerMode: true,
@@ -163,7 +158,7 @@
                   "_token": token,
                 },
                 success: function (){
-                  swal("Data berhasil dihapus!", {
+                  swal("Delete success!", {
                     icon: "success",
                   });
                   setTimeout(function () {
@@ -172,7 +167,7 @@
                 }
               });
             } else {
-              swal("Penghapusan batal!");
+              swal("Delete canceled!");
             }
           });
       });

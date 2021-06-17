@@ -1,3 +1,5 @@
+
+<!-- TODO : mungkin ga dibutuhkan lagi  -->
 @extends('layouts.admin')
 
 @section('page_title', "Kategori")

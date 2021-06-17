@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page_title', "Tambah kategori")
+@section('page_title', "Add Categories")
 
 @section('extend_style')
   <!-- page style -->

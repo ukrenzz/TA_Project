@@ -7,6 +7,9 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -77,6 +80,21 @@ Route::name('transaction.')->group(function()
   Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
   Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
   Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
+});
+
+Route::name('user.')->group(function()
+{
+  Route::get('/manage/user', [UserController::class, 'index'])->name('manage');
+});
+
+Route::name('order.')->group(function()
+{
+  Route::get('/manage/order', [OrderController::class, 'index'])->name('manage');
+});
+
+Route::name('feedback.')->group(function()
+{
+  Route::get('/manage/feedback', [FeedbackController::class, 'index'])->name('manage');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

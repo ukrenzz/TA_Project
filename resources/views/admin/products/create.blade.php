@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page_title', "Tambah produk")
+@section('page_title', "Add Product")
 
 @section('extend_style')
   <!-- page style -->
@@ -17,9 +17,9 @@
 
 @section('breadcrumb_item')
   <a href="{{ route('admin.dashboard')}}" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-  <a class="breadcrumb-item" href="{{ route('product.manage') }}">Produk</a>
+  <a class="breadcrumb-item" href="{{ route('product.manage') }}">Product</a>
   <span class="breadcrumb-item active">
-    {{ $mode == "edit" ? "Edit produk" : "Tambah produk" }}
+    {{ $mode == "edit" ? "Edit product" : "Add product" }}
   </span>
 @endsection
 
@@ -39,7 +39,7 @@
                   @endif
                   <div class="m-l-15">
                       @if($mode != "edit")
-                        <h4 class="m-b-0">Produk baru</h4>
+                        <h4 class="m-b-0">New Product</h4>
                       @else
                         <h4 class="m-b-0">Skinny Men Blazer</h4>
                         <p class="text-muted m-b-0">Code: #5325</p>
@@ -221,7 +221,7 @@
             $('#btn_save').html('<i class="anticon anticon-save"></i> <span>Save</span>');
             $('#btn_save').prop('disabled', false);
             if (data.success) {
-              swal("Sukses", "Produk berhasil {{ isset($data->product) ? 'diperbarui' : 'ditambahkan' }}!", "success")
+              swal("Sukses", "Product is successful {{ isset($data->product) ? 'updated' : 'inserted' }}!", "success")
                 .then(() => {
                   location.href = "/manage/product";
                 });

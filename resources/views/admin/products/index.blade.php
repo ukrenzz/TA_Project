@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page_title', "Produk")
+@section('page_title', "Products")
 
 @section('extend_style')
   <!-- page style -->

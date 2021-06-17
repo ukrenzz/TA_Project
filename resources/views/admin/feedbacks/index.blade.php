@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('page_title', "Kategori")
+@section('page_title', "Feedbacks")
 
 @section('extend_style')
   <!-- page style -->

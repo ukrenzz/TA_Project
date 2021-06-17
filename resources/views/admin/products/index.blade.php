@@ -10,7 +10,7 @@
 @section('breadcrumb_item')
   <a href="{{ route('admin.dashboard')}}" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
   {{-- <a class="breadcrumb-item" href="#">Tables</a> --}}
-  <span class="breadcrumb-item active">Produk</span>
+  <span class="breadcrumb-item active">Product</span>
 @endsection
 
 @section('content')
@@ -24,7 +24,7 @@
               <i class="anticon anticon-check-circle"></i>
             </span>
             <div>
-              <h5 class="alert-heading">Sukses</h5>
+              <h5 class="alert-heading">Success</h5>
               <p>{{ session('status') }}</p>
             </div>
           </div>
@@ -34,37 +34,45 @@
         <div class="col-sm-12 col-md-3 col-lg-3">
           <div class="input-affix m-b-10">
               <i class="prefix-icon anticon anticon-search"></i>
-              <input type="text" class="form-control" id="products-name-search" placeholder="Cari berdasarkan nama atau deskripsi">
+              <input type="text" class="form-control" id="products-name-search" placeholder="Search by name">
           </div>
         </div>
 
         <div class="col-sm-12 col-md-9 col-lg-9 text-right">
-          <a href="{{route('product.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Tambah produk</a>
+          <a href="{{route('product.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Product</a>
         </div>
       </div>
       <div class="table-responsive">
         <table id="products-data-table" class="table">
           <thead>
             <tr>
-              <th>Kode</th>
-              <th>Nama kategori</th>
-              <th>Deskripsi</th>
-              <th>Tanggal pembuatan</th>
+              <th>No</th>
+              <th>Product Name </th>
+              <th>Brand</th>
+              <th>Category</th>
+              <th>Unit</th>
+              <th>Color</th>
+              <th>Description</th>
+              <th>Created at</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {{-- @foreach ($data->categories_data as $categories_item)
+            {{-- @foreach ($data->products as $product)
               <tr>
-                <td>{{ $categories_item->id }}</td>
-                <td>{{ $categories_item->name }}</td>
-                <td>{{ $categories_item->description }}</td>
-                <td>{{ $categories_item->created_at }}</td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $product->name }}</td>
+                <td>{{ $product->brand }}</td>
+                <td>{{ $product->category_id }}</td>
+                <td>{{ $product->unit }}</td>
+                <td>{{ $product->color }}</td>
+                <td>{{ $product->description }}</td>
+                <td>{{ $product->created_at }}</td>
                 <td>
-                  <a href="{{route('category.edit', ['id' => $categories_item->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                  <a href="{{route('product.edit', ['id' => $product->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                   <meta name="csrf-token" content="{{ csrf_token() }}">
-                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$categories_item->id}}"><i class="far fa-trash-alt"></i></button>
+                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$product->id}}"><i class="far fa-trash-alt"></i></button>
                 </td>
               </tr>
             @endforeach --}}
@@ -82,6 +90,7 @@
   <script src="{{ asset('vendors/datatables/dataTables.bootstrap.min.js') }}"></script>
 
   <script type="text/javascript">
+  // TODO : Perlu diganti dari Categories jadi Product 
     $.fn.dataTable.ext.search.push(
       function( settings, data, dataIndex ) {
         var _search = $('#products-name-search').val();

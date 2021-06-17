@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('ecommerce.index');
 })->name('product.index');
+
 Route::name('admin.')->group(function()
 {
   Route::get('/manage/dashboard', [AdminController::class, 'index'])->name('dashboard');

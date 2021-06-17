@@ -11,23 +11,27 @@ use Storage;
 
 class ProductController extends Controller
 {
-  function index()
-  {
-    return view('ecommerce.index');
-  }
-
+  // Admin 
   function manage()
   {
+    $products = Product::orderBy('name', 'asc')->get();
     $data = (object)[
-      'categories' => Product::all(),
+      'products' => $products,
     ];
-
-    return view('admin.products.index', ['data' => $data]);
+    return view('admin.products.index', compact('data'));
   }
 
-  function show()
+
+
+  public static function getProducts($id = null)
   {
-    return view('ecommerce.detail');
+    $data = null;
+    if ($id == null) {
+      $data = Product::select('id', 'name', 'brand', 'category_id', 'unit', 'color', 'description')->orderBy('name', 'asc')->get();
+    } else {
+      $data = Product::select('id', 'name', 'brand', 'category_id', 'unit', 'color', 'description')->where('id', $id)->first();
+    }
+    return ($data);
   }
 
   function create()
@@ -39,20 +43,21 @@ class ProductController extends Controller
       'categories' => CategoryController::getCategories(),
       'colors'     => $_color
     ];
-
     return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }
 
-  function edit()
+  function edit($id)
   {
-    return view('ecommerce.categories');
+    $mode = "edit";
+    $data = Product::where('id', $id)->first();
+    return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }
 
   function store(Request $req)
   {
     $this->validation($req);
     // dd($req);
-    try{
+    try {
       Product::create([
         'name'        => $req->name,
         'brand'       => $req->brand,
@@ -68,8 +73,7 @@ class ProductController extends Controller
       ]);
 
       return response()->json(['success' => true]);
-    }
-    catch(Exception $ex) {
+    } catch (Exception $ex) {
       return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
     }
     // return view('ecommerce.categories');
@@ -96,8 +100,19 @@ class ProductController extends Controller
       'description' => ['required', 'string'],
       'color'       => ['required', 'string'],
       'status'      => ['required', 'string'],
-      'discount'    => ['nullable', 'integer','digits_between:0,100'],
+      'discount'    => ['nullable', 'integer', 'digits_between:0,100'],
       // 'images.*' => 'mimes:jpg,png,jpeg,gif,svg'
     ]);
+  }
+
+  // E-commerce 
+  function index()
+  {
+    return view('ecommerce.index');
+  }
+
+  function show()
+  {
+    return view('ecommerce.detail');
   }
 }

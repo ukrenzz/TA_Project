@@ -35,11 +35,27 @@
                 <a href="{{ route('product.category') }}">Category</a>
               </li>
               <li>
-                <a href="{{ route('product.category') }}">Profile</a>
+                <a href="{{ route('profile.show') }}">Profile</a>
+              </li>
+              @if(Route::has('login'))
+              @auth
+              <li>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <a href="{{ route('logout') }}" class="text-white" style="font-weight: bold; font-size: 0.8rem;" onclick="event.preventDefault();this.closest('form').submit();">
+                    LOG OUT
+                  </a>
+                </form>
+              </li>
+              @else
+              <li>
+                <a href="{{ route('login') }}">Log In</a>
               </li>
               <li>
-                <a href="{{ route('login')  }}">Log in</a>
+                <a href="{{ route('register') }}">Register</a>
               </li>
+              @endauth
+              @endif
             </ul>
           </div>
           <!--/main-menu -->

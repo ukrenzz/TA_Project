@@ -44,10 +44,13 @@ Route::name('category.')->group(function()
 
 Route::name('product.')->group(function()
 {
+  // E-com
   Route::get('/', [ProductController::class, 'index'])->name('index');
-  Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
   Route::get('/category', [ProductController::class, 'index'])->name('category');
+  // TODO : Tambahkan parameter id di url 
   Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
+  // Admin
+  Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
   Route::get('/manage/product/create', [ProductController::class, 'create'])->name('create');
   Route::get('/manage/product/edit', [ProductController::class, 'edit'])->name('edit');
   Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');
@@ -77,9 +80,11 @@ Route::name('cart.')->group(function()
 
 Route::name('transaction.')->group(function()
 {
-  Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
+  // E-Com
   Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
   Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
+  // Admin
+  Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
 });
 
 Route::name('user.')->group(function()

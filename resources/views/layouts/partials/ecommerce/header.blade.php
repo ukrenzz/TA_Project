@@ -28,17 +28,18 @@
                 <a href="{{ route('product.index') }}">Home</a>
               </li>
               <li>
-                <!-- TODO : perlu ganti href -->
-                <a href="{{ route('product.index') }}">Order</a>
-              </li>
-              <li>
-                <a href="{{ route('product.category') }}">Category</a>
-              </li>
-              <li>
-                <a href="{{ route('profile.show') }}">Profile</a>
+                <a href="{{ route('product.category') }}">Categories</a>
               </li>
               @if(Route::has('login'))
               @auth
+              <li>
+                <!-- TODO : perlu ganti href -->
+                <a href="{{ route('product.index') }}">Order</a>
+              </li>
+
+              <li>
+                <a href="{{ route('profile.show') }}">Profile</a>
+              </li>
               <li>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf

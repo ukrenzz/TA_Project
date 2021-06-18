@@ -15,7 +15,7 @@
   <div class="row">
     <div class="col-md-6">
       <div class="all">
-        <div class="slider">
+        <div class="slider pl-3">
           <div class="owl-carousel owl-theme main">
             <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item-box">
               <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item-box"></div>
@@ -41,77 +41,77 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="breadcrumbs">
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Category</a></li>
-            <li>Page active</li>
-          </ul>
-        </div>
-        <!-- /page_header -->
-        <div class="prod_info">
-          <h1>Armor Air X Fear</h1>
-          <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span>
-          <p><small>SKU: MTKRY-001</small><br>Sed ex labitur adolescens scriptorem. Te saepe verear tibique sed. Et wisi ridens vix, lorem iudico blandit mel cu. Ex vel sint zril oportere, amet wisi aperiri te cum.</p>
-          <div class="prod_options">
-            <div class="row">
-              <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
-              <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
-                <ul>
-                  <li><a href="#0" class="color color_1 active"></a></li>
-                  <li><a href="#0" class="color color_2"></a></li>
-                  <li><a href="#0" class="color color_3"></a></li>
-                  <li><a href="#0" class="color color_4"></a></li>
-                </ul>
-              </div>
+    </div>
+    <div class="col-md-6">
+      <div class="breadcrumbs">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">{{$data->category_id}}</a></li>
+          <li>{{$data->name}}</li>
+        </ul>
+      </div>
+      <!-- /page_header -->
+      <div class="prod_info">
+        <h1>{{$data->name}}</h1>
+        <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span>
+        <p><small>SKU: {{$data->id}}</small><br>{{$data->description}}</p>
+        <div class="prod_options">
+          <div class="row">
+            <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
+              <ul>
+                <li><a href="#0" class="color color_1 active"></a></li>
+                <li><a href="#0" class="color color_2"></a></li>
+                <li><a href="#0" class="color color_3"></a></li>
+                <li><a href="#0" class="color color_4"></a></li>
+              </ul>
             </div>
-            <div class="row">
-              <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Varians</strong></label>
-              <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-                <div class="custom-select-form">
-                  <select class="wide">
-                    <option value="" selected>Small (S)</option>
-                    <option value="">M</option>
-                    <option value=" ">L</option>
-                    <option value=" ">XL</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
-              <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-                <div class="numbers-row">
-                  <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
-                </div>
+          </div>
+          <div class="row">
+            <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Varians</strong></label>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+              <div class="custom-select-form">
+                <select class="wide">
+                  <option value="" selected>Small (S)</option>
+                  <option value="">M</option>
+                  <option value=" ">L</option>
+                  <option value=" ">XL</option>
+                </select>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-5 col-md-6">
-              <div class="price_main"><span class="new_price">$148.00</span><span class="percentage">-20%</span> <span class="old_price">$160.00</span></div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-              <div class="btn_add_to_cart"><a href="#0" class="btn_1">Add to Cart</a></div>
+            <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+              <div class="numbers-row">
+                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
+              </div>
             </div>
           </div>
         </div>
-        <!-- /prod_info -->
-        <div class="product_actions">
-          <ul>
-            <li>
-              <a href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a>
-            </li>
-          </ul>
+        <div class="row">
+          <div class="col-lg-5 col-md-6">
+            <div class="price_main"><span class="new_price">$148.00</span><span class="percentage">-20%</span> <span class="old_price">$160.00</span></div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="btn_add_to_cart"><a href="#0" class="btn_1">Add to Cart</a></div>
+          </div>
         </div>
-        <!-- /product_actions -->
       </div>
+      <!-- /prod_info -->
+      <div class="product_actions">
+        <ul>
+          <li>
+            <a href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a>
+          </li>
+        </ul>
+      </div>
+      <!-- /product_actions -->
     </div>
-    <!-- /row -->
+  </div>
+  <!-- /row -->
   </div>
   <!-- /container -->
-
   <div class="tabs_product">
     <div class="container">
       <ul class="nav nav-tabs" role="tablist">

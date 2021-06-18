@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
+use App\Models\Category;
 use Storage;
 
 class ProductController extends Controller
@@ -108,14 +109,29 @@ class ProductController extends Controller
   // E-commerce 
   function index()
   {
-    return view('ecommerce.index');
+    $products = Product::orderBy('name', 'asc')->get();
+    $categories = Category::orderBy('name', 'asc')->get();
+    $data = (object)[
+      'products' => $products,
+      'categories' => $categories,
+    ];
+    return view('ecommerce.index', compact('data'));
   }
 
   function show()
   {
     // Perlu ganti jadi parameter 
-    $id = 1; 
+    $id = 1;
     $data = Product::where('id', $id)->first();
     return view('ecommerce.detail', ['data' => $data]);
+  }
+
+  function categories()
+  {
+    $categories = Category::orderBy('name', 'asc')->get();
+    $data = (object)[
+      'categories' => $categories,
+    ];
+    return view('ecommerce.categories', compact('data'));
   }
 }

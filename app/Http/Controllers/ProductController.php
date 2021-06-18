@@ -113,6 +113,9 @@ class ProductController extends Controller
 
   function show()
   {
-    return view('ecommerce.detail');
+    // Perlu ganti jadi parameter 
+    $id = 1; 
+    $data = Product::where('id', $id)->first();
+    return view('ecommerce.detail', ['data' => $data]);
   }
 }

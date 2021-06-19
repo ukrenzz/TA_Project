@@ -59,20 +59,20 @@
             @foreach ($data->orders as $order)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $categories_item->ref }}</td>
-                <td>{{ $categories_item->user_id }}</td>
-                <td>{{ $categories_item->status }}</td>
-                <td>{{ $categories_item->discount }}</td>
-                <td>{{ $categories_item->shipping_cost }}</td>
-                <td>{{ $categories_item->payment_method}}</td>
-                <td>{{ $categories_item->created_at }}</td>
+                <td>{{ $order->ref }}</td>
+                <td>{{ $order->username }}</td>
+                <td>{{ $order->status }}</td>
+                <td>{{ $order->discount }}</td>
+                <td>{{ $order->shipping_cost }}</td>
+                <td>{{ $order->payment_method}}</td>
+                <td>{{ $order->created_at }}</td>
                 <td>
                 <!-- TODO : Apakah masih butuh Action untuk Order ?  -->
-                  <a href="{{route('category.edit', ['id' => $categories_item->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                  <a href="{{route('category.edit', ['id' => $order->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                   <meta name="csrf-token" content="{{ csrf_token() }}">
-                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$categories_item->id}}"><i class="far fa-trash-alt"></i></button>
-                  {{-- <form class="d-inline-block" action="{{route('category.delete', $categories_item->id) }}" method="post">
+                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$order->id}}"><i class="far fa-trash-alt"></i></button>
+                  {{-- <form class="d-inline-block" action="{{route('category.delete', $order->id) }}" method="post">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>

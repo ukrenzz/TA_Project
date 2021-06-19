@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Order;
+use App\Models\Transaction;
 
 
 class OrderController extends Controller
@@ -15,7 +15,10 @@ class OrderController extends Controller
 	 */
 	public function index()
 	{
-		$orders = Order::orderBy('ref', 'desc')->get();
+		$orders = Transaction::join('users', 'users.id', '=', 'transactions.user_id')
+			->select('transactions.id', 'ref', 'users.name as username', 'ppn', 'status', 'discount', 'shipping_cost', 'payment_method', 'transactions.created_at', 'transactions.updated_at')
+			->orderBy('ref', 'desc')
+			->get();
 
 		$data = (object)[
 			'orders' => $orders,

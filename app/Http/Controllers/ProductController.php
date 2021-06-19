@@ -15,7 +15,10 @@ class ProductController extends Controller
   // Admin 
   function manage()
   {
-    $products = Product::orderBy('name', 'asc')->get();
+    $products = Product::join('categories', 'products.category_id', '=', 'categories.id')
+      ->select('products.name as product_name', 'categories.name as category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'products.created_at')
+      ->orderBy('product_name', 'asc')
+      ->get();
     $data = (object)[
       'products' => $products,
     ];
@@ -85,9 +88,13 @@ class ProductController extends Controller
     return view('ecommerce.categories');
   }
 
-  function delete()
+  function destroy($id)
   {
-    return view('ecommerce.categories');
+    // TODO: Belum berhasil 
+    Product::find($id)->delete();
+    return response()->json([
+      'success' => 'Record deleted successfully!'
+    ]);
   }
 
   private function validation(Request $req)

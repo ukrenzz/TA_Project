@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->string('status', 25);
             $table->bigInteger('discount')->nullable()->default(0);
             $table->timestamps();
-            $table->foreign('category_id')->reference('id')->on('categories');
+            // $table->foreign('category_id')->reference('id')->on('categories');
         });
     }
 

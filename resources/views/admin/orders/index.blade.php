@@ -60,7 +60,7 @@
               <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $order->ref }}</td>
-                <td>{{ $order->user_id }}</td>
+                <td>{{ $order->username }}</td>
                 <td>{{ $order->status }}</td>
                 <td>{{ $order->discount }}</td>
                 <td>{{ $order->shipping_cost }}</td>

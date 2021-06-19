@@ -69,7 +69,7 @@ Route::name('product.')->group(function()
   Route::get('/manage/product/edit', [ProductController::class, 'edit'])->name('edit');
   Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');
   Route::put('/manage/product/update', [ProductController::class, 'update'])->name('update');
-  Route::delete('/manage/product/delete', [ProductController::class, 'delete'])->name('delete');
+  Route::delete('/manage/product/delete/{id}', [ProductController::class, 'destroy'])->name('delete');
 });
 
 Route::name('wishlist.')->group(function()

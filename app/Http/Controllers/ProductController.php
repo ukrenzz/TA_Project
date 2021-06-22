@@ -7,14 +7,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
+use App\Models\Category;
 use Storage;
 
-
-
-use CV\CascadeClassifier, CV\Face\FacemarkLBF;
-use function CV\{circle, imread, imwrite, cvtColor, equalizeHist};
-use CV\Scalar;
-use const CV\{COLOR_BGR2GRAY};
+// use CV\CascadeClassifier, CV\Face\FacemarkLBF;
+// use function CV\{circle, imread, imwrite, cvtColor, equalizeHist};
+// use CV\Scalar;
+// use const CV\{COLOR_BGR2GRAY};
 
 class colorInfo
 {
@@ -34,23 +33,30 @@ class colorInfo
 
 class ProductController extends Controller
 {
-  function index()
-  {
-    return view('ecommerce.index');
-  }
-
+  // Admin 
   function manage()
   {
+    $products = Product::join('categories', 'products.category_id', '=', 'categories.id')
+      ->select('products.name as product_name', 'categories.name as category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'products.created_at')
+      ->orderBy('product_name', 'asc')
+      ->get();
     $data = (object)[
-      'categories' => Product::all(),
+      'products' => $products,
     ];
-
-    return view('admin.products.index', ['data' => $data]);
+    return view('admin.products.index', compact('data'));
   }
 
-  function show()
+
+
+  public static function getProducts($id = null)
   {
-    return view('ecommerce.detail');
+    $data = null;
+    if ($id == null) {
+      $data = Product::select('id', 'name', 'brand', 'category_id', 'unit', 'color', 'description')->orderBy('name', 'asc')->get();
+    } else {
+      $data = Product::select('id', 'name', 'brand', 'category_id', 'unit', 'color', 'description')->where('id', $id)->first();
+    }
+    return ($data);
   }
 
   function create()
@@ -62,13 +68,14 @@ class ProductController extends Controller
       'categories' => CategoryController::getCategories(),
       'colors'     => $_color
     ];
-
     return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }
 
-  function edit()
+  function edit($id)
   {
-    return view('ecommerce.categories');
+    $mode = "edit";
+    $data = Product::where('id', $id)->first();
+    return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }
 
   function store(Request $req)
@@ -102,9 +109,13 @@ class ProductController extends Controller
     return view('ecommerce.categories');
   }
 
-  function delete()
+  function destroy($id)
   {
-    return view('ecommerce.categories');
+    // TODO: Belum berhasil 
+    Product::find($id)->delete();
+    return response()->json([
+      'success' => 'Record deleted successfully!'
+    ]);
   }
 
   private function validation(Request $req)
@@ -122,6 +133,35 @@ class ProductController extends Controller
       // 'images.*' => 'mimes:jpg,png,jpeg,gif,svg'
     ]);
   }
+
+    // E-commerce 
+    function index()
+    {
+      $products = Product::orderBy('name', 'asc')->get();
+      $categories = Category::orderBy('name', 'asc')->get();
+      $data = (object)[
+        'products' => $products,
+        'categories' => $categories,
+      ];
+      return view('ecommerce.index', compact('data'));
+    }
+  
+    function show()
+    {
+      // Perlu ganti jadi parameter 
+      $id = 1;
+      $data = Product::where('id', $id)->first();
+      return view('ecommerce.detail', ['data' => $data]);
+    }
+  
+    function categories()
+    {
+      $categories = Category::orderBy('name', 'asc')->get();
+      $data = (object)[
+        'categories' => $categories,
+      ];
+      return view('ecommerce.categories', compact('data'));
+    }
 
   // -------------------------
   // CTEBIR Algo 
@@ -321,7 +361,7 @@ class ProductController extends Controller
         $r = ($rgb >> 16) & 0xFF;
         $g = ($rgb >> 8) & 0xFF;
         $b = $rgb & 0xFF;
-        $hsv = RGBtoHSV($r, $g, $b);
+        $hsv = $this->RGBtoHSV($r, $g, $b);
         
         if ($hi < $h - 1) {
           // compare pixel below with current pixel
@@ -329,7 +369,7 @@ class ProductController extends Controller
           $br = ($brgb >> 16) & 0xFF;
           $bg = ($brgb >> 8) & 0xFF;
           $bb = $brgb & 0xFF;
-          $bhsv = RGBtoHSV($br, $bg, $bb);
+          $bhsv = $this->RGBtoHSV($br, $bg, $bb);
           
           // if difference in hue is bigger than 20, make this pixel white (edge), otherwise black
           if ($bhsv[2] - $hsv[2] > 20) {
@@ -346,7 +386,4 @@ class ProductController extends Controller
     imagejpeg($im);
     imagedestroy($im);
   }
-
-
-
 }

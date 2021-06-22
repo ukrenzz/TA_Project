@@ -4,8 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CtebirController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -18,10 +23,6 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// index e-commerce
-Route::get('/', function () {
-    return view('ecommerce.index');
-})->name('product.index');
 
 Route::name('ctebir.')->group(function()
 {
@@ -29,6 +30,8 @@ Route::name('ctebir.')->group(function()
   // Route::post('/ctebir/store', [CtebirController::class, 'store'])->name('store');
 });
 
+
+// Admin Route 
 Route::name('admin.')->group(function()
 {
   Route::get('/manage/dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -44,24 +47,44 @@ Route::name('category.')->group(function()
   Route::delete('/manage/category/delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
 });
 
+Route::name('user.')->group(function()
+{
+  Route::get('/manage/user', [UserController::class, 'index'])->name('manage');
+});
+
+Route::name('order.')->group(function()
+{
+  Route::get('/manage/order', [OrderController::class, 'index'])->name('manage');
+});
+
+Route::name('feedback.')->group(function()
+{
+  Route::get('/manage/feedback', [FeedbackController::class, 'index'])->name('manage');
+});
+
+// E-com Routes 
+
 Route::name('product.')->group(function()
 {
+  // E-com
   Route::get('/', [ProductController::class, 'index'])->name('index');
-  Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
-  Route::get('/category', [ProductController::class, 'index'])->name('category');
+  Route::get('/categories', [ProductController::class, 'categories'])->name('category');
+  // TODO : Tambahkan parameter id di url 
   Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
+  // Admin
+  Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
   Route::get('/manage/product/create', [ProductController::class, 'create'])->name('create');
   Route::get('/manage/product/edit', [ProductController::class, 'edit'])->name('edit');
   Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');
   Route::put('/manage/product/update', [ProductController::class, 'update'])->name('update');
-  Route::delete('/manage/product/delete', [ProductController::class, 'delete'])->name('delete');
+  Route::delete('/manage/product/delete/{id}', [ProductController::class, 'destroy'])->name('delete');
 });
 
 Route::name('wishlist.')->group(function()
 {
   Route::get('/wishlist', [WishlistController::class, 'index'])->name('index');
-  Route::get('/wishlist/create', [WishlistController::class, 'create'])->name('create');
-  Route::get('/wishlist/edit', [WishlistController::class, 'edit'])->name('edit');
+  // Route::get('/wishlist/create', [WishlistController::class, 'create'])->name('create');
+  // Route::get('/wishlist/edit', [WishlistController::class, 'edit'])->name('edit');
   Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('store');
   Route::put('/wishlist/update', [WishlistController::class, 'update'])->name('update');
   Route::delete('/wishlist/delete', [WishlistController::class, 'delete'])->name('delete');
@@ -70,8 +93,8 @@ Route::name('wishlist.')->group(function()
 Route::name('cart.')->group(function()
 {
   Route::get('/cart', [CartController::class, 'index'])->name('index');
-  Route::get('/cart/create', [CartController::class, 'create'])->name('create');
-  Route::get('/cart/edit', [CartController::class, 'edit'])->name('edit');
+  // Route::get('/cart/create', [CartController::class, 'create'])->name('create');
+  // Route::get('/cart/edit', [CartController::class, 'edit'])->name('edit');
   Route::post('/cart/store', [CartController::class, 'store'])->name('store');
   Route::put('/cart/update', [CartController::class, 'update'])->name('update');
   Route::delete('/cart/delete', [CartController::class, 'delete'])->name('delete');
@@ -79,10 +102,36 @@ Route::name('cart.')->group(function()
 
 Route::name('transaction.')->group(function()
 {
-  Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
+  // E-Com
   Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
   Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
+  // Admin
+  Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
 });
+
+Route::name('search.')->group(function()
+{
+  // E-Com
+  Route::get('/text-search', [SearchController::class, 'textSearchIndex'])->name('text');
+  Route::get('/visual-search', [SearchController::class, 'visualSearchIndex'])->name('visual');
+  // Route::post('/payment/store', [SearchController::class, 'store'])->name('store');
+});
+
+Route::name('history.')->group(function()
+{
+  // 
+});
+
+Route::name('feedback.')->group(function()
+{
+  // Di DB namanya ratings
+});
+
+Route::name('profile.')->group(function()
+{
+  // Apakah ini bisa disamakan langsung dengan Auth ? 
+});
+
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

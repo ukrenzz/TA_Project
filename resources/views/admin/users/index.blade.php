@@ -1,8 +1,6 @@
-
-<!-- TODO : mungkin ga dibutuhkan lagi  -->
 @extends('layouts.admin')
 
-@section('page_title', "Kategori")
+@section('page_title', "Users")
 
 @section('extend_style')
   <!-- page style -->
@@ -11,8 +9,7 @@
 
 @section('breadcrumb_item')
   <a href="{{ route('admin.dashboard')}}" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-  {{-- <a class="breadcrumb-item" href="#">Tables</a> --}}
-  <span class="breadcrumb-item active">Kategori</span>
+  <span class="breadcrumb-item active">Users</span>
 @endsection
 
 @section('content')
@@ -26,7 +23,7 @@
               <i class="anticon anticon-check-circle"></i>
             </span>
             <div>
-              <h5 class="alert-heading">Sukses</h5>
+              <h5 class="alert-heading">Success</h5>
               <p>{{ session('status') }}</p>
             </div>
           </div>
@@ -36,29 +33,29 @@
         <div class="col-sm-12 col-md-3 col-lg-3">
           <div class="input-affix m-b-10">
               <i class="prefix-icon anticon anticon-search"></i>
-              <input type="text" class="form-control" id="categories-name-search" placeholder="Cari berdasarkan nama atau deskripsi">
+              <input type="text" class="form-control" id="categories-name-search" placeholder="Search by name">
           </div>
         </div>
 
         <div class="col-sm-12 col-md-9 col-lg-9 text-right">
-          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Tambah kategori</a>
+          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Categories</a>
         </div>
       </div>
       <div class="table-responsive">
         <table id="categories-data-table" class="table">
           <thead>
             <tr>
-              <th>Kode</th>
-              <th>Nama kategori</th>
-              <th>Deskripsi</th>
-              <th>Tanggal pembuatan</th>
+              <th>No</th>
+              <th>Category Name</th>
+              <th>Description</th>
+              <th>Created at</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             @foreach ($data->categories_data as $categories_item)
               <tr>
-                <td>{{ $categories_item->id }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $categories_item->name }}</td>
                 <td>{{ $categories_item->description }}</td>
                 <td>{{ $categories_item->created_at }}</td>
@@ -141,8 +138,8 @@
       } );
       $('.btn-delete').click(function(){
         swal({
-          title: "Anda yakin ingin menghapus data ini?",
-          text: "Setelah dihapus, data tidak dapat dikembalikan!",
+          title: "Are you sure want to delete this data?",
+          text: "Data is lost forever after delete",
           icon: "warning",
           buttons: true,
           dangerMode: true,
@@ -161,7 +158,7 @@
                   "_token": token,
                 },
                 success: function (){
-                  swal("Data berhasil dihapus!", {
+                  swal("Delete success!", {
                     icon: "success",
                   });
                   setTimeout(function () {
@@ -170,7 +167,7 @@
                 }
               });
             } else {
-              swal("Penghapusan batal!");
+              swal("Delete canceled!");
             }
           });
       });

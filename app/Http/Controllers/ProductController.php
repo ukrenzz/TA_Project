@@ -30,7 +30,7 @@ class colorInfo
   public $ht_IB;
 }
 
-$img = new Imagick('D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg');
+// $img = new Imagick('D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg');
 
 class ProductController extends Controller
 {

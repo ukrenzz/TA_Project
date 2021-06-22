@@ -24,6 +24,7 @@
         "tailwindcss": "^2.0.1"
     },
     "dependencies": {
-        "bootstrap-colorpicker": "^3.3.0"
+        "bootstrap-colorpicker": "^3.3.0",
+        "js-canny-edge-detector": "github:petarjs/js-canny-edge-detector"
     }
 }

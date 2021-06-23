@@ -1,164 +1,254 @@
 <!DOCTYPE html>
+<!-- https://github.com/petarjs/js-canny-edge-detector -->
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
   <title>CTEBIR Playground</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 20px;
+    }
+
+    .js_controls {
+      display: none;
+    }
+
+    .js_status {
+      display: none;
+    }
+
+    .controls--blocked .column *:not(.cancel) {
+      opacity: 0.5;
+      user-select: none;
+    }
+
+    .cancel {
+      display: none;
+    }
+
+    .input--file {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+
+    .input--file+label {
+      font-size: 1.25em;
+      font-weight: 700;
+      display: inline-block;
+      cursor: pointer;
+      color: #FFFFFF;
+      white-space: nowrap;
+      display: inline-block;
+      overflow: hidden;
+      padding: 0.625rem 1.25rem;
+      font-size: 1.1rem;
+      height: 3.8rem;
+      letter-spacing: .1rem;
+      line-height: 3.8rem;
+      padding: 0 3.0rem;
+      font-weight: 700;
+      border-radius: .4rem;
+      background-color: #9b4dca;
+      border: 0.1rem solid #9b4dca;
+      text-transform: uppercase;
+    }
+
+    .input--file:focus+label,
+    .input--file+label:hover {
+      background-color: #606c76;
+      border-color: #606c76;
+      color: #fff;
+      outline: 0;
+    }
+
+    .ta-c {
+      text-align: center;
+    }
+
+    .pb-md {
+      padding-bottom: 1rem;
+    }
+
+    .controls {
+      margin: 0 auto;
+    }
+
+    .result {
+      position: relative;
+      height: 400px;
+    }
+
+    .result>section {
+      position: absolute;
+      width: 100%;
+      display: none;
+      text-align: center;
+    }
+
+    .image-nav {
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .image-nav--active {
+      display: inline-block;
+    }
+
+    .image-nav>ul {
+      display: inline-block;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    .image-nav__item {
+      margin: 0;
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+      background: #DADADA;
+      border-radius: 50%;
+    }
+
+    .image-nav__item--active {
+      background: #9b4dca;
+    }
+
+    .result {
+      padding: 0;
+    }
+
+    .result .image--active {
+      display: inline-block;
+    }
+  </style>
 </head>
 
 <body>
-  <div>
-    <?php
-    $img = imagecreatefromjpeg('D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg');
+  <div class="container">
+    <div class="row">
+      <div class="column ta-c">
+        <a href="https://github.com/petarjs/js-canny-edge-detector">Back to GitHub</a>
+        <h1 class="ta-c pb-md">Canny Edge Detector</h1>
+      </div>
+    </div>
 
-    function RGBtoHSV($r, $g, $b)
-    {
-      $r = $r / 255.; // convert to range 0..1
-      $g = $g / 255.;
-      $b = $b / 255.;
-      $cols = array("r" => $r, "g" => $g, "b" => $b);
-      asort($cols, SORT_NUMERIC);
-      $min = key(array_slice($cols, 1)); // "r", "g" or "b"
-      $max = key(array_slice($cols, -1)); // "r", "g" or "b"
-      
-      // hue
-      if ($cols[$min] == $cols[$max]) {
-        $h = 0;
-      } else {
-        if ($max == "r") {
-          $h = 60. * (0 + (($cols["g"] - $cols["b"]) / ($cols[$max] - $cols[$min])));
-        } elseif ($max == "g") {
-          $h = 60. * (2 + (($cols["b"] - $cols["r"]) / ($cols[$max] - $cols[$min])));
-        } elseif ($max == "b") {
-          $h = 60. * (4 + (($cols["r"] - $cols["g"]) / ($cols[$max] - $cols[$min])));
-        }
-        if ($h < 0) {
-          $h += 360;
-        }
-      }
-      
-      // saturation
-      if ($cols[$max] == 0) {
-        $s = 0;
-      } else {
-        $s = (($cols[$max] - $cols[$min]) / $cols[$max]);
-        $s = $s * 255;
-      }
-      
-      // lightness
-      $v = $cols[$max];
-      $v = $v * 255;
+    <div class="row">
+      <div class="column">
+        <div class="upload-image ta-c pb-md">
+          <input type="file" id="image" class="input--file js_image">
+          <label for="image">Choose Image</label>
+        </div>
+      </div>
+    </div>
 
-      return(array($h, $s, $v));
-    }
+    <div class="row">
+      <div class="column ta-c">
+        <div class="js_controls controls">
+          <div class="row">
+            <div class="column">
+              <input type="text" class="js_lt" placeholder="Lower Treshold (0-1)">
+              <input type="text" class="js_ut" placeholder="Upper Treshold (0-1)">
+            </div>
+          </div>
 
+          <div class="row">
+            <div class="column">
+              <button class="button js_submit">Find Edges</button>
+              <button class="button cancel js_cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="row">
+      <div class="column ta-c">
+        <div class="js_status"></div>
+      </div>
+    </div>
 
-    $filename = "D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg";
-    $dimensions = getimagesize($filename);
-    $w = $dimensions[0]; // width
-    $h = $dimensions[1]; // height
+    <div class="row">
+      <div class="column ta-c">
+        <div class="image-nav js_image-nav">
+          <ul>
+            <li data-target="js_image--from" class="image-nav__item" title="Start"></li>
+            <li data-target="js_image--grayscale" class="image-nav__item" title="Grayscale"></li>
+            <li data-target="js_image--blurred" class="image-nav__item" title="Blurred"></li>
+            <li data-target="js_image--x-derived" class="image-nav__item" title="X derived"></li>
+            <li data-target="js_image--y-derived" class="image-nav__item" title="Y derived"></li>
+            <li data-target="js_image--result" class="image-nav__item" title="Result"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-    $im = imagecreatefromjpeg($filename);
+    <div class="row">
+      <div class="column result">
+        <section class="js_image--from">
+          <canvas class="image--from"></canvas>
+        </section>
 
-    for ($hi = 0; $hi < $h; $hi++) {
-      for ($wi = 0; $wi < $w; $wi++) {
-        $rgb = imagecolorat($im, $wi, $hi);
-        
-        
-        $r = ($rgb >> 16) & 0xFF;
-        $g = ($rgb >> 8) & 0xFF;
-        $b = $rgb & 0xFF;
-        $hsv = RGBtoHSV($r, $g, $b);
-        
-        if ($hi < $h - 1) {
-          // compare pixel below with current pixel
-          $brgb = imagecolorat($im, $wi, $hi + 1);
-          $br = ($brgb >> 16) & 0xFF;
-          $bg = ($brgb >> 8) & 0xFF;
-          $bb = $brgb & 0xFF;
-          $bhsv = RGBtoHSV($br, $bg, $bb);
-          
-          // if difference in hue is bigger than 20, make this pixel white (edge), otherwise black
-          if ($bhsv[2] - $hsv[2] > 20) {
-            imagesetpixel($im, $wi, $hi, imagecolorallocate($im, 255, 255, 255));
-          } else {
-            imagesetpixel($im, $wi, $hi, imagecolorallocate($im, 0, 0, 0));
-          }
-        }
-      }
-    }
-    
-    header('Content-Type: image/jpeg');
-    // TODO : Bagaimana cara memanfaatkan hasil ini ? 
-    imagejpeg($im);
-    imagedestroy($im);
+        <section class="js_image--grayscale">
+          <canvas class="image--grayscale"></canvas>
+        </section>
 
-    // // Color Descriptor
-    // // Imagick untuk dapat Mean dan STDV 
-    // $imagick = new Imagick('D:\New Neko Code\TA_Project\public\assets\image\Godfrey Gao.jpg');
+        <section class="js_image--blurred">
+          <canvas class="image--blurred"></canvas>
+        </section>
 
-    // // Mean and Std method from Imagick
-    // $IR = $imagick->getImageChannelMean(1); // Red
-    // $IG = $imagick->getImageChannelMean(4); // Green
-    // $IB = $imagick->getImageChannelMean(2); // Blue 
-    // // Mean, perlu direturn untuk citra dari DB
-    // $mean_IR =  $IR["mean"];
-    // $mean_IG =  $IG["mean"];
-    // $mean_IB =  $IB["mean"];
+        <section class="js_image--x-derived">
+          <canvas class="image--x-derived"></canvas>
+        </section>
 
-    // // LT dan HT 
-    // $lt_IR =  $IR["mean"] - $IR["standardDeviation"];
-    // $ht_IR =  $IR["mean"] + $IR["standardDeviation"];
+        <section class="js_image--y-derived">
+          <canvas class="image--y-derived"></canvas>
+        </section>
 
-    // $lt_IG =  $IG["mean"] - $IG["standardDeviation"];
-    // $ht_IG =  $IG["mean"] + $IG["standardDeviation"];
-
-    // $lt_IB =  $IB["mean"] - $IB["standardDeviation"];
-    // $ht_IB =  $IB["mean"] + $IB["standardDeviation"];
-
-    // class colorInfo
-    // {
-    //   public $mean_IR;
-    //   public $mean_IG;
-    //   public $mean_IB;
-
-    //   public $lt_IR;
-    //   public $ht_IR;
-    //   public $lt_IG;
-    //   public $ht_IG;
-    //   public $lt_IB;
-    //   public $ht_IB;
-    // }
-
-    // $colorObj = new colorInfo();
-
-    // $colorObj->mean_IR = $mean_IR;
-    // $colorObj->mean_IG = $mean_IG;
-    // $colorObj->mean_IB = $mean_IB;
-
-    // $colorObj->lt_IR = $lt_IR;
-    // $colorObj->ht_IR = $ht_IR;
-    // $colorObj->lt_IG = $lt_IG;
-    // $colorObj->ht_IG = $ht_IG;
-    // $colorObj->lt_IB = $lt_IB;
-    // $colorObj->ht_IB = $ht_IB;
-    // dd($colorObj);
-
-    // // dd($IR, $IG, $IB, $lt_IR, $ht_IR, $lt_IG, $ht_IG, $lt_IB, $ht_IB);
-
-    // // https://www.php.net/manual/en/imagick.getimagechannelmean.php
-    // // https://www.php.net/manual/en/imagick.constants.php#imagick.constants.channel
-    // // https://www.geeksforgeeks.org/php-imagick-getimagechannelmean-function/
-
-    ?>
+        <section class="js_image--result">
+          <canvas class="image--result"></canvas>
+        </section>
+      </div>
+    </div>
   </div>
+
 </body>
 
 </html>
 
+<script src="{{URL::asset('vendors/ctebir/main.js')}}"></script>
+<script src="{{URL::asset('vendors/ctebir/index.js')}}"></script>
 <script>
+  let worker = new Worker("URL::asset('vendors/ctebir/worker.js')")
+  worker.postMessage({
+    cmd: 'appData',
+    data: {
+      width: window.appData.width,
+      height: window.appData.height,
+      ut: window.appData.ut,
+      lt: window.appData.lt
+    }
+  })
+  worker.postMessage({
+    cmd: 'imgData',
+    data: pixels
+  })
+  const imgd = canvasFrom
+    .getContext('2d')
+    .getImageData(0, 0, width, height)
 
+  const imageData = imgd.data
 </script>

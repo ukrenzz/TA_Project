@@ -1,254 +1,101 @@
 <!DOCTYPE html>
-<!-- https://github.com/petarjs/js-canny-edge-detector -->
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CTEBIR Playground</title>
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.min.css">
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      padding: 20px;
-    }
-
-    .js_controls {
-      display: none;
-    }
-
-    .js_status {
-      display: none;
-    }
-
-    .controls--blocked .column *:not(.cancel) {
-      opacity: 0.5;
-      user-select: none;
-    }
-
-    .cancel {
-      display: none;
-    }
-
-    .input--file {
-      width: 0.1px;
-      height: 0.1px;
-      opacity: 0;
-      overflow: hidden;
-      position: absolute;
-      z-index: -1;
-    }
-
-    .input--file+label {
-      font-size: 1.25em;
-      font-weight: 700;
-      display: inline-block;
-      cursor: pointer;
-      color: #FFFFFF;
-      white-space: nowrap;
-      display: inline-block;
-      overflow: hidden;
-      padding: 0.625rem 1.25rem;
-      font-size: 1.1rem;
-      height: 3.8rem;
-      letter-spacing: .1rem;
-      line-height: 3.8rem;
-      padding: 0 3.0rem;
-      font-weight: 700;
-      border-radius: .4rem;
-      background-color: #9b4dca;
-      border: 0.1rem solid #9b4dca;
-      text-transform: uppercase;
-    }
-
-    .input--file:focus+label,
-    .input--file+label:hover {
-      background-color: #606c76;
-      border-color: #606c76;
-      color: #fff;
-      outline: 0;
-    }
-
-    .ta-c {
-      text-align: center;
-    }
-
-    .pb-md {
-      padding-bottom: 1rem;
-    }
-
-    .controls {
-      margin: 0 auto;
-    }
-
-    .result {
-      position: relative;
-      height: 400px;
-    }
-
-    .result>section {
-      position: absolute;
-      width: 100%;
-      display: none;
-      text-align: center;
-    }
-
-    .image-nav {
-      margin-top: 2rem;
-      display: none;
-    }
-
-    .image-nav--active {
-      display: inline-block;
-    }
-
-    .image-nav>ul {
-      display: inline-block;
-      list-style-type: none;
-      margin: 0;
-    }
-
-    .image-nav__item {
-      margin: 0;
-      display: inline-block;
-      width: 2rem;
-      height: 2rem;
-      cursor: pointer;
-      background: #DADADA;
-      border-radius: 50%;
-    }
-
-    .image-nav__item--active {
-      background: #9b4dca;
-    }
-
-    .result {
-      padding: 0;
-    }
-
-    .result .image--active {
-      display: inline-block;
-    }
-  </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="column ta-c">
-        <a href="https://github.com/petarjs/js-canny-edge-detector">Back to GitHub</a>
-        <h1 class="ta-c pb-md">Canny Edge Detector</h1>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="column">
-        <div class="upload-image ta-c pb-md">
-          <input type="file" id="image" class="input--file js_image">
-          <label for="image">Choose Image</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="column ta-c">
-        <div class="js_controls controls">
-          <div class="row">
-            <div class="column">
-              <input type="text" class="js_lt" placeholder="Lower Treshold (0-1)">
-              <input type="text" class="js_ut" placeholder="Upper Treshold (0-1)">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="column">
-              <button class="button js_submit">Find Edges</button>
-              <button class="button cancel js_cancel">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="column ta-c">
-        <div class="js_status"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="column ta-c">
-        <div class="image-nav js_image-nav">
-          <ul>
-            <li data-target="js_image--from" class="image-nav__item" title="Start"></li>
-            <li data-target="js_image--grayscale" class="image-nav__item" title="Grayscale"></li>
-            <li data-target="js_image--blurred" class="image-nav__item" title="Blurred"></li>
-            <li data-target="js_image--x-derived" class="image-nav__item" title="X derived"></li>
-            <li data-target="js_image--y-derived" class="image-nav__item" title="Y derived"></li>
-            <li data-target="js_image--result" class="image-nav__item" title="Result"></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="column result">
-        <section class="js_image--from">
-          <canvas class="image--from"></canvas>
-        </section>
-
-        <section class="js_image--grayscale">
-          <canvas class="image--grayscale"></canvas>
-        </section>
-
-        <section class="js_image--blurred">
-          <canvas class="image--blurred"></canvas>
-        </section>
-
-        <section class="js_image--x-derived">
-          <canvas class="image--x-derived"></canvas>
-        </section>
-
-        <section class="js_image--y-derived">
-          <canvas class="image--y-derived"></canvas>
-        </section>
-
-        <section class="js_image--result">
-          <canvas class="image--result"></canvas>
-        </section>
-      </div>
-    </div>
-  </div>
-
+  <h1>Color Descriptor (Ganbatte!!!)</h1>
+  <img id="i" src="data:image/jpeg;base64,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">
 </body>
 
 </html>
 
-<script src="{{asset('vendors/ctebir/main.js')}}"></script>
-<script src="{{asset('vendors/ctebir/index.js')}}"></script>
-<script>
-  let worker = new Worker("{{asset('vendors/ctebir/worker.js')}}")
-  worker.postMessage({
-    cmd: 'appData',
-    data: {
-      width: window.appData.width,
-      height: window.appData.height,
-      ut: window.appData.ut,
-      lt: window.appData.lt
-    }
-  })
-  worker.postMessage({
-    cmd: 'imgData',
-    data: pixels
-  })
-  const imgd = canvasFrom
-    .getContext('2d')
-    .getImageData(0, 0, width, height)
 
-  const imageData = imgd.data
+<script>
+  function getImageArray(imgEl) {
+    // for non-supporting envs
+    var canvas = document.createElement('canvas'),
+      context = canvas.getContext && canvas.getContext('2d'),
+      data, width, height;
+
+    if (!context) {
+      return 'no context';
+    }
+
+    height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+    context.drawImage(imgEl, 0, 0);
+
+    try {
+      data = context.getImageData(0, 0, width, height);
+      return data;
+    } catch (e) {
+      alert('Security Error, image on different domain');
+    }
+  }
+
+  function getAverageRGB(data) {
+    let blockSize = 5,
+      i = -4,
+      rgb = {
+        r: 0,
+        g: 0,
+        b: 0
+      },
+      length,
+      count = 0;
+
+    length = data.data.length;
+
+    while ((i += blockSize * 4) < length) {
+      ++count;
+      rgb.r += data.data[i];
+      rgb.g += data.data[i + 1];
+      rgb.b += data.data[i + 2];
+    }
+
+    // ~~ used to floor values
+    rgb.r = ~~(rgb.r / count);
+    rgb.g = ~~(rgb.g / count);
+    rgb.b = ~~(rgb.b / count);
+
+    return rgb;
+  }
+
+  function average(data) {
+    var sum = data.reduce(function(sum, value) {
+      return sum + value;
+    }, 0);
+
+    var avg = sum / data.length;
+    return avg;
+  }
+
+  function standardDeviation(values) {
+    var avg = getAverageRGB(values);
+
+    var squareDiffs = values.data.map(function(value) {
+      var diff = value - avg;
+      var sqrDiff = diff * diff;
+      return sqrDiff;
+    });
+
+    var avgSquareDiff = average(squareDiffs);
+
+    var stdDev = Math.sqrt(avgSquareDiff);
+    return stdDev;
+  }
+
+  var imgArr = getImageArray(document.getElementById('i'));
+  var newRGB = getAverageRGB(imgArr);
+  //Tampilkan warna nya jadi bg 
+  document.body.style.backgroundColor = 'rgb(' + newRGB.r + ',' + newRGB.g + ',' + newRGB.b + ')';
+
+  console.log('std', standardDeviation(imgArr))
 </script>

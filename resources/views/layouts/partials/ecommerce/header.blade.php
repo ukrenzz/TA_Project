@@ -34,7 +34,7 @@
               @auth
               <li>
                 <!-- TODO : perlu ganti href -->
-                <a href="{{ route('product.index') }}">Order</a>
+                <a href="{{ route('cart.index') }}">Order</a>
               </li>
 
               <li>

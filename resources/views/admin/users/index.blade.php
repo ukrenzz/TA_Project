@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-sm-12 col-md-9 col-lg-9 text-right">
-          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Categories</a>
+          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Users</a>
         </div>
       </div>
       <div class="table-responsive">
@@ -46,25 +46,25 @@
           <thead>
             <tr>
               <th>No</th>
-              <th>Category Name</th>
-              <th>Description</th>
-              <th>Created at</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($data->categories_data as $categories_item)
+            @foreach ($data->users as $user)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $categories_item->name }}</td>
-                <td>{{ $categories_item->description }}</td>
-                <td>{{ $categories_item->created_at }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->role }}</td>
                 <td>
-                  <a href="{{route('category.edit', ['id' => $categories_item->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                  <a href="{{route('category.edit', ['id' => $user->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                   <meta name="csrf-token" content="{{ csrf_token() }}">
-                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$categories_item->id}}"><i class="far fa-trash-alt"></i></button>
-                  {{-- <form class="d-inline-block" action="{{route('category.delete', $categories_item->id) }}" method="post">
+                  <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$user->id}}"><i class="far fa-trash-alt"></i></button>
+                  {{-- <form class="d-inline-block" action="{{route('category.delete', $user->id) }}" method="post">
                     @csrf
                     @method('DELETE')
                     <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>

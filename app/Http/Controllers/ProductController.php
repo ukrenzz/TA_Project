@@ -8,15 +8,17 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Feedback;
 use Storage;
 
 class ProductController extends Controller
 {
+
   // Admin 
   function manage()
   {
     $products = Product::join('categories', 'products.category_id', '=', 'categories.id')
-      ->select('products.name as product_name', 'categories.name as category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'products.created_at')
+      ->select('products.name as product_name', 'categories.name as product_category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
       ->orderBy('product_name', 'asc')
       ->get();
     $data = (object)[
@@ -129,7 +131,26 @@ class ProductController extends Controller
   {
     // Perlu ganti jadi parameter 
     $id = 1;
-    $data = Product::where('id', $id)->first();
+
+    $categories = Category::orderBy('name', 'asc')->get();
+
+    $product = Product::join('categories', 'products.category_id', '=', 'categories.id')
+    ->select('products.name as product_name', 'categories.name as product_category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
+    ->orderBy('product_name', 'asc')
+    ->where('products.id',$id)
+    ->get()->first();
+
+    $feedbacks = Feedback::join('products','ratings.product_id', '=', 'products.id')
+		->select('ratings.id as id ', 'products.name as product_name', 'rate', 'comment', 'ratings.created_at as created_at', 'ratings.updated_at as updated_at' )
+    ->where('ratings.product_id',$id) 
+		->orderBy('rate', 'desc')
+    ->get();
+
+    $data = (object)[
+      'product' => $product,
+      'categories' => $categories,
+      'feedbacks' => $feedbacks,
+    ];
     return view('ecommerce.detail', ['data' => $data]);
   }
 

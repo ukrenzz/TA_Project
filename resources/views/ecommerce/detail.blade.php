@@ -46,39 +46,21 @@
       <div class="breadcrumbs">
         <ul>
           <li><a href="#">Home</a></li>
-          <li><a href="#">{{$data->category_id}}</a></li>
-          <li>{{$data->name}}</li>
+          <li><a href="#">{{$data->product->product_category}}</a></li>
+          <li>{{$data->product->product_name}}</li>
         </ul>
       </div>
       <!-- /page_header -->
       <div class="prod_info">
-        <h1>{{$data->name}}</h1>
-        <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4 reviews</em></span>
-        <p><small>SKU: {{$data->id}}</small><br>{{$data->description}}</p>
+        <h1>{{$data->product->product_name}}</h1>
+        <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em> @foreach($data->feedbacks as $feedbacks)
+            <?php echo $feedbacks->rate  ?>
+            @endforeach</em></span>
+        <p><small>SKU: {{$data->product->id}}</small><br>{{$data->product->description}}</p>
         <div class="prod_options">
           <div class="row">
             <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
-            <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
-              <ul>
-                <li><a href="#0" class="color color_1 active"></a></li>
-                <li><a href="#0" class="color color_2"></a></li>
-                <li><a href="#0" class="color color_3"></a></li>
-                <li><a href="#0" class="color color_4"></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="row">
-            <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Varians</strong></label>
-            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-              <div class="custom-select-form">
-                <select class="wide">
-                  <option value="" selected>Small (S)</option>
-                  <option value="">M</option>
-                  <option value=" ">L</option>
-                  <option value=" ">XL</option>
-                </select>
-              </div>
-            </div>
+            <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>{{($data->product->color)}}</strong></label>
           </div>
           <div class="row">
             <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
@@ -91,7 +73,14 @@
         </div>
         <div class="row">
           <div class="col-lg-5 col-md-6">
-            <div class="price_main"><span class="new_price">$148.00</span><span class="percentage">-20%</span> <span class="old_price">$160.00</span></div>
+            <div class="price_main"><span class="new_price">Rp                 <?php
+                $oldprice = $data->product->price;
+                $disc = $data->product->discount;
+                $new = ($oldprice * (100- $disc )) / 100;
+                echo $new;
+                ?></span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
+{{$data->product->price}}
+              </span></div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="btn_add_to_cart"><a href="#0" class="btn_1">Add to Cart</a></div>
@@ -141,9 +130,7 @@
               <div class="row justify-content-between">
                 <div class="col-lg-6">
                   <h3>Details</h3>
-                  <p>Lorem ipsum dolor sit amet, in eleifend <strong>inimicus elaboraret</strong> his, harum efficiendi mel ne. Sale percipit vituperata ex mel, sea ne essent aeterno sanctus, nam ea laoreet civibus electram. Ea vis eius explicari. Quot iuvaret ad has.</p>
-                  <p>Vis ei ipsum conclusionemque. Te enim suscipit recusabo mea, ne vis mazim aliquando, everti insolens at sit. Cu vel modo unum quaestio, in vide dicta has. Ut his laudem explicari adversarium, nisl <strong>laboramus hendrerit</strong> te his, alia lobortis vis ea.</p>
-                  <p>Perfecto eleifend sea no, cu audire voluptatibus eam. An alii praesent sit, nobis numquam principes ea eos, cu autem constituto suscipiantur eam. Ex graeci elaboraret pro. Mei te omnis tantas, nobis viderer vivendo ex has.</p>
+                  <p>{{$data->product->description}}</p>
                 </div>
                 <div class="col-lg-5">
                   <h3>Specifications</h3>
@@ -152,7 +139,7 @@
                       <tbody>
                         <tr>
                           <td><strong>Color</strong></td>
-                          <td>Blue, Purple</td>
+                          <td>{{$data->product->color}}</td>
                         </tr>
                         <tr>
                           <td><strong>Size</strong></td>
@@ -164,7 +151,7 @@
                         </tr>
                         <tr>
                           <td><strong>Manifacturer</strong></td>
-                          <td>Manifacturer</td>
+                          <td>{{$data->product->brand}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -252,7 +239,7 @@
             <i class="ti-gift"></i>
             <div class="justify-content-center">
               <h3>Free Shipping</h3>
-              <p>For all oders over $99</p>
+              <p>For all orders over Rp 499.999,00</p>
             </div>
           </div>
         </li>

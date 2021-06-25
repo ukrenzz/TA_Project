@@ -1,7 +1,7 @@
 {
-  "name": "nekoproject",
-  "version": "1.0.0",
-  "description": "My webpack project",
+  "name": "project-io-15",
+  "version": "0.0.1",
+  "description": "Aplikasi untuk Tugas Akhir",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,7 +18,7 @@
     "YOLO"
   ],
   "author": "Richy Rotuahta Saragih, Jesslyn Yien, M. Taufiq Hidayat Pohan",
-  "license": "ISC",
+  "license": "GPLv3",
   "bugs": {
     "url": "https://github.com/ukrenzz/TA_Project/issues"
   },

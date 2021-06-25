@@ -95,10 +95,10 @@ Route::name('cart.')->group(function()
 Route::name('transaction.')->group(function()
 {
   // E-Com
-  Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
+  Route::get('/payment', [TransactionController::class, 'index'])->name('payment');
   Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
   // Admin
-  Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
+  // Route::get('/manage/transaction', [CategoryController::class, 'index'])->name('manage');
 });
 
 Route::name('search.')->group(function()

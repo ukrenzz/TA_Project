@@ -24,8 +24,8 @@
             <h5 class="mb-4">Billing address</h5>
             <div class="billing-information">
               <h6>Your Full Name <span class="badge badge-info p-1 ml-2">Primary</span></h6>
-              <div>Jl. Nama jalan dan No. 9999 Kec. Mana</div>
-              <div>Kab. Siapa, Sumatera Utara. 20345</div>
+              <div>Jl. B Hamid dan No. 8 Kec. Medan Johor</div>
+              <div>Kota Medan, Sumatera Utara. 20145</div>
               <button type="button" class="btn_1 gray my-3 p-2" name="button">Change</button>
             </div>
           </div>
@@ -132,35 +132,6 @@
                   </div>
                 </div>
               </div>
-
-              {{-- Express --}}
-              <div class="filter_col shipping-method-filter">
-                <div class="filter_type version_2">
-                  <h4><a href="#filter_2" data-toggle="collapse" aria-expanded="false" class="collapsed">Express</a></h4>
-                  <div class="collapse" id="filter_2">
-                    <ul>
-                      <li>
-                        <label class="container_radio">Standard Regular <small>5 Hari | Rp.30.000</small>
-                          <input type="radio" name="shipping_method">
-                          <span class="checkmark"></span>
-                        </label>
-                      </li>
-                      <li>
-                        <label class="container_radio">J&T Regular <small>7 Hari | Rp.30.000</small>
-                          <input type="radio" name="shipping_method">
-                          <span class="checkmark"></span>
-                        </label>
-                      </li>
-                      <li>
-                        <label class="container_radio">Ninja Van Regular <small>3 Hari | Rp.40.000</small>
-                          <input type="radio" name="shipping_method">
-                          <span class="checkmark"></span>
-                        </label>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -177,30 +148,9 @@
                 <div class="total clearfix">TOTAL <span>$450.00</span></div>
               </div>
 
-              <h5 class="mt-5">Choose payment method</h5>
+              <h5 class="mt-5">Payment method</h5>
               <div class="payment-method-box">
-                <p>Please select your payment method and easy for it.</p>
                 <ul class="payment-method-list">
-                  <li>
-                    <label class="container_radio">
-                      <span class="payment-item-row">
-                        <i class="ri-bank-card-line mr-1 payment-item-icon"></i>
-                        <span class="payment-item-name">Credit Card</span>
-                      </span>
-                      <input type="radio" name="payments_method">
-                      <span class="checkmark"></span>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="container_radio">
-                      <span class="payment-item-row">
-                        <i class="ri-paypal-line mr-1 payment-item-icon"></i>
-                        <span class="payment-item-name">Paypal</span>
-                      </span>
-                      <input type="radio" name="payments_method">
-                      <span class="checkmark"></span>
-                    </label>
-                  </li>
                   <li>
                     <label class="container_radio">
                       <span class="payment-item-row">
@@ -211,15 +161,6 @@
                       <span class="checkmark"></span>
                     </label>
                   </li>
-                  <li>
-                    <label class="container_radio">
-                      <span class="payment-item-row">
-                        <i class="ri-bank-line mr-1 payment-item-icon"></i>
-                        <span class="payment-item-name">Bank Transfer</span>
-                      </span>
-                      <input type="radio" name="payments_method">
-                      <span class="checkmark"></span>
-                    </label>
                   </li>
                 </ul>
                 <a href="confirm.html" class="btn_1 full-width mb-4 mt-3">Confirm and Pay</a>

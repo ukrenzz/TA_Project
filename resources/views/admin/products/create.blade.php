@@ -7,6 +7,9 @@
   <link href="{{ asset('vendors/select2/select2.css') }}" rel="stylesheet">
   <link href="{{ asset('vendors/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css') }}" rel="stylesheet">
 
+  <link href="{{ asset('vendors/dropzone/dropzone.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('vendors/dropzone/test.css') }}" rel="stylesheet">
+
   <style media="screen">
     .select2-choices{
       border: 1px solid #edf2f9 !important;
@@ -87,11 +90,13 @@
                       </div>
                       <div class="form-group">
                           <label class="font-weight-semibold" for="productPrice">Price</label>
-                          <input type="number" name="price" class="form-control" id="productPrice" placeholder="Min : Rp. 100" min="100" required>
+                          {{-- <input type="number" name="price" class="form-control" id="productPrice" placeholder="Min : Rp. 100" min="100" required> --}}
+                          <input type="number" name="price" class="form-control" id="productPrice" placeholder="Min : Rp. 100" min="100" value="10" required>
                       </div>
                       <div class="form-group">
                           <label class="font-weight-semibold" for="productStock" >Stock</label>
-                          <input type="number" name="stock" class="form-control" id="productStock" placeholder="Min : 0" min="0" required>
+                          {{-- <input type="number" name="stock" class="form-control" id="productStock" placeholder="Min : 0" min="0" required> --}}
+                          <input type="number" name="stock" class="form-control" id="productStock" placeholder="Min : 0" min="0" value="155" required>
                       </div>
                       <div class="form-group">
                           <label class="font-weight-semibold" for="productCategory">Category</label>
@@ -151,18 +156,21 @@
               </div>
           </div>
           <div class="tab-pane fade" id="product-edit-image">
+             <div class="card">
+                 <div class="card-body">
+                     <h5>Upload Images</h5>
+
+                     <input type="file" name="image_product[]" id="image_product" class="form-control" accept="image/*" multiple>
+
+                     {{-- <div id="dZUpload" class="dropzone">
+                            <div class="dz-default dz-message"></div>
+                      </div> --}}
+                 </div>
+             </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img class="img-fluid" src="{{asset('admin/images/others/product-1.jpg')}}" alt="">
-                        </div>
-                        <div class="col-md-3">
-                            <img class="img-fluid" src="{{asset('admin/images/others/product-2.jpg')}}" alt="">
-                        </div>
-                        <div class="col-md-3">
-                            <img class="img-fluid" src="{{asset('admin/images/others/product-3.jpg')}}" alt="">
-                        </div>
+                    <div class="row" id="image_prev">
+
                     </div>
                 </div>
             </div>
@@ -177,15 +185,38 @@
   <script src="{{ asset('vendors/quill/quill.min.js') }}"></script>
   <script src="{{ asset('vendors/ntc/ntc.js') }}"></script>
   <script src="{{ asset('vendors/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js') }}"></script>
+  <script src="{{ asset('vendors/dropzone/dropzone.min.js') }}"></script>
   {{-- <script src="{{ asset('admin/js/pages/e-commerce-product-edit.js') }}"></script> --}}
 
   <script type="text/javascript">
       $('.select2').select2();
-      $(document).ready(function () {
-        new Quill('#productDescription', {
-          theme: 'snow'
-        });
-      });
+
+      var imagesPreview = function(input, placeToInsertImagePreview) {
+
+        if (input.files) {
+            var filesAmount = input.files.length;
+            var elementImage = "";
+            $('div#image_prev').empty();
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+
+                reader.onload = function(event) {
+                  elementImage = '<div class="col-md-3"><img class="img-fluid" src="' + event.target.result +'"></div>';
+                  $('div#image_prev').append(elementImage);
+                }
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+
+    $('#image_product').on('change', function() {
+        imagesPreview(this, 'div#image_prev');
+    });
+
 
       $('#btn_save').click((e) => {
         e.preventDefault();

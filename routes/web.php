@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Admin Route 
+// Admin Route
 Route::name('admin.')->group(function()
 {
   Route::get('/manage/dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -54,20 +54,21 @@ Route::name('feedback.')->group(function()
   Route::get('/manage/feedback', [FeedbackController::class, 'index'])->name('manage');
 });
 
-// E-com Routes 
+// E-com Routes
 
 Route::name('product.')->group(function()
 {
   // E-com
   Route::get('/', [ProductController::class, 'index'])->name('index');
   Route::get('/categories', [ProductController::class, 'categories'])->name('category');
-  // TODO : Tambahkan parameter id di url 
+  // TODO : Tambahkan parameter id di url
   Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
   // Admin
   Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
   Route::get('/manage/product/create', [ProductController::class, 'create'])->name('create');
   Route::get('/manage/product/edit', [ProductController::class, 'edit'])->name('edit');
   Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');
+  Route::post('/manage/product/imagestore', [ProductController::class, 'dropzoneStore'])->name('imagestore');
   Route::put('/manage/product/update', [ProductController::class, 'update'])->name('update');
   Route::delete('/manage/product/delete/{id}', [ProductController::class, 'destroy'])->name('delete');
 });
@@ -111,7 +112,7 @@ Route::name('search.')->group(function()
 
 Route::name('history.')->group(function()
 {
-  // 
+  //
 });
 
 Route::name('feedback.')->group(function()
@@ -121,7 +122,7 @@ Route::name('feedback.')->group(function()
 
 Route::name('profile.')->group(function()
 {
-  // Apakah ini bisa disamakan langsung dengan Auth ? 
+  // Apakah ini bisa disamakan langsung dengan Auth ?
 });
 
 

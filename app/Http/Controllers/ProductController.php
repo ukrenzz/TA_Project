@@ -7,14 +7,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
+use App\Models\ProductImages;
 use App\Models\Category;
 use App\Models\Feedback;
 use Storage;
+Use Image;
 
 class ProductController extends Controller
 {
-
-  // Admin 
+  // Admin
   function manage()
   {
     $products = Product::join('categories', 'products.category_id', '=', 'categories.id')
@@ -62,21 +63,50 @@ class ProductController extends Controller
   function store(Request $req)
   {
     $this->validation($req);
-    // dd($req);
+    // dd($req->hasfile('image_product'));
     try {
-      Product::create([
-        'name'        => $req->name,
-        'brand'       => $req->brand,
-        'stock'       => $req->stock,
-        'price'       => $req->price,
-        'category_id' => $req->category,
-        'unit'        => $req->unit,
-        'user_id'     => Auth::id(),
-        'description' => $req->description,
-        'color'       => $req->color,
-        'status'      => $req->status,
-        'discount'    => $req->discount
-      ]);
+      // $productInput = Product::create([
+      //   'name'        => $req->name,
+      //   'brand'       => $req->brand,
+      //   'stock'       => $req->stock,
+      //   'price'       => $req->price,
+      //   'category_id' => $req->category,
+      //   'unit'        => $req->unit,
+      //   'user_id'     => 1,
+      //   // 'user_id'     => Auth::id(),
+      //   'description' => $req->description,
+      //   'color'       => $req->color,
+      //   'status'      => $req->status,
+      //   'discount'    => $req->discount
+      // ]);
+
+      // dd($req->image_product[0]->getClientOriginalExtension());
+      $p_id = 114;
+      $p_ca = "2021-06-08 21:48:06";
+      $p_cad = date("Y-m-d_H-i-s", strtotime($p_ca));
+      if($req->hasfile('image_product'))
+      {
+        $numbering = 1;
+        $dataImageProducts=[];
+        foreach($req->file('image_product') as $image)
+        {
+          $filesize = $image->getSize();
+          $imageThumbnail = Image::make($image);
+          // $named   = 'product_' . $productInput->id . '_' . $productInput->created_at . '.' . $image->getClientOriginalExtension();
+          $named   = 'product_' . $p_id . '_' . $p_cad . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
+          $image  -> move(public_path().'/images/products', $named);
+          $dataImage = [
+            'url'  => $named,
+            'width'     => $imageThumbnail->width(),
+            'height'    => $imageThumbnail->height(),
+            'size'  => $filesize
+          ];
+          array_push($dataImageProducts, $dataImage);
+
+        }
+        ProductImages::insert($dataImageProducts);
+        // dd($dataImageProducts);
+      }
 
       return response()->json(['success' => true]);
     } catch (Exception $ex) {
@@ -92,30 +122,31 @@ class ProductController extends Controller
 
   function destroy($id)
   {
-    // TODO: Belum berhasil 
+
     Product::find($id)->delete();
     return response()->json([
       'success' => 'Record deleted successfully!'
     ]);
   }
 
+
   private function validation(Request $req)
   {
     $req->validate([
-      'name'        => ['required'],
-      'brand'       => ['required', 'string'],
-      'stock'       => ['required', 'integer'],
-      'category'    => ['required', 'integer'],
-      'unit'        => ['required', 'string'],
-      'description' => ['required', 'string'],
-      'color'       => ['required', 'string'],
-      'status'      => ['required', 'string'],
-      'discount'    => ['nullable', 'integer', 'digits_between:0,100'],
-      // 'images.*' => 'mimes:jpg,png,jpeg,gif,svg'
+      'name'          => ['required'],
+      'brand'         => ['required', 'string'],
+      'stock'         => ['required', 'integer'],
+      'category'      => ['required', 'integer'],
+      'unit'          => ['required', 'string'],
+      'description'   => ['required', 'string'],
+      'color'         => ['required', 'string'],
+      'status'        => ['required', 'string'],
+      'discount'      => ['nullable', 'integer', 'digits_between:0,100'],
+      'image_product.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:15360'
     ]);
   }
 
-  // E-commerce 
+  // E-commerce
   function index()
   {
     $products = Product::orderBy('name', 'asc')->get();
@@ -129,7 +160,7 @@ class ProductController extends Controller
 
   function show()
   {
-    // Perlu ganti jadi parameter 
+    // Perlu ganti jadi parameter
     $id = 1;
 
     $categories = Category::orderBy('name', 'asc')->get();

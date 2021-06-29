@@ -21,7 +21,7 @@ class CreateProductImageTable extends Migration
             $table->binary('shape_feature'); // result of featured extraction
             $table->integer('width'); // in pixel
             $table->integer('height'); // in pixel
-            $table->integer('size'); //in kilobytes
+            $table->bigInteger('size')->unsigned(); //in kilobytes
             $table->timestamps();
         });
     }

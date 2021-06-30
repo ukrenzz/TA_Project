@@ -66,7 +66,7 @@ Route::name('product.')->group(function()
   // Admin
   Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
   Route::get('/manage/product/create', [ProductController::class, 'create'])->name('create');
-  Route::get('/manage/product/edit', [ProductController::class, 'edit'])->name('edit');
+  Route::get('/manage/product/edit/{id}', [ProductController::class, 'edit'])->name('edit');
   Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');
   Route::post('/manage/product/imagestore', [ProductController::class, 'dropzoneStore'])->name('imagestore');
   Route::put('/manage/product/update', [ProductController::class, 'update'])->name('update');

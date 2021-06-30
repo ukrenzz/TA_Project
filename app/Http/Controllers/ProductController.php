@@ -11,7 +11,6 @@ use App\Models\ProductImages;
 use App\Models\Category;
 use App\Models\Feedback;
 use Storage;
-Use Image;
 
 class ProductController extends Controller
 {
@@ -56,7 +55,13 @@ class ProductController extends Controller
   function edit($id)
   {
     $mode = "edit";
-    $data = Product::where('id', $id)->first();
+    $_color = json_decode(Storage::disk('local')->get('colors.json'), true);
+    $product = Product::where('id', $id)->first();
+    $data = (object)[
+      'categories' => CategoryController::getCategories(),
+      'colors'     => $_color,
+      'product'   => $product,
+    ];
     return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }
 
@@ -84,17 +89,15 @@ class ProductController extends Controller
       $p_id = 114;
       $p_ca = "2021-06-08 21:48:06";
       $p_cad = date("Y-m-d_H-i-s", strtotime($p_ca));
-      if($req->hasfile('image_product'))
-      {
+      if ($req->hasfile('image_product')) {
         $numbering = 1;
-        $dataImageProducts=[];
-        foreach($req->file('image_product') as $image)
-        {
+        $dataImageProducts = [];
+        foreach ($req->file('image_product') as $image) {
           $filesize = $image->getSize();
           $imageThumbnail = Image::make($image);
           // $named   = 'product_' . $productInput->id . '_' . $productInput->created_at . '.' . $image->getClientOriginalExtension();
           $named   = 'product_' . $p_id . '_' . $p_cad . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
-          $image  -> move(public_path().'/images/products', $named);
+          $image->move(public_path() . '/images/products', $named);
           $dataImage = [
             'url'  => $named,
             'width'     => $imageThumbnail->width(),
@@ -102,7 +105,6 @@ class ProductController extends Controller
             'size'  => $filesize
           ];
           array_push($dataImageProducts, $dataImage);
-
         }
         ProductImages::insert($dataImageProducts);
         // dd($dataImageProducts);
@@ -166,16 +168,16 @@ class ProductController extends Controller
     $categories = Category::orderBy('name', 'asc')->get();
 
     $product = Product::join('categories', 'products.category_id', '=', 'categories.id')
-    ->select('products.name as product_name', 'categories.name as product_category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
-    ->orderBy('product_name', 'asc')
-    ->where('products.id',$id)
-    ->get()->first();
+      ->select('products.name as product_name', 'categories.name as product_category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
+      ->orderBy('product_name', 'asc')
+      ->where('products.id', $id)
+      ->get()->first();
 
-    $feedbacks = Feedback::join('products','ratings.product_id', '=', 'products.id')
-		->select('ratings.id as id ', 'products.name as product_name', 'rate', 'comment', 'ratings.created_at as created_at', 'ratings.updated_at as updated_at' )
-    ->where('ratings.product_id',$id) 
-		->orderBy('rate', 'desc')
-    ->get();
+    $feedbacks = Feedback::join('products', 'ratings.product_id', '=', 'products.id')
+      ->select('ratings.id as id ', 'products.name as product_name', 'rate', 'comment', 'ratings.created_at as created_at', 'ratings.updated_at as updated_at')
+      ->where('ratings.product_id', $id)
+      ->orderBy('rate', 'desc')
+      ->get();
 
     $data = (object)[
       'product' => $product,

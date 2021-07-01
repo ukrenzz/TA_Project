@@ -33,8 +33,7 @@
               @if(Route::has('login'))
               @auth
               <li>
-                <!-- TODO : perlu ganti href -->
-                <a href="{{ route('cart.index') }}">Order</a>
+                <a href="{{ route('transaction.order') }}">Order</a>
               </li>
 
               <li>
@@ -102,9 +101,10 @@
         <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
           <div class="custom-search-input">
             <input type="text" placeholder="Search product">
-            <button action="route('search.text')" type="submit"><i class="header-icon_search_custom"></i></button>
+            <button action="route('search.text')" href="{{ route('search.text') }}" type="submit"><i class="header-icon_search_custom"></i></button>
+            <button action="route('search.visual')" href="{{ route('search.visual') }}" style="color:#dd710e" type="submit"><i class="header-icon_search_custom"></i></button>
+            <!-- <button type="submit"><i class="fas fa-camera" style="color: #dd710e; width: 10px; height : 10px"></i></button> -->
           </div>
-          <button type="submit"><i class="fas fa-camera" style="color: #dd710e; width: 10px; height : 10px"></i></button>
         </div>
         <div class="col-xl-3 col-lg-2 col-md-3">
           <ul class="top_tools">

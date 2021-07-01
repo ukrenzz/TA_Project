@@ -25,6 +25,7 @@ class CreateProductsTable extends Migration
             $table->text('color');
             $table->string('status', 25);
             $table->bigInteger('discount')->nullable()->default(0);
+            $table->foreignId('add_by_user_id')->constrained('users');
             $table->timestamps();
             // $table->foreign('category_id')->reference('id')->on('categories');
         });

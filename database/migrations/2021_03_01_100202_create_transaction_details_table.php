@@ -17,6 +17,7 @@ class CreateTransactionDetailsTable extends Migration
             $table->foreignId('transaction_id')->constrained('transactions');
             $table->foreignId('product_id')->constrained('products');
             $table->integer('quantity');
+            $table->bigInteger('discount')->nullable()->default(0);
             $table->bigInteger('price');
             $table->timestamps();
         });

@@ -20,8 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            // TODO : Perlu diganti, default bukan admin 
-            $table->string('role', 20)->default('admin');
+            $table->string('role', 20)->default('1');
             $table->foreignId('current_team_id')->nullable();
             $table->text('profile_photo_path')->nullable();
             $table->timestamps();

@@ -17,7 +17,6 @@ class CreateCartsTable extends Migration
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('user_id')->constrained('users');
             $table->integer('quantity');
-            $table->bigInteger('price');
             $table->timestamps();
         });
     }

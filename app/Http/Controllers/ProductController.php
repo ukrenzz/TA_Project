@@ -14,7 +14,7 @@ use Storage;
 
 class ProductController extends Controller
 {
-  // Admin 
+  // Admin
   function manage()
   {
     $products = Product::join('categories', 'products.category_id', '=', 'categories.id')

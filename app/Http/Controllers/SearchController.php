@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -13,7 +15,13 @@ class SearchController extends Controller
      */
     public function textSearchIndex()
     {
-        return view('ecommerce.categories');
+        $products = Product::orderBy('name', 'asc')->get();
+        $categories = Category::orderBy('name', 'asc')->get();
+        $data = (object)[
+          'products' => $products,
+          'categories' => $categories,
+        ];
+        return view('ecommerce.text-search', compact('data'));
     }
 
         /**
@@ -23,7 +31,13 @@ class SearchController extends Controller
      */
     public function visualSearchIndex()
     {
-        return view('ecommerce.categories');
+        $products = Product::orderBy('name', 'asc')->get();
+        $categories = Category::orderBy('name', 'asc')->get();
+        $data = (object)[
+          'products' => $products,
+          'categories' => $categories,
+        ];
+        return view('ecommerce.visual-search', compact('data'));
     }
 
 

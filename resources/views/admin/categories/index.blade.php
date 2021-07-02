@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-sm-12 col-md-9 col-lg-9 text-right">
-          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Categories</a>
+          <a href="{{route('category.create')}}" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Category</a>
         </div>
       </div>
       <div class="table-responsive">

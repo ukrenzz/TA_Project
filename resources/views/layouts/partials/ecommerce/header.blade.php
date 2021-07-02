@@ -113,9 +113,9 @@
                 @if (Route::has('login'))
                 @auth
                 <a href="{{ route('profile.show') }}" class="access_link"><span>Account</span></a>
-                @endauth
                 @else
                 <a href="{{ route('login') }}" class="access_link"><span>Account</span></a>
+                @endauth
                 @endif
                 <div class="dropdown-menu">
                   <ul>

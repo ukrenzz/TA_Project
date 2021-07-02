@@ -2136,6 +2136,12 @@ header {
                     }
                 }
 
+                &.my_cart {
+                  &:before {
+                      content: '\0042';
+                  }
+              }
+
                 &.access_link {
                     &:before {
                         content: '\0043';

@@ -112,7 +112,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
   });
 
   Route::name('feedback.')->group(function () {
-    // Di DB namanya ratings
+    // Di DB namanya feedbacks
   });
 
   Route::name('profile.')->group(function () {

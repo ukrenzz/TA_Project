@@ -13,7 +13,7 @@ class CartController extends Controller
   {
     //TODO: Ingat taruh query where id = "", masukkan id user yang login saat ini
     $carts = Cart::join('products','carts.product_id', '=', 'products.id')
-		->select('products.id as product_id', 'products.name as product_name', 'quantity', 'carts.price', 'carts.created_at as created_at', 'carts.updated_at as updated_at' )
+		->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at' )
 		->orderBy('created_at', 'desc')->get();
 
     $categories = Category::orderBy('name', 'asc')->get();

@@ -36,7 +36,6 @@
                 <!-- TODO : perlu ganti href -->
                 <a href="{{ route('cart.index') }}">Order</a>
               </li>
-
               <li>
                 <a href="{{ route('profile.show') }}">Profile</a>
               </li>
@@ -111,7 +110,13 @@
             <!-- Account -->
             <li>
               <div class="dropdown dropdown-access">
+                @if (Route::has('login'))
+                @auth
+                <a href="{{ route('profile.show') }}" class="access_link"><span>Account</span></a>
+                @endauth
+                @else
                 <a href="{{ route('login') }}" class="access_link"><span>Account</span></a>
+                @endif
                 <div class="dropdown-menu">
                   <ul>
                     @if (Route::has('login'))

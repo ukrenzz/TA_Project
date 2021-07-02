@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -97,13 +98,14 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
   Route::name('transaction.')->group(function () {
     // E-Com
     Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
+    Route::get('/order', [TransactionController::class, 'order'])->name('order');
     Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
   });
 
   Route::name('search.')->group(function () {
     // E-Com
-    Route::get('/text-search', [SearchController::class, 'textSearchIndex'])->name('text');
-    Route::get('/visual-search', [SearchController::class, 'visualSearchIndex'])->name('visual');
+    Route::get('/search/text', [SearchController::class, 'textSearchIndex'])->name('text');
+    Route::get('/search/visual', [SearchController::class, 'visualSearchIndex'])->name('visual');
     // Route::post('/payment/store', [SearchController::class, 'store'])->name('store');
   });
 

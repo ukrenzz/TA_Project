@@ -15,10 +15,10 @@
       <div class="breadcrumbs">
         <ul>
           <li><a href="#">Home</a></li>
-          <li>Categories</li>
+          <li>Visual Search</li>
         </ul>
       </div>
-      <h1>Categories</h1>
+      <h1>Search Result</h1>
     </div>
     <div class="row">
       <aside class="col-lg-3" id="sidebar_fixed">

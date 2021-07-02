@@ -36,11 +36,6 @@
           <input type="text" class="form-control" id="categories-name-search" placeholder="Search by name">
         </div>
       </div>
-
-      <div class="col-sm-12 col-md-9 col-lg-9 text-right">
-        <!-- TODO : masih butuh button add ?  -->
-        <a href="#" class="btn btn-primary"><i class="far fa-plus-square mr-1"></i> Add Feedback ?</a>
-      </div>
     </div>
     <div class="table-responsive">
       <table id="categories-data-table" class="table">

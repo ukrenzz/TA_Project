@@ -173,9 +173,9 @@ class ProductController extends Controller
       ->where('products.id', $id)
       ->get()->first();
 
-    $feedbacks = Feedback::join('products', 'ratings.product_id', '=', 'products.id')
-      ->select('ratings.id as id ', 'products.name as product_name', 'rate', 'comment', 'ratings.created_at as created_at', 'ratings.updated_at as updated_at')
-      ->where('ratings.product_id', $id)
+    $feedbacks = Feedback::join('products', 'feedbacks.product_id', '=', 'products.id')
+      ->select('feedbacks.id as id ', 'products.name as product_name', 'rate', 'comment', 'feedbacks.created_at as created_at', 'feedbacks.updated_at as updated_at')
+      ->where('feedbacks.product_id', $id)
       ->orderBy('rate', 'desc')
       ->get();
 

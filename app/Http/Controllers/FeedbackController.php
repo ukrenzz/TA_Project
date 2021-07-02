@@ -15,9 +15,9 @@ class FeedbackController extends Controller
 	 */
 	public function index()
 	{
-		$feedbacks = Feedback::join('users','ratings.user_id', '=', 'users.id')
-		->join('products','ratings.product_id', '=', 'products.id')
-		->select('ratings.id as id ', 'users.name as user_name', 'products.name as product_name', 'rate', 'comment', 'ratings.created_at as created_at', 'ratings.updated_at as updated_at' )
+		$feedbacks = Feedback::join('users','feedbacks.user_id', '=', 'users.id')
+		->join('products','feedbacks.product_id', '=', 'products.id')
+		->select('feedbacks.id as id ', 'users.name as user_name', 'products.name as product_name', 'rate', 'comment', 'feedbacks.created_at as created_at', 'feedbacks.updated_at as updated_at' )
 		->orderBy('rate', 'desc')->get();
 
 		$data = (object)[

@@ -36,7 +36,6 @@
                 <!-- TODO : perlu ganti href -->
                 <a href="{{ route('cart.index') }}">Order</a>
               </li>
-
               <li>
                 <a href="{{ route('profile.show') }}">Profile</a>
               </li>
@@ -111,17 +110,17 @@
             <!-- Account -->
             <li>
               <div class="dropdown dropdown-access">
+                @if (Route::has('login'))
+                @auth
+                <a href="{{ route('profile.show') }}" class="access_link"><span>Account</span></a>
+                @endauth
+                @else
                 <a href="{{ route('login') }}" class="access_link"><span>Account</span></a>
+                @endif
                 <div class="dropdown-menu">
                   <ul>
                     @if (Route::has('login'))
                     @auth
-                    <li>
-                      <a href="#"><i class="ti-truck"></i>Track your Order</a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="ti-package"></i>My Orders</a>
-                    </li>
                     <li>
                       <a href="{{ route('profile.show') }}"><i class="ti-user"></i>My Profile</a>
                     </li>
@@ -161,29 +160,7 @@
               @if (Route::has('login'))
               @auth
               <div class="dropdown dropdown-cart">
-                <a href="{{ route('cart.index') }}" class="cart_bt"><strong>2</strong></a>
-                <div class="dropdown-menu">
-                  <ul>
-                    <li>
-                      <a href="{{ route('product.show') }}">
-                        <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/1.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
-                        <strong><span>1x Armor Air x Fear</span>$90.00</strong>
-                      </a>
-                      <a href="#0" class="action"><i class="ti-trash"></i></a>
-                    </li>
-                    <li>
-                      <a href="{{ route('product.show') }}">
-                        <figure><img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/thumb/2.jpg') }}" alt="" width="50" height="50" class="lazy"></figure>
-                        <strong><span>1x Armor Okwahn II</span>$110.00</strong>
-                      </a>
-                      <a href="0" class="action"><i class="ti-trash"></i></a>
-                    </li>
-                  </ul>
-                  <div class="total_drop">
-                    <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
-                    <a href="{{ route('cart.index') }}" class="btn_1 outline">View Cart</a><a href="{{ route('transaction.payment') }}" class="btn_1">Checkout</a>
-                  </div>
-                </div>
+                <a href="{{ route('cart.index') }}" class="my_cart"><span>Cart</span></a>
               </div>
               <!-- /dropdown-cart-->
               @endauth

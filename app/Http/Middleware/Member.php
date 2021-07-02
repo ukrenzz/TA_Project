@@ -16,13 +16,11 @@ class Member
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user() == null) {
+        if (auth()->user() == null) {
             return redirect('/');
-        }
-        else if (!auth()->user()->role) {
-        return $next($request);
-        }
-        else{
+        } else if (auth()->user()->role) {
+            return $next($request);
+        } else {
             return abort(403);
         }
     }

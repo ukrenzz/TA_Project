@@ -69,7 +69,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
 
 // E-com Routes
 
-Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
+Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
   Route::name('product.')->group(function () {
     // E-com
     Route::get('/categories', [ProductController::class, 'categories'])->name('category');

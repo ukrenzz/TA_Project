@@ -102,7 +102,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
   });
 
   Route::name('feedback.')->group(function () {
-    // Di DB namanya feedbacks
+    Route::get('/feedback', [FeedbackController::class, 'create'])->name('form');
   });
 
   Route::name('profile.')->group(function () {
@@ -119,7 +119,7 @@ Route::name('product.')->group(function () {
   Route::get('/', [ProductController::class, 'index'])->name('index');
   Route::get('/categories', [ProductController::class, 'categories'])->name('category');
   // TODO : Tambahkan parameter id di url
-  Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
+  Route::get('/product/detail/slug-produk-id-produk/{id}', [ProductController::class, 'show'])->name('show');
 });
 
 Route::name('search.')->group(function () {

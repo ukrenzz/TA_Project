@@ -28,7 +28,7 @@
 					<th>Product</th>
 					<th>Ref</th>
 					<th>Price</th>
-					<th>Quantity</th>
+					<th>Qty.</th>
 					<th>Tax</th>
 					<th>Disc</th>
 					<th>Shipping</th>
@@ -43,7 +43,7 @@
 						<div class="thumb_cart">
 							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
 						</div>
-						<span class="item_cart"><a href="{{ route('product.show') }}" class="product-link">{{$transaction->product_name}}</a></span>
+						<span class="item_cart"><a href="{{ route('product.show', ['id' => $transaction->product_id]) }}" class="product-link">{{$transaction->product_name}}</a></span>
 					</td>
 					<td>
 						<strong>{{$transaction->ref}}</strong>
@@ -72,6 +72,9 @@
 											echo $total;
 											?>
 						</strong>
+					</td>
+					<td>
+						<a href="{{route('feedback.form', ['id' => $transaction->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i>Review</a>
 					</td>
 				</tr>
 				@endforeach

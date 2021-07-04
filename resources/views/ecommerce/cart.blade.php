@@ -32,6 +32,7 @@
 				</tr>
 			</thead>
 			<tbody>
+			<?php $total = 0  ?>
 				@foreach ($data->carts as $cart)
 				<tr>
 					<td>
@@ -42,10 +43,11 @@
 					</td>
 					<td>
 						<strong>Rp {{$cart->price}}</strong>
+						<?php $total+= $cart->price ?>
 					</td>
 					<td>
 						<div class="numbers-row">
-							<input type="text" value="1" class="qty2" name="quantity_1">
+							<input type="text" value="{{ isset($cart->quantity) ? $cart->quantity : '' }}" class="qty2" name="quantity_1">
 							<div class="inc button_inc">+</div>
 							<div class="dec button_inc">-</div>
 						</div>
@@ -78,13 +80,7 @@
 				<div class="col-xl-4 col-lg-4 col-md-6">
 					<ul>
 						<li>
-							<span>Subtotal</span> $240.00
-						</li>
-						<li>
-							<span>Shipping</span> $7.00
-						</li>
-						<li>
-							<span>Total</span> $247.00
+							<span>Total</span> Rp <?php echo $total ?>
 						</li>
 					</ul>
 					<a href="{{route('transaction.payment')}}" class="btn_1 full-width cart">Proceed to Checkout</a>

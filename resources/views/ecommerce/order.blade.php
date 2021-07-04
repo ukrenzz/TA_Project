@@ -20,6 +20,7 @@
 			</div>
 			<h1>Transaction page</h1>
 		</div>
+		@if(($data->transactions)->isNotEmpty())
 		<!-- /page_header -->
 		<table class="table table-striped cart-list">
 			<thead>
@@ -27,7 +28,7 @@
 					<th>Product</th>
 					<th>Ref</th>
 					<th>Price</th>
-					<th>Quantity</th>
+					<th>Qty.</th>
 					<th>Tax</th>
 					<th>Disc</th>
 					<th>Shipping</th>
@@ -42,7 +43,7 @@
 						<div class="thumb_cart">
 							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
 						</div>
-						<span class="item_cart"><a href="{{ route('product.show') }}" class="product-link">{{$transaction->product_name}}</a></span>
+						<span class="item_cart"><a href="{{ route('product.show', ['id' => $transaction->product_id]) }}" class="product-link">{{$transaction->product_name}}</a></span>
 					</td>
 					<td>
 						<strong>{{$transaction->ref}}</strong>
@@ -72,15 +73,20 @@
 											?>
 						</strong>
 					</td>
+					<td>
+						<a href="{{route('feedback.form', ['id' => $transaction->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i>Review</a>
+					</td>
 				</tr>
 				@endforeach
 			</tbody>
 		</table>
 		<!-- /cart_actions -->
-
+		@else
+		<div class="d-flex justify-content-center">
+			<h5 style="color:#dd710e">You haven't make any transaction yet.</h5>
+		</div>
+		@endif
 	</div>
-	<!-- /container -->
-
 </main>
 <!-- /main -->
 @endsection

@@ -19,7 +19,6 @@ class OrderController extends Controller
 			->select('transactions.id', 'ref', 'users.name as username', 'ppn', 'status', 'discount', 'shipping_cost', 'payment_method', 'transactions.created_at', 'transactions.updated_at')
 			->orderBy('ref', 'desc')
 			->get();
-
 		$data = (object)[
 			'orders' => $orders,
 		];

@@ -160,11 +160,8 @@ class ProductController extends Controller
     return view('ecommerce.index', compact('data'));
   }
 
-  function show()
+  function show($id)
   {
-    // Perlu ganti jadi parameter
-    $id = 1;
-
     $categories = Category::orderBy('name', 'asc')->get();
 
     $product = Product::join('categories', 'products.category_id', '=', 'categories.id')

@@ -70,12 +70,6 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
 // E-com Routes
 
 Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
-  Route::name('product.')->group(function () {
-    // E-com
-    Route::get('/categories', [ProductController::class, 'categories'])->name('category');
-    // TODO : Tambahkan parameter id di url
-    Route::get('/product/detail/slug-produk-id-produk', [ProductController::class, 'show'])->name('show');
-  });
 
   Route::name('wishlist.')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('index');
@@ -99,14 +93,8 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
     // E-Com
     Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
     Route::get('/order', [TransactionController::class, 'order'])->name('order');
+    Route::get('/payment/success', [TransactionController::class, 'success'])->name('success');
     Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
-  });
-
-  Route::name('search.')->group(function () {
-    // E-Com
-    Route::get('/search/text', [SearchController::class, 'textSearchIndex'])->name('text');
-    Route::get('/search/visual', [SearchController::class, 'visualSearchIndex'])->name('visual');
-    // Route::post('/payment/store', [SearchController::class, 'store'])->name('store');
   });
 
   Route::name('history.')->group(function () {
@@ -114,7 +102,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
   });
 
   Route::name('feedback.')->group(function () {
-    // Di DB namanya feedbacks
+    Route::get('/feedback', [FeedbackController::class, 'create'])->name('form');
   });
 
   Route::name('profile.')->group(function () {
@@ -127,5 +115,16 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
 });
 
 Route::name('product.')->group(function () {
+  // E-com
   Route::get('/', [ProductController::class, 'index'])->name('index');
+  Route::get('/categories', [ProductController::class, 'categories'])->name('category');
+  // TODO : Tambahkan parameter id di url
+  Route::get('/product/detail/slug-produk-id-produk/{id}', [ProductController::class, 'show'])->name('show');
+});
+
+Route::name('search.')->group(function () {
+  // E-Com
+  Route::get('/search/text', [SearchController::class, 'textSearchIndex'])->name('text');
+  Route::get('/search/visual', [SearchController::class, 'visualSearchIndex'])->name('visual');
+  // Route::post('/payment/store', [SearchController::class, 'store'])->name('store');
 });

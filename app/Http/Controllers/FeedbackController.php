@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feedback;
+use App\Models\Category;
 
 
 class FeedbackController extends Controller
@@ -15,15 +16,14 @@ class FeedbackController extends Controller
 	 */
 	public function index()
 	{
-		$feedbacks = Feedback::join('users','feedbacks.user_id', '=', 'users.id')
-		->join('products','feedbacks.product_id', '=', 'products.id')
-		->select('feedbacks.id as id ', 'users.name as user_name', 'products.name as product_name', 'rate', 'comment', 'feedbacks.created_at as created_at', 'feedbacks.updated_at as updated_at' )
-		->orderBy('rate', 'desc')->get();
+		$feedbacks = Feedback::join('users', 'feedbacks.user_id', '=', 'users.id')
+			->join('products', 'feedbacks.product_id', '=', 'products.id')
+			->select('feedbacks.id as id ', 'users.name as user_name', 'products.name as product_name', 'rate', 'comment', 'feedbacks.created_at as created_at', 'feedbacks.updated_at as updated_at')
+			->orderBy('rate', 'desc')->get();
 
 		$data = (object)[
 			'feedbacks' => $feedbacks,
 		];
-
 		return view('admin.feedbacks.index', compact('data'));
 	}
 
@@ -34,7 +34,11 @@ class FeedbackController extends Controller
 	 */
 	public function create()
 	{
-		//
+		$categories = Category::orderBy('name', 'asc')->get();
+		$data = (object)[
+			'categories' => $categories,
+		];
+		return view('ecommerce.feedback', compact('data'));
 	}
 
 	/**

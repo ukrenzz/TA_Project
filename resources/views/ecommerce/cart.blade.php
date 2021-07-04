@@ -20,6 +20,7 @@
 			</div>
 			<h1>Cart page</h1>
 		</div>
+		@if(($data->carts)->isNotEmpty())
 		<!-- /page_header -->
 		<table class="table table-striped cart-list">
 			<thead>
@@ -32,7 +33,7 @@
 				</tr>
 			</thead>
 			<tbody>
-			<?php $total = 0  ?>
+				<?php $total = 0  ?>
 				@foreach ($data->carts as $cart)
 				<tr>
 					<td>
@@ -43,7 +44,7 @@
 					</td>
 					<td>
 						<strong>Rp {{$cart->price}}</strong>
-						<?php $total+= $cart->price ?>
+						<?php $total += $cart->price ?>
 					</td>
 					<td>
 						<div class="numbers-row">
@@ -70,10 +71,7 @@
 			</div>
 		</div>
 		<!-- /cart_actions -->
-
 	</div>
-	<!-- /container -->
-
 	<div class="box_cart">
 		<div class="container">
 			<div class="row justify-content-end">
@@ -89,6 +87,12 @@
 		</div>
 	</div>
 	<!-- /box_cart -->
+	@else
+	<div class="d-flex justify-content-center">
+		<h5 style="color:#dd710e">Nothing here.</h5>
+	</div>
+	@endif
+
 
 </main>
 <!-- /main -->

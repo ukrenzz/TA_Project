@@ -20,6 +20,7 @@
 			</div>
 			<h1>Transaction page</h1>
 		</div>
+		@if(($data->transactions)->isNotEmpty())
 		<!-- /page_header -->
 		<table class="table table-striped cart-list">
 			<thead>
@@ -77,10 +78,12 @@
 			</tbody>
 		</table>
 		<!-- /cart_actions -->
-
+		@else
+		<div class="d-flex justify-content-center">
+			<h5 style="color:#dd710e">You haven't make any transaction yet.</h5>
+		</div>
+		@endif
 	</div>
-	<!-- /container -->
-
 </main>
 <!-- /main -->
 @endsection

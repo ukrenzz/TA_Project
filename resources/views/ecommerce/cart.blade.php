@@ -87,7 +87,7 @@
 							<span>Total</span> $247.00
 						</li>
 					</ul>
-					<a href="cart-2.html" class="btn_1 full-width cart">Proceed to Checkout</a>
+					<a href="{{route('transaction.payment')}}" class="btn_1 full-width cart">Proceed to Checkout</a>
 				</div>
 			</div>
 		</div>

@@ -33,7 +33,7 @@
       <div class="col-sm-12 col-md-3 col-lg-3">
         <div class="input-affix m-b-10">
           <i class="prefix-icon anticon anticon-search"></i>
-          <input type="text" class="form-control" id="categories-name-search" placeholder="Search by name">
+          <input type="text" class="form-control" id="users-name-search" placeholder="Search by name">
         </div>
       </div>
     </div>
@@ -56,11 +56,9 @@
             <td>{{ $user->email }}</td>
             <td>{{ $user->role }}</td>
             <td>
-              <a href="{{route('category.edit', ['id' => $user->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
-
               <meta name="csrf-token" content="{{ csrf_token() }}">
               <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$user->id}}"><i class="far fa-trash-alt"></i></button>
-              {{-- <form class="d-inline-block" action="{{route('category.delete', $user->id) }}" method="post">
+              {{-- <form class="d-inline-block" action="{{route('user.delete', $user->id) }}" method="post">
               @csrf
               @method('DELETE')
               <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>
@@ -84,7 +82,7 @@
 <script type="text/javascript">
   $.fn.dataTable.ext.search.push(
     function(settings, data, dataIndex) {
-      var _search = $('#categories-name-search').val();
+      var _search = $('#users-name-search').val();
       var _dataName = data[1]; // use data for the age column
       var _dataDesc = data[2]; // use data for the age column
       console.log([_search, _dataName, _dataDesc]);
@@ -127,7 +125,7 @@
     });
     $('#categories-data-table_wrapper').children().first().remove();
 
-    $('#categories-name-search').keyup(function() {
+    $('#users-name-search').keyup(function() {
       categories_table.search($(this).val()).draw();
     });
     $('.btn-delete').click(function() {
@@ -144,7 +142,7 @@
             var token = $("meta[name='csrf-token']").attr("content");
 
             $.ajax({
-              url: "category/delete/" + id,
+              url: "user/delete/" + id,
               type: 'DELETE',
               data: {
                 "id": id,

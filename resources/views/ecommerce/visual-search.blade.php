@@ -52,12 +52,12 @@
             <div class="grid_item">
               <span class="ribbon off">-30%</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1], ) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" alt="">
                 </a>
                 <div data-countdown="2019/05/15" class="countdown"></div>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Air x Fear</h3>
               </a>
               <div class="price_box">
@@ -77,12 +77,12 @@
             <div class="grid_item">
               <span class="ribbon off">-30%</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/2.jpg') }}" alt="">
                 </a>
                 <div data-countdown="2019/05/10" class="countdown"></div>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Okwahn II</h3>
               </a>
               <div class="price_box">
@@ -102,12 +102,12 @@
             <div class="grid_item">
               <span class="ribbon off">-50%</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/3.jpg') }}" alt="">
                 </a>
                 <div data-countdown="2019/05/21" class="countdown"></div>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Air Wildwood ACG</h3>
               </a>
               <div class="price_box">
@@ -127,11 +127,11 @@
             <div class="grid_item">
               <span class="ribbon new">New</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/4.jpg') }}" alt="">
                 </a>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor ACG React Terra</h3>
               </a>
               <div class="price_box">
@@ -150,11 +150,11 @@
             <div class="grid_item">
               <span class="ribbon new">New</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/5.jpg') }}" alt="">
                 </a>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Air Zoom Alpha</h3>
               </a>
               <div class="price_box">
@@ -173,11 +173,11 @@
             <div class="grid_item">
               <span class="ribbon new">New</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/6.jpg') }}" alt="">
                 </a>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Air Alpha</h3>
               </a>
               <div class="price_box">
@@ -196,11 +196,11 @@
             <div class="grid_item">
               <span class="ribbon hot">Hot</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/7.jpg') }}" alt="">
                 </a>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Air 98</h3>
               </a>
               <div class="price_box">
@@ -219,11 +219,11 @@
             <div class="grid_item">
               <span class="ribbon hot">Hot</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/8.jpg') }}" alt="">
                 </a>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor Air 720</h3>
               </a>
               <div class="price_box">
@@ -242,11 +242,11 @@
             <div class="grid_item">
               <span class="ribbon hot">Hot</span>
               <figure>
-                <a href="{{ route('product.show') }}">
+                <a href="{{ route('product.show', ['id' => 1]) }}">
                   <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/9.jpg') }}" alt="">
                 </a>
               </figure>
-              <a href="{{ route('product.show') }}">
+              <a href="{{ route('product.show', ['id' => 1]) }}">
                 <h3>Armor 720</h3>
               </a>
               <div class="price_box">

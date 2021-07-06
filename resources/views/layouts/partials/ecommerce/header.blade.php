@@ -36,6 +36,9 @@
                 <a href="{{ route('transaction.order') }}">Order</a>
               </li>
               <li>
+                <a href="{{ route('search.visual') }}">Visual Search</a>
+              </li>
+              <li>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf
                   <a href="{{ route('logout') }}" class="text-white" style="font-weight: bold; font-size: 0.8rem;" onclick="event.preventDefault();this.closest('form').submit();">

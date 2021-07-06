@@ -63,7 +63,7 @@
             <td>{{ $loop->iteration }}</td>
             <td>{{ $product->product_name }}</td>
             <td>{{ $product->brand }}</td>
-            <td>{{ $product->category }}</td>
+            <td>{{ $product->product_category }}</td>
             <td>{{ $product->unit }}</td>
             <td>{{ $product->color }}</td>
             <td>{{ $product->description }}</td>
@@ -73,6 +73,11 @@
 
               <meta name="csrf-token" content="{{ csrf_token() }}">
               <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$product->id}}"><i class="far fa-trash-alt"></i></button>
+              {{-- <form class="d-inline-block" action="{{route('product.delete', $product->id) }}" method="post">
+              @csrf
+              @method('DELETE')
+              <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>
+              </form> --}}
             </td>
           </tr>
           @endforeach

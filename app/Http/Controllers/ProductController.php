@@ -124,7 +124,6 @@ class ProductController extends Controller
 
   function destroy($id)
   {
-
     Product::find($id)->delete();
     return response()->json([
       'success' => 'Record deleted successfully!'

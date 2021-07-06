@@ -48,6 +48,7 @@
             <th>Discount</th>
             <th>Shipping Cost</th>
             <th>Payment Method</th>
+            <th>Created At</th>
             <th></th>
           </tr>
         </thead>
@@ -62,18 +63,6 @@
             <td>{{ $order->shipping_cost }}</td>
             <td>{{ $order->payment_method}}</td>
             <td>{{ $order->created_at }}</td>
-            <td>
-              <!-- TODO : Apakah masih butuh Action untuk Order ?  -->
-              <a href="{{route('category.edit', ['id' => $order->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
-
-              <meta name="csrf-token" content="{{ csrf_token() }}">
-              <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$order->id}}"><i class="far fa-trash-alt"></i></button>
-              {{-- <form class="d-inline-block" action="{{route('category.delete', $order->id) }}" method="post">
-              @csrf
-              @method('DELETE')
-              <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>
-              </form> --}}
-            </td>
           </tr>
           @endforeach
         </tbody>
@@ -138,40 +127,6 @@
 
     $('#categories-name-search').keyup(function() {
       categories_table.search($(this).val()).draw();
-    });
-    $('.btn-delete').click(function() {
-      swal({
-          title: "Are you sure want to delete this data?",
-          text: "Data is lost forever after delete",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-            var id = $(this).data("id");
-            var token = $("meta[name='csrf-token']").attr("content");
-
-            $.ajax({
-              url: "category/delete/" + id,
-              type: 'DELETE',
-              data: {
-                "id": id,
-                "_token": token,
-              },
-              success: function() {
-                swal("Delete success!", {
-                  icon: "success",
-                });
-                setTimeout(function() {
-                  top.location.href = '';
-                }, 1000);
-              }
-            });
-          } else {
-            swal("Delete canceled!");
-          }
-        });
     });
   });
 </script>

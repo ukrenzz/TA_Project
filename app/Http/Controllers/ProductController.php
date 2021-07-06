@@ -151,7 +151,7 @@ class ProductController extends Controller
   // E-commerce
   function index()
   {
-    $products = Product::orderBy('name', 'asc')->get();
+    $products = Product::orderBy('created_at', 'asc')->take(10)->get();
     $categories = Category::orderBy('name', 'asc')->get();
     $data = (object)[
       'products' => $products,
@@ -187,8 +187,10 @@ class ProductController extends Controller
   function categories()
   {
     $categories = Category::orderBy('name', 'asc')->get();
+    $products = Product::orderBy('created_at', 'asc')->take(10)->get();
     $data = (object)[
       'categories' => $categories,
+      'products' => $products,
     ];
     return view('ecommerce.categories', compact('data'));
   }

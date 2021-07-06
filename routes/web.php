@@ -41,6 +41,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
 
   Route::name('user.')->group(function () {
     Route::get('/manage/user', [UserController::class, 'index'])->name('manage');
+    Route::delete('/manage/user/delete/{id}', [UserController::class, 'destroy'])->name('delete');
   });
 
   Route::name('order.')->group(function () {

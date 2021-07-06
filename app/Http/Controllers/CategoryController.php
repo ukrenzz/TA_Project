@@ -89,9 +89,5 @@ class CategoryController extends Controller
     return response()->json([
       'success' => 'Record deleted successfully!'
     ]);
-    // $lastData = Category::where('id', $id)->first();
-    // Category::find($id)->delete();
-    // return redirect()->route('category.manage')
-    //     ->with('status', 'Data '. $lastData->name .' berhasil dihapus!');
   }
 }

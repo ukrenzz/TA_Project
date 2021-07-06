@@ -28,7 +28,7 @@
                 <a href="{{ route('product.index') }}">Home</a>
               </li>
               <li>
-                <a href="{{ route('product.category') }}">Categories</a>
+                <a href="{{ route('product.category', ['cat_id' => 0]) }}">Categories</a>
               </li>
               @if(Route::has('login'))
               @auth
@@ -81,7 +81,7 @@
                 <div id="menu">
                   <ul>
                     @foreach($data->categories as $category)
-                    <li><span><a href="#0">{{$category->name}}</a></span>
+                    <li><span><a href="{{ route('product.category', ['cat_id' => $category->id]) }}">{{$category->name}}</a></span>
                     </li>
                     @endforeach
                   </ul>

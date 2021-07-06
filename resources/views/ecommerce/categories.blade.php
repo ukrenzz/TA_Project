@@ -21,35 +21,12 @@
       <h1>Categories</h1>
     </div>
     <div class="row">
-      <aside class="col-lg-3" id="sidebar_fixed">
-        <div class="filter_col">
-          <div class="inner_bt"><a href="#" class="open_filters"><i class="ti-close"></i></a></div>
-          <div class="filter_type version_2">
-            <h4><a href="#filter_1" data-toggle="collapse" class="opened">Categories</a></h4>
-            <div class="collapse show" id="filter_1">
-              <ul>
-                @foreach($data->categories as $category )
-                <li>
-                  <label class="container_check">{{$category->name}} <small>12</small>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                  </label>
-                </li>
-                @endforeach
-              </ul>
-            </div>
-          </div>
-          <div class="buttons">
-            <a href="#0" class="btn_1">Filter</a> <a href="#0" class="btn_1 gray">Reset</a>
-          </div>
-        </div>
-      </aside>
       <!-- /col -->
-      <div class="col-lg-9">
+      <div class="col-lg-12">
         <!-- /toolbox -->
         <div class="row small-gutters">
           @foreach($data->products as $product)
-          <div class="col-6 col-md-4">
+          <div class="col-6 col-md-3">
             <div class="grid_item">
               <span class="ribbon off">-{{$product->discount}}%</span>
               <figure>

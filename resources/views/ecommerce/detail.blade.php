@@ -73,13 +73,13 @@
         </div>
         <div class="row">
           <div class="col-lg-5 col-md-6">
-            <div class="price_main"><span class="new_price">Rp                 <?php
-                $oldprice = $data->product->price;
-                $disc = $data->product->discount;
-                $new = ($oldprice * (100- $disc )) / 100;
-                echo $new;
-                ?></span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
-{{$data->product->price}}
+            <div class="price_main"><span class="new_price">Rp <?php
+                                                                $oldprice = $data->product->price;
+                                                                $disc = $data->product->discount;
+                                                                $new = ($oldprice * (100 - $disc)) / 100;
+                                                                echo $new;
+                                                                ?></span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
+                {{$data->product->price}}
               </span></div>
           </div>
           <div class="col-lg-4 col-md-6">

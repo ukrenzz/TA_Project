@@ -28,12 +28,15 @@
                 <a href="{{ route('product.index') }}">Home</a>
               </li>
               <li>
-                <a href="{{ route('product.category') }}">Categories</a>
+                <a href="{{ route('product.category', ['cat_id' => 0]) }}">Categories</a>
               </li>
               @if(Route::has('login'))
               @auth
               <li>
                 <a href="{{ route('transaction.order') }}">Order</a>
+              </li>
+              <li>
+                <a href="{{ route('search.visual') }}">Visual Search</a>
               </li>
               <li>
                 <form method="POST" action="{{ route('logout') }}">
@@ -78,7 +81,7 @@
                 <div id="menu">
                   <ul>
                     @foreach($data->categories as $category)
-                    <li><span><a href="#0">{{$category->name}}</a></span>
+                    <li><span><a href="{{ route('product.category', ['cat_id' => $category->id]) }}">{{$category->name}}</a></span>
                     </li>
                     @endforeach
                   </ul>

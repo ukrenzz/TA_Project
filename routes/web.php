@@ -118,8 +118,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
 Route::name('product.')->group(function () {
   // E-com
   Route::get('/', [ProductController::class, 'index'])->name('index');
-  Route::get('/categories', [ProductController::class, 'categories'])->name('category');
-  // TODO : Tambahkan parameter id di url
+  Route::get('/categories/{cat_id}', [ProductController::class, 'categories'])->name('category');
   Route::get('/product/detail/slug-produk-id-produk/{id}', [ProductController::class, 'show'])->name('show');
 });
 

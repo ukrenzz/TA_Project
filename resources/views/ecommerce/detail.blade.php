@@ -53,9 +53,15 @@
       <!-- /page_header -->
       <div class="prod_info">
         <h1>{{$data->product->product_name}}</h1>
-        <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em> @foreach($data->feedbacks as $feedbacks)
-            <?php echo $feedbacks->rate  ?>
-            @endforeach</em></span>
+        <?php $total_rate = 0;
+        $count = 0 ?>
+        @foreach($data->feedbacks as $feedback)
+        <?php $total_rate += $feedback->rate;
+        $count++; ?>
+        @endforeach
+        <span class="rating"><i class="icon-star voted"></i><em>
+            <?php echo $total_rate / $count ?>
+          </em></span>
         <p><small>SKU: {{$data->product->id}}</small><br>{{$data->product->description}}</p>
         <div class="prod_options">
           <div class="row">

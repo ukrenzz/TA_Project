@@ -40,7 +40,24 @@
 						<span class="item_cart"><a href="{{ route('product.show',['id' => $wishlist->product_id]) }}" class="product-link">{{$wishlist->product_name}}</a></span>
 					</td>
 					<td>
-						<strong>Rp {{$wishlist->price}}</strong>
+						<strong>Rp
+							<?php echo number_format(($wishlist->price), 0, '', '.'); ?>
+						</strong>
+					</td>
+					<td class="options">
+						<form method="POST" action="{{ route('cart.store') }}">
+							@csrf
+							<input type="hidden" name="product_id" value="{{ isset($data) ? $wishlist->product_id : '' }}">
+							<input type="hidden" name="quantity" value="1">
+							<button class="btn_1">
+								<span> Add to Cart</span>
+							</button>
+							@if (session('status'))
+							<div style="margin-top: 10px;">
+								<p style="color: green">{{ session('status') }}</p>
+							</div>
+							@endif
+						</form>
 					</td>
 					<td class="options">
 						<form method="POST" action="{{ route('wishlist.delete', ['id'=>   $wishlist->product_id , 'from'=>'wishlist']) }}">
@@ -48,9 +65,6 @@
 							{{ method_field('DELETE') }}
 							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i></button>
 						</form>
-					</td>
-					<td>
-						<button type="button" class="btn_1" name="button">Buy</button>
 					</td>
 				</tr>
 				@endforeach

@@ -43,10 +43,11 @@
                       $oldprice = $product->price;
                       $disc = $product->discount;
                       $new = ($oldprice * (100 - $disc)) / 100;
-                      echo $new;
+                      echo number_format($new, 0, '', '.');
                       ?>
                 </span><span class="percentage">-{{$product->discount}}</span>
-                <span class="old_price">Rp {{$product->price}}</span>
+                <span class="old_price">Rp </span>
+                <?php echo number_format(($product->price), 0, '', '.'); ?>
               </div>
             </div>
             <!-- /grid_item -->

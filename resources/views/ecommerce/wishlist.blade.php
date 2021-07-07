@@ -58,7 +58,7 @@
 		</table>
 		@else
 		<div class="d-flex justify-content-center">
-			<h5 style="color:#dd710e">You haven't make any transaction yet.</h5>
+			<h5 style="color:#dd710e">Browse for some products and Add to your wishlist!</h5>
 		</div>
 		@endif
 	</div>

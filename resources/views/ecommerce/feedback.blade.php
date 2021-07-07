@@ -24,30 +24,45 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-8">
 				<div class="write_review">
-					<h1>Leave a Review</h1>
-					<div class="rating_submit">
-						<div class="form-group">
-							<label class="d-block">Overall rating</label>
-							<span class="rating mb-0">
-								<input type="radio" class="rating-input" id="5_star" name="rating-input" value="5 Stars"><label for="5_star" class="rating-star"></label>
-								<input type="radio" class="rating-input" id="4_star" name="rating-input" value="4 Stars"><label for="4_star" class="rating-star"></label>
-								<input type="radio" class="rating-input" id="3_star" name="rating-input" value="3 Stars"><label for="3_star" class="rating-star"></label>
-								<input type="radio" class="rating-input" id="2_star" name="rating-input" value="2 Stars"><label for="2_star" class="rating-star"></label>
-								<input type="radio" class="rating-input" id="1_star" name="rating-input" value="1 Star"><label for="1_star" class="rating-star"></label>
-							</span>
+					<h1>Leave a Review for {{ isset($data) ? $data->transaction->product_name : '' }}</h1>
+					@if ($errors->any())
+					<div class="row">
+						<div style="color : red;">
+							<ul>
+								@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+								@endforeach
+							</ul>
 						</div>
 					</div>
-					<!-- /rating_submit -->
-					<div class="form-group">
-						<label>Title of your review</label>
-						<input class="form-control" type="text" placeholder="If you could say it in one sentence, what would you say?">
-					</div>
-					<div class="form-group">
-						<label>Your review</label>
-						<textarea class="form-control" style="height: 180px;" placeholder="Write your review to help others learn about this online business"></textarea>
-					</div>
-					<a href="confirm.html" class="btn_1">Submit review</a>
+					@endif
+					<form id="form-validation" action="{{route('feedback.store')}}" method="post">
+						@csrf
+						<div class="rating_submit">
+							<div class="form-group">
+								<label class="d-block">Overall rating</label>
+								<span class="rating mb-0">
+									<input type="radio" class="rating-input" name="rate" value="5"><label for="5_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="4"><label for="4_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="3"><label for="3_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="2"><label for="2_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="1"><label for="1_star" class="rating-star"></label>
+								</span>
+							</div>
+						</div>
+						<!-- /rating_submit -->
+						<div class="form-group">
+							<label>Your review</label>
+							<textarea class="form-control" name="comment" style="height: 180px;" placeholder="Write your review to help others learn about this online business"></textarea>
+							<input type="hidden" name="transaction_id" value="{{ isset($data) ? $data->transaction->id : '' }}">
+							<input type="hidden" name="user_id" value="{{ isset($data) ? $data->transaction->user_id : '' }}">
+							<input type="hidden" name="product_id" value="{{ isset($data) ? $data->transaction->product_id : '' }}">
+						</div>
+						<div class="form-group text-right">
+							<button class="btn_1">Submit Review</button>
+						</div>
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -55,6 +70,27 @@
 <!-- /main -->
 @endsection
 
-
 @section('user_defined_script')
+@endsection
+
+@section('extend_script')
+<!-- page js -->
+<script src="{{ asset('vendors/jquery-validation/jquery.validate.min.js') }}"></script>
+
+<script type="text/javascript">
+	$("#form-validation").validate({
+		ignore: ':hidden:not(:checkbox)',
+		errorElement: 'label',
+		errorClass: 'is-invalid',
+		validClass: 'is-valid',
+		rules: {
+			rate: {
+				required: true,
+			},
+			comment: {
+				required: false
+			}
+		}
+	});
+</script>
 @endsection

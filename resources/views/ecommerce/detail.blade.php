@@ -60,7 +60,8 @@
         $count++; ?>
         @endforeach
         <span class="rating"><i class="icon-star voted"></i><em>
-            <?php echo $total_rate / $count ?>
+            <?php if ($total_rate && $count) echo number_format(floor($total_rate) / $count, 2, '. ', '');
+            else echo 0 ?>
           </em></span>
         <p><small>SKU: {{$data->product->id}}</small><br>{{$data->product->description}}</p>
         <div class="prod_options">

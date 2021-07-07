@@ -98,16 +98,9 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
     Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
   });
 
-  Route::name('history.')->group(function () {
-    //
-  });
-
   Route::name('feedback.')->group(function () {
-    Route::get('/feedback', [FeedbackController::class, 'create'])->name('form');
-  });
-
-  Route::name('profile.')->group(function () {
-    // Apakah ini bisa disamakan langsung dengan Auth ?
+    Route::get('/feedback/{id}/{product_id}', [FeedbackController::class, 'create'])->name('form');
+    Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('store');
   });
 
   Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

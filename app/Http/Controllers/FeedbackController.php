@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Feedback;
 use App\Models\Category;
-
+use App\Models\Transaction;
 
 class FeedbackController extends Controller
 {
@@ -32,11 +32,22 @@ class FeedbackController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
+	public function create($id, $product_id)
 	{
 		$categories = Category::orderBy('name', 'asc')->get();
+		$transaction = Transaction::join('transaction_details', 'transaction_details.transaction_id', '=', 'transactions.id')
+			->join('products', 'products.id', '=', 'transaction_details.product_id')
+			->select('transactions.id as id', 'transactions.user_id as user_id', 'transaction_details.product_id as product_id', 'products.name as product_name')
+			->orderBy('transactions.created_at', 'asc')
+			->where(
+				[
+					['transactions.id', '=', $id],
+					['transaction_details.product_id', '=', $product_id]
+				]
+			)->get()->first();
 		$data = (object)[
 			'categories' => $categories,
+			'transaction' => $transaction
 		];
 		return view('ecommerce.feedback', compact('data'));
 	}
@@ -49,7 +60,23 @@ class FeedbackController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		//
+		// Form validation
+		$validated = $request->validate([
+			'user_id' => ['required'],
+			'product_id' => ['required'],
+			'transaction_id' => ['required'],
+			'rate' => ['required'],
+		]);
+
+		Feedback::create([
+			'user_id' =>  strtolower($request['user_id']),
+			'product_id' =>  strtolower($request['product_id']),
+			'transaction_id' =>  strtolower($request['transaction_id']),
+			'rate' => strtolower($request['rate']),
+			'comment' => $request['comment'],
+		]);
+
+		return redirect()->route('transaction.order')->with('status', 'Feedbacks added !!');
 	}
 
 	/**

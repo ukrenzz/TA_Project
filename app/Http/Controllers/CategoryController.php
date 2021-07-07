@@ -80,7 +80,7 @@ class CategoryController extends Controller
     $data->description = $request['description'];
     $data->save();
 
-    return redirect()->route('category.manage')->with('status', 'Data ' . $lastData->name . ' berhasil diubah!');
+    return redirect()->route('category.manage')->with('status', 'Data ' . $lastData->name . ' is updated!');
   }
 
   function destroy($id)

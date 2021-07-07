@@ -9,6 +9,9 @@ class Cart extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = null;
+    public $incrementing = false;
+
     protected $table = "carts";
     protected $guarded = [];
 }

@@ -74,7 +74,7 @@
 						</strong>
 					</td>
 					<td>
-						<a href="{{route('feedback.form', ['id' => $transaction->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i>Review</a>
+						<a href="{{route('feedback.form', ['id' => $transaction->id, 'product_id'=> $transaction->product_id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i>Review</a>
 					</td>
 				</tr>
 				@endforeach

@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductImages;
 use App\Models\Category;
 use App\Models\Wishlist;
+use App\Models\Cart;
 use App\Models\Feedback;
 use Storage;
 
@@ -177,15 +178,21 @@ class ProductController extends Controller
 
     $wishlists = Wishlist::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
       ->orderBy('wishlists.created_at', 'desc')->get();
-      
+
+    $cart = Cart::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
+      ->orderBy('carts.created_at', 'desc')->get();
+
     $isWishlist = false;
+    $isCart = false;
     if ($wishlists->isNotEmpty()) $isWishlist = true;
+    if ($cart->isNotEmpty()) $isCart = true;
 
     $data = (object)[
       'product' => $product,
       'categories' => $categories,
       'feedbacks' => $feedbacks,
       'isWishlist' => $isWishlist,
+      'isCart' => $isCart,
     ];
     return view('ecommerce.detail', ['data' => $data]);
   }

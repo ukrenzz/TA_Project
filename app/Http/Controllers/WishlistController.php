@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Wishlist;
 use App\Models\Category;
-use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -41,7 +41,7 @@ class WishlistController extends Controller
   function store(Request $request)
   {
     // Form validation
-    $validated = $request->validate([
+    $request->validate([
       'product_id' => ['required'],
     ]);
 
@@ -50,7 +50,7 @@ class WishlistController extends Controller
       'user_id' => Auth::id(),
     ]);
 
-    return redirect()->route('product.show', ['id' => $request['product_id']])->with('status', 'Product is added to Wishlist!!');
+    return back()->with('status', 'Product is added to Wishlist!!');
   }
 
   function update()
@@ -58,11 +58,9 @@ class WishlistController extends Controller
     return view('ecommerce.categories');
   }
 
-  function delete($id, $from)
+  function delete($id)
   {
     DB::table('wishlists')->where([['product_id', '=', $id], ['user_id', '=', Auth::id()]])->delete();
-    if ($from == 'wishlist') return redirect()->route('wishlist.index')->with('status', 'Product is added to Wishlist!!');
-    else
-      return redirect()->route('product.show', ['id' => $id])->with('status', 'Product is added to Wishlist!!');
+      return back()->with('status', 'Product is removed from Wishlist!!');
   }
 }

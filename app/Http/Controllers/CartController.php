@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -36,9 +37,20 @@ class CartController extends Controller
     return view('ecommerce.cart');
   }
 
-  function store()
+  function store(Request $request)
   {
-    return view('ecommerce.cart');
+    // Form validation
+    $request->validate([
+      'product_id' => ['required'],
+      'quantity' => ['required'],
+    ]);
+
+    Cart::create([
+      'product_id' => strtolower($request['product_id']),
+      'user_id' => Auth::id(),
+      'quantity' => strtolower($request['quantity'])
+    ]);
+    return back()->with('status', 'Product is added to Cart!!');
   }
 
   function update()
@@ -46,8 +58,9 @@ class CartController extends Controller
     return view('ecommerce.cart');
   }
 
-  function delete()
+  function delete($id)
   {
-    return view('ecommerce.cart');
+    DB::table('carts')->where([['product_id', '=', $id], ['user_id', '=', Auth::id()]])->delete();
+    return back()->with('status', 'Product is removed from Cart!!');
   }
 }

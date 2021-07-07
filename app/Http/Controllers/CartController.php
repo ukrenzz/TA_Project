@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -11,10 +13,10 @@ class CartController extends Controller
 {
   function index()
   {
-    //TODO: Ingat taruh query where id = "", masukkan id user yang login saat ini
-    $carts = Cart::join('products','carts.product_id', '=', 'products.id')
-		->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at' )
-		->orderBy('created_at', 'desc')->get();
+    $carts = Cart::join('products', 'carts.product_id', '=', 'products.id')
+      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at')
+      ->where('user_id', '=', Auth::id())
+      ->orderBy('created_at', 'desc')->get();
 
     $categories = Category::orderBy('name', 'asc')->get();
 
@@ -35,18 +37,52 @@ class CartController extends Controller
     return view('ecommerce.cart');
   }
 
-  function store()
+  function store(Request $request)
   {
-    return view('ecommerce.cart');
+    // Form validation
+    $request->validate([
+      'product_id' => ['required'],
+      'quantity' => ['required'],
+    ]);
+
+    Cart::create([
+      'product_id' => strtolower($request['product_id']),
+      'user_id' => Auth::id(),
+      'quantity' => strtolower($request['quantity'])
+    ]);
+    return back()->with('status', 'Product is added to Cart!!');
   }
 
-  function update()
+  function update(Request $request)
   {
-    return view('ecommerce.cart');
+    $data = Cart::where([
+      ['product_id', $request['product_id']],
+      ['user_id', Auth::id()]
+    ])->first();
+
+    // Form validation
+    $request->validate([
+      'product_id' => ['required'],
+      'quantity' => ['required'],
+    ]);
+    $data->quantity = $request['quantity'];
+    $data->save();
+
+    return back()->with('status', 'Data is updated!');
+
+    // $affected = DB::table('carts')
+    //   ->where(['product_id', $request['product_id']])
+    //   ->where(['user_id', Auth::id()])
+    //   ->update([
+    //     ['quantity' => $request['quantity']]
+    //   ]);
+    // if ($affected) return back()->with('status', 'Data is updated!');
+    // else return back()->with('status', 'Update Failed!');
   }
 
-  function delete()
+  function delete($id)
   {
-    return view('ecommerce.cart');
+    DB::table('carts')->where([['product_id', '=', $id], ['user_id', '=', Auth::id()]])->delete();
+    return back()->with('status', 'Product is removed from Cart!!');
   }
 }

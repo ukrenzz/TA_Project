@@ -51,54 +51,89 @@
         </ul>
       </div>
       <!-- /page_header -->
-      <div class="prod_info">
-        <h1>{{$data->product->product_name}}</h1>
-        <?php $total_rate = 0;
-        $count = 0 ?>
-        @foreach($data->feedbacks as $feedback)
-        <?php $total_rate += $feedback->rate;
-        $count++; ?>
-        @endforeach
-        <span class="rating"><i class="icon-star voted"></i><em>
-            <?php if ($total_rate && $count) echo number_format(floor($total_rate) / $count, 2, '. ', '');
-            else echo 0 ?>
-          </em></span>
-        <p><small>SKU: {{$data->product->id}}</small><br>{{$data->product->description}}</p>
-        <div class="prod_options">
-          <div class="row">
-            <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
-            <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>{{($data->product->color)}}</strong></label>
+      <form method="POST" action="{{ route('cart.store') }}">
+        @csrf
+        <div class="prod_info">
+          <h1>{{$data->product->product_name}}</h1>
+          <?php $total_rate = 0;
+          $count = 0 ?>
+          @foreach($data->feedbacks as $feedback)
+          <?php $total_rate += $feedback->rate;
+          $count++; ?>
+          @endforeach
+          <span class="rating"><i class="icon-star voted"></i><em>
+              <?php if ($total_rate && $count) echo number_format(floor($total_rate) / $count, 2, '. ', '');
+              else echo 0 ?>
+            </em></span>
+          <p><small>SKU: {{$data->product->id}}</small><br>{{$data->product->description}}</p>
+          <div class="prod_options">
+            <div class="row">
+              <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
+              <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>{{($data->product->color)}}</strong></label>
+            </div>
+            <div class="row">
+              <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
+              <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+                <div class="numbers-row">
+                  <input type="text" value="1" id="quantity" class="qty2" name="quantity">
+                </div>
+              </div>
+            </div>
           </div>
           <div class="row">
-            <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
-            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-              <div class="numbers-row">
-                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
+            <div class="col-lg-5 col-md-6">
+              <div class="price_main">
+                <span class="new_price">Rp
+                  <?php
+                  $oldprice = $data->product->price;
+                  $disc = $data->product->discount;
+                  $new = ($oldprice * (100 - $disc)) / 100;
+                  echo number_format($new, 0, '', '.');
+                  ?>
+                </span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
+                  <?php echo number_format(($data->product->price), 0, '', '.'); ?>
+                </span>
+              </div>
+            </div>
+            <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+            <div class="col-lg-4 col-md-6">
+              <div class="btn_add_to_cart">
+                @if(!$data->isCart)
+                <button class="btn_1">
+                  <span> Add to Cart</span>
+                </button>
+                @endif
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-5 col-md-6">
-            <div class="price_main"><span class="new_price">Rp <?php
-                                                                $oldprice = $data->product->price;
-                                                                $disc = $data->product->discount;
-                                                                $new = ($oldprice * (100 - $disc)) / 100;
-                                                                echo $new;
-                                                                ?></span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
-                {{$data->product->price}}
-              </span></div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="btn_add_to_cart"><a href="#0" class="btn_1">Add to Cart</a></div>
-          </div>
-        </div>
-      </div>
-      <!-- /prod_info -->
+      </form>
+
       <div class="product_actions">
         <ul>
           <li>
-            <a href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a>
+            @if($data->isWishlist)
+            <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
+              {{ csrf_field() }}
+              {{ method_field('DELETE') }}
+              <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
+                <span> Remove from Wishlist</span>
+              </button>
+            </form>
+            @else
+            <form method="POST" action="{{ route('wishlist.store') }}">
+              @csrf
+              <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+              <button class="btn_1">
+                <i class="ti-heart"></i><span> Add to Wishlist</span>
+              </button>
+            </form>
+            @endif
+            @if (session('status'))
+            <div style="margin-top: 10px;">
+              <p style="color: green">{{ session('status') }}</p>
+            </div>
+            @endif
           </li>
         </ul>
       </div>

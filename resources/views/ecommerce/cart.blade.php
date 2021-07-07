@@ -40,36 +40,46 @@
 						<div class="thumb_cart">
 							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
 						</div>
-						<span class="item_cart"><a href="{{ route('product.show', ['id' => 1]) }}" class="product-link">{{$cart->product_name}}</a></span>
+						<span class="item_cart"><a href="{{ route('product.show', ['id' => $cart->product_id]) }}" class="product-link">{{$cart->product_name}}</a></span>
 					</td>
 					<td>
-						<strong>Rp {{$cart->price}}</strong>
+						<strong>Rp <?php echo number_format(($cart->price), 0, '', '.'); ?> </strong>
 						<?php $total += $cart->price ?>
 					</td>
 					<td>
-						<div class="numbers-row">
-							<input type="text" value="{{ isset($cart->quantity) ? $cart->quantity : '' }}" class="qty2" name="quantity_1">
-							<div class="inc button_inc">+</div>
-							<div class="dec button_inc">-</div>
-						</div>
+						<form method="post" action="{{ route('cart.update') }}">
+							@csrf
+							@if(isset($cart))
+							@method('PUT')
+							@endif
+							<input type="hidden" name="product_id" value="{{ isset($cart) ? $cart->product_id : '' }}">
+							<div class="numbers-row">
+								<input type="text" value="{{ isset($cart->quantity) ? $cart->quantity : '' }}" class="qty2" name="quantity">
+								<div class="inc button_inc">+</div>
+								<div class="dec button_inc">-</div>
+							</div>
+							<button style="width: 100%; background : #DD710E; color : white; border: none" type="submit">Refresh</button>
+						</form>
 					</td>
 					<td>
-						<strong>Rp {{($cart->price)*($cart->quantity)}}</strong>
+						<strong>Rp
+							<?php echo number_format((($cart->price) * ($cart->quantity)), 0, '', '.'); ?>
+						</strong>
 					</td>
 					<td class="options">
-						<a href="#" class="text-hover-secondary-danger"><i class="ti-trash"></i></a>
+						<form method="POST" action="{{ route('cart.delete', ['id'=>   $cart->product_id , 'from'=>'cart']) }}">
+							{{ csrf_field() }}
+							{{ method_field('DELETE') }}
+							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i></button>
+						</form>
+					</td>
+					<td>
+						<button type="button" class="btn_1" name="button">Buy</button>
 					</td>
 				</tr>
 				@endforeach
 			</tbody>
 		</table>
-
-		<div class="row add_top_30 flex-sm-row-reverse cart_actions">
-			<!-- TODO : Update Cart, masukkan fungsi untuk ubah nilai quantity -->
-			<div class="col-sm-4 text-right">
-				<button type="button" class="btn_1 gray">Update Cart</button>
-			</div>
-		</div>
 		<!-- /cart_actions -->
 	</div>
 	<div class="box_cart">
@@ -78,7 +88,8 @@
 				<div class="col-xl-4 col-lg-4 col-md-6">
 					<ul>
 						<li>
-							<span>Total</span> Rp <?php echo $total ?>
+							<span>Total</span> Rp
+							<?php echo number_format($total, 0, '', '.'); ?>
 						</li>
 					</ul>
 					<a href="{{route('transaction.payment')}}" class="btn_1 full-width cart">Proceed to Checkout</a>

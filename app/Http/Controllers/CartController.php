@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use App\Models\Category;
 
@@ -11,10 +12,10 @@ class CartController extends Controller
 {
   function index()
   {
-    //TODO: Ingat taruh query where id = "", masukkan id user yang login saat ini
-    $carts = Cart::join('products','carts.product_id', '=', 'products.id')
-		->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at' )
-		->orderBy('created_at', 'desc')->get();
+    $carts = Cart::join('products', 'carts.product_id', '=', 'products.id')
+      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at')
+      ->where('user_id', '=', Auth::id())
+      ->orderBy('created_at', 'desc')->get();
 
     $categories = Category::orderBy('name', 'asc')->get();
 

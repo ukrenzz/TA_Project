@@ -74,11 +74,9 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
 
   Route::name('wishlist.')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('index');
-    // Route::get('/wishlist/create', [WishlistController::class, 'create'])->name('create');
-    // Route::get('/wishlist/edit', [WishlistController::class, 'edit'])->name('edit');
     Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('store');
     Route::put('/wishlist/update', [WishlistController::class, 'update'])->name('update');
-    Route::delete('/wishlist/delete', [WishlistController::class, 'delete'])->name('delete');
+    Route::delete('/wishlist/delete/{id}/{from}', [WishlistController::class, 'delete'])->name('delete');
   });
 
   Route::name('cart.')->group(function () {

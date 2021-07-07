@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class WishlistController extends Controller
   {
     $wishlists = Wishlist::join('users', 'wishlists.user_id', '=', 'users.id')
       ->join('products', 'wishlists.product_id', '=', 'products.id')
-      ->select('users.name as user_name', 'products.name as product_name', 'products.price as price', 'wishlists.created_at as created_at', 'wishlists.updated_at as updated_at')
+      ->select('users.name as user_name', 'products.id as product_id', 'products.name as product_name', 'products.price as price', 'wishlists.created_at as created_at', 'wishlists.updated_at as updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('wishlists.created_at', 'desc')->get();
 
@@ -37,9 +38,19 @@ class WishlistController extends Controller
     return view('ecommerce.categories');
   }
 
-  function store()
+  function store(Request $request)
   {
-    return view('ecommerce.categories');
+    // Form validation
+    $validated = $request->validate([
+      'product_id' => ['required'],
+    ]);
+
+    Wishlist::create([
+      'product_id' => strtolower($request['product_id']),
+      'user_id' => Auth::id(),
+    ]);
+
+    return redirect()->route('product.show', ['id' => $request['product_id']])->with('status', 'Product is added to Wishlist!!');
   }
 
   function update()
@@ -47,8 +58,11 @@ class WishlistController extends Controller
     return view('ecommerce.categories');
   }
 
-  function delete()
+  function delete($id, $from)
   {
-    return view('ecommerce.categories');
+    DB::table('wishlists')->where([['product_id', '=', $id], ['user_id', '=', Auth::id()]])->delete();
+    if ($from == 'wishlist') return redirect()->route('wishlist.index')->with('status', 'Product is added to Wishlist!!');
+    else
+      return redirect()->route('product.show', ['id' => $id])->with('status', 'Product is added to Wishlist!!');
   }
 }

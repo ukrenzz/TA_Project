@@ -98,7 +98,23 @@
       <div class="product_actions">
         <ul>
           <li>
-            <a href="#"><i class="ti-heart"></i><span>Add to Wishlist</span></a>
+            @if($data->isWishlist)
+            <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
+              {{ csrf_field() }}
+              {{ method_field('DELETE') }}
+              <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
+                <span> Remove from Wishlist</span>
+              </button>
+            </form>
+            @else
+            <form method="POST" action="{{ route('wishlist.store') }}">
+              @csrf
+              <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+              <button class="btn_1">
+                <i class="ti-heart"></i><span> Add to Wishlist</span>
+              </button>
+            </form>
+            @endif
           </li>
         </ul>
       </div>

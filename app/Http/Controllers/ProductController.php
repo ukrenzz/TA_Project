@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Models\Product;
 use App\Models\ProductImages;
 use App\Models\Category;
+use App\Models\Wishlist;
 use App\Models\Feedback;
 use Storage;
 
@@ -77,7 +78,7 @@ class ProductController extends Controller
       //   'price'       => $req->price,
       //   'category_id' => $req->category,
       //   'unit'        => $req->unit,
-        // 'user_id'     => Auth::id(),
+      // 'user_id'     => Auth::id(),
       //   'description' => $req->description,
       //   'color'       => $req->color,
       //   'status'      => $req->status,
@@ -174,10 +175,17 @@ class ProductController extends Controller
       ->orderBy('rate', 'desc')
       ->get();
 
+    $wishlists = Wishlist::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
+      ->orderBy('wishlists.created_at', 'desc')->get();
+      
+    $isWishlist = false;
+    if ($wishlists->isNotEmpty()) $isWishlist = true;
+
     $data = (object)[
       'product' => $product,
       'categories' => $categories,
       'feedbacks' => $feedbacks,
+      'isWishlist' => $isWishlist,
     ];
     return view('ecommerce.detail', ['data' => $data]);
   }

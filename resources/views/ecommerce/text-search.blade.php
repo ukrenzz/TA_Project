@@ -20,6 +20,7 @@
       </div>
       <h1>Search Result</h1>
     </div>
+    @if(($data->products)->isNotEmpty())
     <div class="row">
       <!-- /col -->
       <div class="col-lg-12">
@@ -76,7 +77,11 @@
       </div>
       <!-- /col -->
     </div>
-    <!-- /row -->
+    @else
+    <div class="d-flex justify-content-center">
+      <h5 style="color:#dd710e">No Result for "{{$data->term}}", try with another keyword!</h5>
+    </div>
+    @endif
   </div>
   <!-- /container -->
 </main>

@@ -112,7 +112,7 @@ Route::name('product.')->group(function () {
 
 Route::name('search.')->group(function () {
   // E-Com
-  Route::get('/search/text', [SearchController::class, 'textSearchIndex'])->name('text');
+  Route::get('/search/text', [SearchController::class, 'querySearch'])->name('text');
   Route::get('/search/visual', [SearchController::class, 'visualSearchIndex'])->name('visual');
   // Route::post('/payment/store', [SearchController::class, 'store'])->name('store');
 });

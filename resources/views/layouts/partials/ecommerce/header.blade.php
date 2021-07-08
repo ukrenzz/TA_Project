@@ -92,10 +92,11 @@
         </div>
         <div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
           <div class="custom-search-input">
-            <input type="text" placeholder="Search product">
-            <button action="route('search.text')" href="{{ route('search.text') }}" type="submit"><i class="header-icon_search_custom"></i></button>
-            <button action="route('search.visual')" href="{{ route('search.visual') }}" style="color:#dd710e" type="submit"><i class="header-icon_search_custom"></i></button>
-            <!-- <button type="submit"><i class="fas fa-camera" style="color: #dd710e; width: 10px; height : 10px"></i></button> -->
+            <form method="GET" action="{{ route('search.text') }}">
+              @csrf
+              <input type="text" name="term" placeholder="Search product">
+              <button type="submit"><i class="header-icon_search_custom"></i></button>
+            </form>
           </div>
         </div>
         <div class="col-xl-3 col-lg-2 col-md-3">
@@ -178,8 +179,11 @@
       <!-- /row -->
     </div>
     <div class="search_mob_wp">
-      <input type="text" class="form-control" placeholder="Search product">
-      <input type="submit" class="btn_1 full-width" value="Search">
+      <form method="GET" action="{{ route('search.text') }}">
+        @csrf
+        <input type="text" name="term" class="form-control" placeholder="Search product">
+        <input type="submit" class="btn_1 full-width" value="Search">
+      </form>
     </div>
     <!-- /search_mobile -->
   </div>

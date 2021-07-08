@@ -25,23 +25,7 @@
           <div class="billing-information">
             <h6>Status <span class="badge badge-info p-1 ml-2">Sending </span></h6>
             <div>Please prepare your money. </div>
-            <div>Your order will be sent to your address in 3 days.</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 col-md-5 col-sm-12">
-        <div class="box_general">
-          {{-- Summary --}}
-          <div class="summary-box">
-            <h5 class="pb-4">Summary</h5>
-            <div class="summary mt-3">
-              <ul>
-                <li class="clearfix"><em><strong>Subtotal</strong></em> <span>$450.00</span></li>
-                <li class="clearfix"><em><strong>Shipping</strong></em> <span>$0</span></li>
-              </ul>
-              <div class="total clearfix">TOTAL <span>$450.00</span></div>
-            </div>
-
+            <div>Your order will be sent to your address in 3 - 7 days.</div>
           </div>
         </div>
       </div>
@@ -49,17 +33,4 @@
   </div>
 </main>
 <!-- /main -->
-@endsection
-
-
-@section('user_defined_script')
-<script>
-  // Other address Panel
-  $('#other_addr input').on("change", function() {
-    if (this.checked)
-      $('#other_addr_c').fadeIn('fast');
-    else
-      $('#other_addr_c').fadeOut('fast');
-  });
-</script>
 @endsection

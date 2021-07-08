@@ -20,6 +20,11 @@
 			</div>
 			<h1>Your favorites</h1>
 		</div>
+		@if (session('status'))
+		<div style="margin-top: 5px; background : #cdfbcd; padding : 10px; margin-bottom: 5px">
+			<p style="color: #2fec00; margin:0">{{ session('status') }}</p>
+		</div>
+		@endif
 		@if(($data->wishlists)->isNotEmpty())
 		<!-- /page_header -->
 		<table class="table table-striped cart-list">
@@ -52,11 +57,6 @@
 							<button class="btn_1">
 								<span> Add to Cart</span>
 							</button>
-							@if (session('status'))
-							<div style="margin-top: 10px;">
-								<p style="color: green">{{ session('status') }}</p>
-							</div>
-							@endif
 						</form>
 					</td>
 					<td class="options">

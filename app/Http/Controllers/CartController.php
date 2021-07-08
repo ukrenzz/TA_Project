@@ -50,6 +50,10 @@ class CartController extends Controller
       'user_id' => Auth::id(),
       'quantity' => strtolower($request['quantity'])
     ]);
+
+    // Delete from Wishlist 
+    DB::table('wishlists')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->delete();
+
     return back()->with('status', 'Product is added to Cart!!');
   }
 

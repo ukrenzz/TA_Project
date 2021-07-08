@@ -23,7 +23,7 @@
         <div class="billing-information-box box_general">
           <h5 class="mb-4">Billing address</h5>
           <div class="billing-information">
-            <h6>Your Full Name <span class="badge badge-info p-1 ml-2">Primary</span></h6>
+            <h6>{{$data->user->name}} <span class="badge badge-info p-1 ml-2">Primary</span></h6>
             <div>Jl. B Hamid dan No. 8 Kec. Medan Johor</div>
             <div>Kota Medan, Sumatera Utara. 20145</div>
             <button type="button" class="btn_1 gray my-3 p-2" name="button">Change</button>
@@ -43,58 +43,29 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $total = 0 ?>
+                @foreach ($data->carts as $cart)
                 <tr>
                   <td>
                     <div class="thumb_cart">
                       <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
                     </div>
-                    <span class="item_cart"><a href="" class="product-link">Armor Air x Fear</a></span>
+                    <span class="item_cart"><a href="" class="product-link">{{$cart->product_name}}</a></span>
                   </td>
                   <td>
-                    <strong>$140.00</strong>
+                    <strong>Rp<?php echo number_format(($cart->price), 0, '', '.'); ?></strong>
                   </td>
                   <td>
-                    <strong>1</strong>
+                    <strong>{{$cart->quantity}}</strong>
                   </td>
                   <td>
-                    <strong>$140.00</strong>
+                    <strong>Rp<?php
+                              $total += ($cart->price) * ($cart->quantity);
+                              echo number_format((($cart->price) * ($cart->quantity)), 0, '', '.'); ?>
+                    </strong>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <div class="thumb_cart">
-                      <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/2.jpg') }}" class="lazy" alt="Image">
-                    </div>
-                    <span class="item_cart"><a href="" class="product-link">Armor Okwahn II</a></span>
-                  </td>
-                  <td>
-                    <strong>$110.00</strong>
-                  </td>
-                  <td>
-                    <strong>1</strong>
-                  </td>
-                  <td>
-                    <strong>$110.00</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="thumb_cart">
-                      <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/3.jpg') }}" class="lazy" alt="Image">
-                    </div>
-                    <span class="item_cart"><a href="" class="product-link">Armor Air Wildwood ACG</a></span>
-                  </td>
-                  <td>
-                    <strong>$90.00</strong>
-                  </td>
-
-                  <td>
-                    <strong>1</strong>
-                  </td>
-                  <td>
-                    <strong>$90.00</strong>
-                  </td>
-                </tr>
+                @endforeach
               </tbody>
             </table>
           </div>
@@ -111,20 +82,8 @@
                 <div class="collapse show" id="filter_1">
                   <ul>
                     <li>
-                      <label class="container_radio">Standard Regular <small>5 Hari | Rp.30.000</small>
+                      <label class="container_radio">Neko Flash <small>3-7 Hari | Rp.30.000</small>
                         <input type="radio" name="shipping_method" checked>
-                        <span class="checkmark"></span>
-                      </label>
-                    </li>
-                    <li>
-                      <label class="container_radio">J&T Regular <small>7 Hari | Rp.30.000</small>
-                        <input type="radio" name="shipping_method">
-                        <span class="checkmark"></span>
-                      </label>
-                    </li>
-                    <li>
-                      <label class="container_radio">Ninja Van Regular <small>3 Hari | Rp.40.000</small>
-                        <input type="radio" name="shipping_method">
                         <span class="checkmark"></span>
                       </label>
                     </li>
@@ -142,10 +101,14 @@
             <h5 class="pb-4">Summary</h5>
             <div class="summary mt-3">
               <ul>
-                <li class="clearfix"><em><strong>Subtotal</strong></em> <span>$450.00</span></li>
-                <li class="clearfix"><em><strong>Shipping</strong></em> <span>$0</span></li>
+                <li class="clearfix"><em><strong>Subtotal</strong></em> <span>Rp
+                    <?php echo number_format($total, 0, '', '.');  ?>
+                  </span></li>
+                <li class="clearfix"><em><strong>Shipping</strong></em> <span>Rp 30.000</span></li>
               </ul>
-              <div class="total clearfix">TOTAL <span>$450.00</span></div>
+              <div class="total clearfix">TOTAL <span>Rp
+                  <?php echo number_format($total + 30000, 0, '', '.');  ?>
+                </span></div>
             </div>
 
             <h5 class="mt-5">Payment method</h5>
@@ -157,7 +120,7 @@
                       <i class="ri-currency-line mr-1 payment-item-icon"></i>
                       <span class="payment-item-name">Cash on Delivery</span>
                     </span>
-                    <input type="radio" name="payments_method">
+                    <input type="radio" name="payments_method" checked>
                     <span class="checkmark"></span>
                   </label>
                 </li>

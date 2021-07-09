@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+// Login Check
+Route::get('/login/check', [UserController::class, 'logincheck']);
+
 // Admin Route
 Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
   Route::name('admin.')->group(function () {

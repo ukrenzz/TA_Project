@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Auth;
 
 class UserController extends Controller
 {
@@ -89,4 +91,21 @@ class UserController extends Controller
 			'success' => 'Record deleted successfully!'
 		]);
 	}
+
+	public function logincheck()
+	{
+		$role = (int)Auth::user()->role;
+		if($role === 0)
+		{
+			return redirect()->route('admin.dashboard');
+		}
+		else if($role === 1)
+		{
+			return redirect()->route('product.index');
+		}
+		else {
+			dd($role);
+		}
+	}
+
 }

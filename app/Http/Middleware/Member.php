@@ -18,7 +18,7 @@ class Member
     {
         if (auth()->user() == null) {
             return redirect('/');
-        } else if (auth()->user()->role) {
+        } else if (auth()->user()->role == 1) {
             return $next($request);
         } else {
             return abort(403);

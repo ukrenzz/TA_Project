@@ -18,8 +18,8 @@ class Admin
     {
         if (auth()->user() == null) {
             return redirect('/');
-        } else if (!auth()->user()->role) {
-            return $next($request); 
+        } else if (auth()->user()->role == 0) {
+            return $next($request);
         } else {
             return abort(403);
         }

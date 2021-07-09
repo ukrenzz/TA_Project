@@ -56,14 +56,17 @@
         </button>
       </div>
     </div>
-    <div class="alert alert-danger" id="error-area" style="display:none;">
-      <h5>Error</h5>
+    <div class="alert alert-danger" id="error-area" style="display:none">
+      <h5 class="text-danger"><i class="anticon anticon-warning"></i> Error</h5>
       <hr>
-      <ul id="error">
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-      </ul>
+      <div class="col-12">
+        <ul id="error">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error->massage }}</li>
+          @endforeach
+        </ul>
+
+      </div>
     </div>
     <ul class="nav nav-tabs">
       <li class="nav-item">
@@ -86,29 +89,29 @@
         <div class="card-body">
           <div class="form-group">
             <label class="font-weight-semibold" for="productName">Product Name</label>
-            <input type="text" name="name" class="form-control" id="productName" placeholder="Product Name" value="{{ isset($data->product) ? $data->product->name : '' }}" required>
+            <input type="text" name="name" class="form-control" id="productName" placeholder="Product Name" value="{{ isset($data->product) ? $data->product->name : old('name') }}" required>
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productPrice">Price</label>
             {{-- <input type="number" name="price" class="form-control" id="productPrice" placeholder="Min : Rp. 100" min="100" required> --}}
-            <input type="number" name="price" class="form-control" id="productPrice" placeholder="Min : Rp. 100" min="100" value="{{ isset($data->product) ? $data->product->price : '' }}" required>
+            <input type="number" name="price" class="form-control" id="productPrice" placeholder="Min : Rp. 100" min="100" value="{{ isset($data->product) ? $data->product->price : old('price') }}" required>
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productStock">Stock</label>
             {{-- <input type="number" name="stock" class="form-control" id="productStock" placeholder="Min : 0" min="0" required> --}}
-            <input type="number" name="stock" class="form-control" id="productStock" placeholder="Min : 0" min="0" value="{{ isset($data->product) ? $data->product->stock : '' }}" required>
+            <input type="number" name="stock" class="form-control" id="productStock" placeholder="Min : 0" min="0" value="{{ isset($data->product) ? $data->product->stock : old('stock') }}" required>
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productCategory">Category </label>
             <select class="custom-select" name="category" id="productCategory" required>
               @foreach ($data->categories as $item)
-              <option value="{{ isset($data->product) ? $data->product->category_id : $item->id }}" {{ $loop->index == 0 ? "selected" : "" }}>{{ ucfirst($item->name) }}</option>
+                <option value="{{ isset($data->product) ? $data->product->category_id : $item->id }}" {{ $loop->index == 0 ? "selected" : "" }}>{{ ucfirst($item->name) }}</option>
               @endforeach
             </select>
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productBrand">Brand</label>
-            <input type="text" name="brand" class="form-control" id="productBrand" value="{{ isset($data->product) ? $data->product->brand : '' }}" placeholder="Brand" required>
+            <input type="text" name="brand" class="form-control" id="productBrand" value="{{ isset($data->product) ? $data->product->brand : old('brand') }}" placeholder="Brand" required>
           </div>
         </div>
       </div>
@@ -126,13 +129,13 @@
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productDiscount">Discount (%)</label>
-            <input type="number" name="discount" class="form-control" id="productDiscount" value="{{ isset($data->product) ? $data->product->discount : '' }}" placeholder="Ex : 10%" min="0" max="100">
+            <input type="number" name="discount" class="form-control" id="productDiscount" value="{{ isset($data->product) ? $data->product->discount : old('discount') }}" placeholder="Ex : 10%" min="0" max="100">
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productSize">Unit</label>
             <select class="custom-select w-100" name="unit" id="productSize" required>
-              <option value="pcs" selected>Pcs</option>
-              <option value="box">Box</option>
+              <option value="pcs" {{ old("unit") == "pcs" || old('unit') == "" ? "selected" : ""  }}>Pcs</option>
+              <option value="box" {{ old("unit") == "box" ? "selected" : ""  }}>Box</option>
             </select>
           </div>
           <div class="form-group">
@@ -154,12 +157,7 @@
       <div class="card">
         <div class="card-body">
           <div id="productDescription">
-            <div class="form-group row">
-              <label class="col-sm-2 col-form-label control-label">Description</label>
-              <div class="col-sm-10">
-                <textarea class="form-control" name="description" rows="3" style="resize:none" placeholder="Special product alert. The key to more success is to have a lot of pillows. Surround yourself with angels, positive energy, beautiful people, beautiful souls, clean heart, angel. They will try to close the door on you, just open it. A major key, never panic. Don’t panic, when it gets crazy and rough, don’t panic, stay calm.">{{ isset($data->product) ? $data->product->description : '' }}</textarea>
-              </div>
-            </div>
+            <p>Special cloth alert. The key to more success is to have a lot of pillows. Surround yourself with angels, positive energy, beautiful people, beautiful souls, clean heart, angel. They will try to close the door on you, just open it. A major key, never panic. Don’t panic, when it gets crazy and rough, don’t panic, stay calm. They key is to have every key, the key to open every door.The other day the grass was brown, now it’s green because I ain’t give up. Never surrender. Lion! I’m up to something. Always remember in the jungle there’s a lot of they in there, after you overcome they, you will make it to paradise.</p>
           </div>
         </div>
       </div>
@@ -171,9 +169,10 @@
 
           <input type="file" name="image_product[]" id="image_product" class="form-control" accept="image/*" multiple>
 
-          {{-- <div id="dZUpload" class="dropzone">
-                            <div class="dz-default dz-message"></div>
-                      </div> --}}
+          <small>Accepted image type is .png, .jpg, .jpeg, and .gif. </small>
+          <br>
+          <small>Max image size is 15 Mb</small>
+
         </div>
       </div>
       <div class="card">
@@ -199,6 +198,11 @@
 
 <script type="text/javascript">
   $('.select2').select2();
+  $(document).ready(function () {
+    new Quill('#productDescription', {
+      theme: 'snow'
+    });
+  });
 
   var imagesPreview = function(input, placeToInsertImagePreview) {
 
@@ -229,6 +233,7 @@
 
   $('#btn_save').click((e) => {
     e.preventDefault();
+    $('#error').empty();
 
     // Color selection to text
     var _colors = $('#productColors').val();
@@ -274,11 +279,14 @@
       error: function(err) {
         console.log("Meninggoy");
         console.warn(err.responseJSON.errors);
+
+        $('#btn_save').html('<i class="anticon anticon-save"></i> <span>Save again</span>');
+
         $('#error-area').css('display', 'block');
         if (err.status == 422)
           $.each(err.responseJSON.errors, function(key, item) {
-            $("#error").append("<li>" + key + ": " + item[0] + "</li>")
-            console.log(key);
+            $("#error").append("<li>" + item[0] + "</li>")
+            // console.log(key);
           });
       }
     });

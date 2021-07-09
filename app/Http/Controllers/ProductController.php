@@ -13,6 +13,7 @@ use App\Models\Wishlist;
 use App\Models\Cart;
 use App\Models\Feedback;
 use Storage;
+use Image;
 
 class ProductController extends Controller
 {
@@ -72,38 +73,38 @@ class ProductController extends Controller
     $this->validation($req);
     // dd($req->hasfile('image_product'));
     try {
-      // $productInput = Product::create([
-      //   'name'        => $req->name,
-      //   'brand'       => $req->brand,
-      //   'stock'       => $req->stock,
-      //   'price'       => $req->price,
-      //   'category_id' => $req->category,
-      //   'unit'        => $req->unit,
-      // 'user_id'     => Auth::id(),
-      //   'description' => $req->description,
-      //   'color'       => $req->color,
-      //   'status'      => $req->status,
-      //   'discount'    => $req->discount
-      // ]);
+      $productInput = Product::create([
+        'name'              => $req->name,
+        'brand'           => $req->brand,
+        'stock'           => $req->stock,
+        'price'           => $req->price,
+        'category_id'     => $req->category,
+        'unit'            => $req->unit,
+        'add_by_user_id'  => Auth::id(),
+        'description'     => $req->description,
+        'color'           => $req->color,
+        'status'          => $req->status,
+        'discount'        => $req->discount
+      ]);
 
       // dd($req->image_product[0]->getClientOriginalExtension());
-      $p_id = 114;
-      $p_ca = "2021-06-08 21:48:06";
-      $p_cad = date("Y-m-d_H-i-s", strtotime($p_ca));
+      $image_product_id = $productInput->id;
+      $image_product_date = date("Y-m-d_H-i-s", strtotime($productInput->created_at));
+
       if ($req->hasfile('image_product')) {
         $numbering = 1;
         $dataImageProducts = [];
         foreach ($req->file('image_product') as $image) {
           $filesize = $image->getSize();
           $imageThumbnail = Image::make($image);
-          // $named   = 'product_' . $productInput->id . '_' . $productInput->created_at . '.' . $image->getClientOriginalExtension();
-          $named   = 'product_' . $p_id . '_' . $p_cad . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
+          $named   = 'product_' . $image_product_id . '_' . $image_product_date . '.' . $numbering++ . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
           $dataImage = [
-            'url'  => $named,
-            'width'     => $imageThumbnail->width(),
-            'height'    => $imageThumbnail->height(),
-            'size'  => $filesize
+            'product_id'  => $image_product_id,
+            'url'         => $named,
+            'width'       => $imageThumbnail->width(),
+            'height'      => $imageThumbnail->height(),
+            'size'        => $filesize
           ];
           array_push($dataImageProducts, $dataImage);
         }

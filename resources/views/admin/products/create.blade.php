@@ -29,6 +29,9 @@
 @section('content')
 
 <form id="form_product" method="POST" enctype="multipart/form-data">
+  @if (isset($data->product))
+    @method('PUT')
+  @endif
   @csrf
   <div class="page-header no-gutters has-tab">
     <div class="d-md-flex m-b-15 align-items-center justify-content-between">
@@ -87,6 +90,9 @@
     <div class="tab-pane fade show active" id="product-edit-basic">
       <div class="card">
         <div class="card-body">
+          @if (isset($data->product))
+              <input type="hidden" name="id_product" id="id_product" value="{{ $data->product->id }}" required>
+          @endif
           <div class="form-group">
             <label class="font-weight-semibold" for="productName">Product Name</label>
             <input type="text" name="name" class="form-control" id="productName" placeholder="Product Name" value="{{ isset($data->product) ? $data->product->name : old('name') }}" required>
@@ -133,7 +139,7 @@
           </div>
           <div class="form-group">
             <label class="font-weight-semibold" for="productSize">Unit</label>
-            <select class="custom-select w-100" name="unit" id="productSize" required>
+            <select class="custom-select w-100" name="unit" id="productColor" required>
               <option value="pcs" {{ old("unit") == "pcs" || old('unit') == "" ? "selected" : ""  }}>Pcs</option>
               <option value="box" {{ old("unit") == "box" ? "selected" : ""  }}>Box</option>
             </select>
@@ -141,13 +147,20 @@
           <div class="form-group">
             <label class="font-weight-semibold" for="productColors">Colors</label>
             @if(isset($data->product))
-            <input type="text" name="colors" class="form-control" id="productDiscount" value="{{isset($data->product) ? $data->product->color : ''}}">
+              @php
+                $_product_colors = explode(";", $data->product->color)
+              @endphp
+              <select class="select2 w-100" name="colors" id="productColors" multiple="multiple" required>
+                @foreach ($data->colors as $color)
+                  <option value="{{$color['id']}}" {{ in_array($color['id'], $_product_colors) == 1 ? "selected" : ""}}>{{$color['name']}}</option>
+                @endforeach
+              </select>
             @else
-            <select class="select2 w-100" name="colors" id="productColors" multiple="multiple" required>
-              @foreach ($data->colors as $color)
-              <option value="{{$color['id']}}">{{$color['name']}}</option>
-              @endforeach
-            </select>
+              <select class="select2 w-100" name="colors" id="productColors" multiple="multiple" required>
+                @foreach ($data->colors as $color)
+                <option value="{{$color['id']}}">{{$color['name']}}</option>
+                @endforeach
+              </select>
             @endif
           </div>
         </div>
@@ -157,7 +170,11 @@
       <div class="card">
         <div class="card-body">
           <div id="productDescription">
-            <p>Special cloth alert. The key to more success is to have a lot of pillows. Surround yourself with angels, positive energy, beautiful people, beautiful souls, clean heart, angel. They will try to close the door on you, just open it. A major key, never panic. Don’t panic, when it gets crazy and rough, don’t panic, stay calm. They key is to have every key, the key to open every door.The other day the grass was brown, now it’s green because I ain’t give up. Never surrender. Lion! I’m up to something. Always remember in the jungle there’s a lot of they in there, after you overcome they, you will make it to paradise.</p>
+            @if(isset($data->product))
+              {!! $data->product->description !!}
+            @else
+              <p>Special cloth alert. The key to more success is to have a lot of pillows. Surround yourself with angels, positive energy, beautiful people, beautiful souls, clean heart, angel. They will try to close the door on you, just open it. A major key, never panic. Don’t panic, when it gets crazy and rough, don’t panic, stay calm. They key is to have every key, the key to open every door.The other day the grass was brown, now it’s green because I ain’t give up. Never surrender. Lion! I’m up to something. Always remember in the jungle there’s a lot of they in there, after you overcome they, you will make it to paradise.</p>
+            @endif
           </div>
         </div>
       </div>

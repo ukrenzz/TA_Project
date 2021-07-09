@@ -65,6 +65,7 @@ class ProductController extends Controller
       'colors'     => $_color,
       'product'   => $product,
     ];
+    // dd(explode(";",$data->product->color));
     return view('admin.products.create', ['mode' => $mode, 'data' => $data]);
   }
 
@@ -119,9 +120,55 @@ class ProductController extends Controller
     // return view('ecommerce.categories');
   }
 
-  function update()
+  function update(Request $req)
   {
-    return view('ecommerce.categories');
+    $this->validation($req);
+    // dd($req->hasfile('image_product'));
+    try {
+      // dd($req->id_product);
+      $productInput = Product::find($req->id_product);
+      $productInput->update([
+        'name'              => $req->name,
+        'brand'           => $req->brand,
+        'stock'           => $req->stock,
+        'price'           => $req->price,
+        'category_id'     => $req->category,
+        'unit'            => $req->unit,
+        'description'     => $req->description,
+        'color'           => $req->color,
+        'status'          => $req->status,
+        'discount'        => $req->discount
+      ]);
+
+      // dd($req->image_product[0]->getClientOriginalExtension());
+      $image_product_id = $productInput->id;
+      $image_product_date = date("Y-m-d_H-i-s", strtotime($productInput->created_at));
+
+      if ($req->hasfile('image_product')) {
+        $numbering = 1;
+        $dataImageProducts = [];
+        foreach ($req->file('image_product') as $image) {
+          $filesize = $image->getSize();
+          $imageThumbnail = Image::make($image);
+          $named   = 'product_' . $image_product_id . '_' . $image_product_date . '.' . $numbering++ . $image->getClientOriginalExtension();
+          $image->move(public_path() . '/images/products', $named);
+          $dataImage = [
+            'product_id'  => $image_product_id,
+            'url'         => $named,
+            'width'       => $imageThumbnail->width(),
+            'height'      => $imageThumbnail->height(),
+            'size'        => $filesize
+          ];
+          array_push($dataImageProducts, $dataImage);
+        }
+        ProductImages::insert($dataImageProducts);
+        // dd($dataImageProducts);
+      }
+
+      return response()->json(['success' => true]);
+    } catch (Exception $ex) {
+      return response()->json(['success' => false, 'msg' => $ex->getMessage()]);
+    }
   }
 
   function destroy($id)

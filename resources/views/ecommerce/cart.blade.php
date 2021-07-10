@@ -73,9 +73,6 @@
 							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i></button>
 						</form>
 					</td>
-					<td>
-						<button type="button" class="btn_1" name="button">Buy</button>
-					</td>
 				</tr>
 				@endforeach
 			</tbody>

@@ -192,7 +192,7 @@ class ProductController extends Controller
       'color'         => ['required', 'string'],
       'status'        => ['required', 'string'],
       'discount'      => ['nullable', 'integer', 'digits_between:0,100'],
-      'image_product.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:15360'
+      'image_product.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:15360'
     ]);
   }
 

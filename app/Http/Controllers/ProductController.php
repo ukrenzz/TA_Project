@@ -96,7 +96,7 @@ class ProductController extends Controller
         foreach ($req->file('image_product') as $image) {
           $filesize = $image->getSize();
           $imageThumbnail = Image::make($image);
-          $named   = 'product_' . $image_product_id . '_' . $image_product_date . '.' . $numbering++ . $image->getClientOriginalExtension();
+          $named   = 'product_' . $image_product_id . '_' . $image_product_date . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
           $dataImage = [
             'product_id'  => $image_product_id,

@@ -19,6 +19,7 @@ class SearchController extends Controller
 		$term = trim($request['term']);
 		$products = Product::where('name', 'LIKE', '%' . $term . '%')
 			->orderBy('name', 'asc')
+			->take(20)
 			->get();
 		$data = (object)[
 			'products' => $products,

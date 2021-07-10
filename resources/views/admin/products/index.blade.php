@@ -61,12 +61,16 @@
           @foreach ($data->products as $product)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $product->product_name }}</td>
+            <td>
+              <?php echo substr($product->product_name, 0, 20) . '...' ?>
+            </td>
             <td>{{ $product->brand }}</td>
             <td>{{ $product->product_category }}</td>
             <td>{{ $product->unit }}</td>
             <td>{{ $product->color }}</td>
-            <td>{{ $product->description }}</td>
+            <td>
+              <?php echo substr($product->description, 0, 20) . '...' ?>
+            </td>
             <td>{{ $product->created_at }}</td>
             <td>
               <a href="{{route('product.edit', ['id' => $product->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>

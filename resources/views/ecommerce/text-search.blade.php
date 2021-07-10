@@ -36,7 +36,9 @@
                 </a>
               </figure>
               <a href="{{ route('product.show',['id' => $product->id]) }}">
-                <h3>{{$product->name}}</h3>
+                <h3>
+                  <?php echo substr($product->name, 0, 20) . '...' ?>
+                </h3>
               </a>
               <div class="price_box">
                 <span class="new_price">

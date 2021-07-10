@@ -126,7 +126,7 @@
                 </li>
                 </li>
               </ul>
-              <a href="{{route('transaction.success')}}" class="btn_1 full-width mb-4 mt-3">Confirm and Pay</a>
+              <a href="{{route('transaction.success')}}" class="btn_1 full-width mb-4 mt-3">Confirm and Order</a>
             </div>
           </div>
         </div>

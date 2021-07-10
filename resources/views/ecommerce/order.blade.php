@@ -49,7 +49,8 @@
 						<strong>{{$transaction->ref}}</strong>
 					</td>
 					<td>
-						<strong>Rp{{$transaction->price}}</strong>
+						<strong>Rp
+							<?php echo number_format($transaction->price, 0, '', '.') ?> </strong>
 					</td>
 					<td>
 						<strong> {{$transaction->quantity}}</strong>
@@ -69,7 +70,7 @@
 											$ppn = ($transaction->ppn) * $total / 100;
 											$discount = ($transaction->discount) * $total / 100;
 											$total += $ppn - $discount + $transaction->shipping_cost;
-											echo $total;
+											echo number_format($total, 0, '', '.');
 											?>
 						</strong>
 					</td>

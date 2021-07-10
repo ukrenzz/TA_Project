@@ -30,8 +30,6 @@ class ProductController extends Controller
     return view('admin.products.index', compact('data'));
   }
 
-
-
   public static function getProducts($id = null)
   {
     $data = null;

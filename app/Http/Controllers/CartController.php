@@ -59,29 +59,12 @@ class CartController extends Controller
 
   function update(Request $request)
   {
-    $data = Cart::where([
+    Cart::where([
       ['product_id', $request['product_id']],
       ['user_id', Auth::id()]
-    ])->first();
-
-    // Form validation
-    $request->validate([
-      'product_id' => ['required'],
-      'quantity' => ['required'],
-    ]);
-    $data->quantity = $request['quantity'];
-    $data->save();
+    ])->update(['quantity' => $request['quantity']]);
 
     return back()->with('status', 'Data is updated!');
-
-    // $affected = DB::table('carts')
-    //   ->where(['product_id', $request['product_id']])
-    //   ->where(['user_id', Auth::id()])
-    //   ->update([
-    //     ['quantity' => $request['quantity']]
-    //   ]);
-    // if ($affected) return back()->with('status', 'Data is updated!');
-    // else return back()->with('status', 'Update Failed!');
   }
 
   function delete($id)

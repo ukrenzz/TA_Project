@@ -44,7 +44,6 @@
 					</td>
 					<td>
 						<strong>Rp <?php echo number_format(($cart->price), 0, '', '.'); ?> </strong>
-						<?php $total += $cart->price ?>
 					</td>
 					<td>
 						<form method="post" action="{{ route('cart.update') }}">
@@ -64,6 +63,7 @@
 					<td>
 						<strong>Rp
 							<?php echo number_format((($cart->price) * ($cart->quantity)), 0, '', '.'); ?>
+						<?php $total += ($cart->price) * ($cart->quantity) ?>
 						</strong>
 					</td>
 					<td class="options">

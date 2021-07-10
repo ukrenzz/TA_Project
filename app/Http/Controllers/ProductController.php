@@ -15,7 +15,8 @@ use App\Models\Feedback;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Storage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Image;
 
 class ProductController extends Controller
@@ -174,6 +175,20 @@ class ProductController extends Controller
 
   function destroy($id)
   {
+    // Remove image from public path
+    $images = ProductImages::where('product_id', $id)->get();
+    $_imageDeletedCheck = 0;
+    if(count($images) > 0){
+      foreach ($images as $image) {
+        if(File::exists(public_path('images/products/'. $image->url))){
+          $del = File::delete(public_path('images/products/'. $image->url));
+        }
+      }
+      ProductImages::where('product_id', $id)->delete();
+    }
+
+
+
     Product::find($id)->delete();
     return response()->json([
       'success' => 'Record deleted successfully!'

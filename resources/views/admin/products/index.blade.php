@@ -5,6 +5,7 @@
 @section('extend_style')
 <!-- page style -->
 <link href="{{ asset('vendors/datatables/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('ecommerce/css/custom.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb_item')
@@ -34,7 +35,7 @@
       <div class="col-sm-12 col-md-3 col-lg-3">
         <div class="input-affix m-b-10">
           <i class="prefix-icon anticon anticon-search"></i>
-          <input type="text" class="form-control" id="products-name-search" placeholder="Search by name">
+          <input type="text" class="form-control" id="products-search" placeholder="Search by name">
         </div>
       </div>
 
@@ -45,7 +46,7 @@
     <div class="table-responsive">
       <table id="products-data-table" class="table">
         <thead>
-          <tr>
+          <tr class="text-center">
             <th>No</th>
             <th>Product Name </th>
             <th>Brand</th>
@@ -59,31 +60,38 @@
         </thead>
         <tbody>
           @foreach ($data->products as $product)
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>
-              <?php echo substr($product->product_name, 0, 20) . '...' ?>
-            </td>
-            <td>{{ $product->brand }}</td>
-            <td>{{ $product->product_category }}</td>
-            <td>{{ $product->unit }}</td>
-            <td>{{ $product->color }}</td>
-            <td>
-              <?php echo substr($product->description, 0, 20) . '...' ?>
-            </td>
-            <td>{{ $product->created_at }}</td>
-            <td>
-              <a href="{{route('product.edit', ['id' => $product->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+            <tr>
+              <td class="text-center">{{ $loop->iteration }}</td>
+              <td>
+                <?php echo substr($product->product_name, 0, 20) . '...' ?>
+              </td>
+              <td>{{ $product->brand }}</td>
+              <td>{{ $product->product_category }}</td>
+              <td class="text-center">{{ $product->unit }}</td>
+              @php
+                $colors_data = explode(";", $product->color)
+              @endphp
+              <td class="text-center">
+                @foreach ($colors_data as $color)
+                  <span class="color_box mr-2" data-toggle="tooltip" data-placement="bottom" title="{{ ucwords($color) }}" style="background:{{$color}};"></span>
+                @endforeach
+              </td>
+              <td>
+                <?php echo substr($product->description, 0, 20) . '...' ?>
+              </td>
+              <td class="text-center">{{ $product->created_at }}</td>
+              <td>
+                <a href="{{route('product.edit', ['id' => $product->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
-              <meta name="csrf-token" content="{{ csrf_token() }}">
-              <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$product->id}}"><i class="far fa-trash-alt"></i></button>
-              {{-- <form class="d-inline-block" action="{{route('product.delete', $product->id) }}" method="post">
-              @csrf
-              @method('DELETE')
-              <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>
-              </form> --}}
-            </td>
-          </tr>
+                <meta name="csrf-token" content="{{ csrf_token() }}"/>
+                <button type="button" class="btn btn-sm btn-danger btn-delete" id="" data-id="{{$product->id}}"><i class="far fa-trash-alt"></i></button>
+                {{-- <form class="d-inline-block" action="{{route('product.delete', $product->id) }}" method="post">
+                  @csrf
+                  @method('DELETE')
+                  <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="far fa-trash-alt"></i></button>
+                </form> --}}
+              </td>
+            </tr>
           @endforeach
         </tbody>
       </table>
@@ -99,53 +107,71 @@
 <script src="{{ asset('vendors/datatables/dataTables.bootstrap.min.js') }}"></script>
 
 <script type="text/javascript">
-  // TODO : Perlu diganti dari Categories jadi Product 
+  // TODO : Perlu diganti dari Categories jadi Product
   $.fn.dataTable.ext.search.push(
     function(settings, data, dataIndex) {
-      var _search = $('#products-name-search').val();
+      var _search = $('#products-search').val();
       var _dataName = data[1]; // use data for the age column
-      var _dataDesc = data[2]; // use data for the age column
-      console.log([_search, _dataName, _dataDesc]);
-      if (_dataName.includes(_search) || _dataDesc.includes(_search)) {
-        return true;
-      }
+      var _dataBrand = data[2]; // use data for the age column
+      var _dataCategory = data[3]; // use data for the age column
+      if (
+        _dataName.toLowerCase().includes(_search.toLowerCase()) ||
+        _dataBrand.toLowerCase().includes(_search.toLowerCase()) ||
+        _dataCategory.toLowerCase().includes(_search.toLowerCase())
+      )
+        {
+        // console.log([_search, _dataName, _dataBrand, _dataCategory]);
+          return true;
+        }
       return false;
     }
   );
 
   $(document).ready(function() {
     var products_table = $('#products-data-table').DataTable({
-      "columnDefs": [{
-        "targets": [1, 3],
-        'searchable': true,
-        'orderable': true,
-      }],
-      "columnDefs": [{
-        "targets": 2,
-        'searchable': true,
-        'orderable': false,
-      }],
       "columns": [{
           'searchable': false,
           'orderable': true,
         },
-        {},
         {
           'searchable': true,
-          'orderable': false,
+          'orderable': true,
         },
-        {},
+        {
+          'searchable': true,
+          'orderable': true,
+        },
+        {
+          'searchable': true,
+          'orderable': true,
+        },
         {
           'searchable': false,
           'orderable': false,
-        }
+        },
+        {
+          'searchable': false,
+          'orderable': false,
+        },
+        {
+          'searchable': false,
+          'orderable': false,
+        },
+        {
+          'searchable': false,
+          'orderable': false,
+        },
+        {
+          'searchable': false,
+          'orderable': false,
+        },
       ],
       lengthChange: false,
       // searching : false
     });
     $('#products-data-table_wrapper').children().first().remove();
 
-    $('#products-name-search').keyup(function() {
+    $('#products-search').keyup(function() {
       products_table.search($(this).val()).draw();
     });
     $('.btn-delete').click(function() {
@@ -162,7 +188,7 @@
             var token = $("meta[name='csrf-token']").attr("content");
 
             $.ajax({
-              url: "product/delete/" + id,
+              url: "/manage/product/delete/" + id,
               type: 'DELETE',
               data: {
                 "id": id,

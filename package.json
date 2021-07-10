@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "bootstrap-colorpicker": "^3.3.0",
-        "mathjs": "^9.4.3"
+        "mathjs": "^9.4.3",
+        "webcam-easy": "^1.0.5"
     }
 }

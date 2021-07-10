@@ -12,6 +12,9 @@ use App\Models\Category;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use App\Models\Feedback;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Storage;
 use Image;
 
@@ -197,12 +200,14 @@ class ProductController extends Controller
   // E-commerce
   function index()
   {
-    $products = Product::orderBy('created_at', 'asc')->take(20)->get();
+    $products = Product::orderBy('created_at', 'asc')->paginate(20);
+    $products->load('product_images');
     $categories = Category::orderBy('name', 'asc')->get();
     $data = (object)[
       'products' => $products,
       'categories' => $categories,
     ];
+    // dd($products);
     return view('ecommerce.index', compact('data'));
   }
 

@@ -112,10 +112,14 @@
 			<div class="col-6 col-md-4 col-xl-3">
 				<div class="grid_item">
 					<figure>
-						<span class="ribbon off">-{{$product->discount}}%</span>
+						{!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
 						<a href="{{ route('product.show',['id' => $product->id]) }}">
-							<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" alt="">
-							<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1_b.jpg') }}" alt="">
+							@if (count($product->product_images) > 0)
+								<img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
+								<img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
+							@else
+								<img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
+							@endif
 						</a>
 					</figure>
 					<div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
@@ -132,13 +136,29 @@
 									$new = ($oldprice * (100 - $disc)) / 100;
 									echo number_format($new, 0, '', '.');
 									?>
-						</span><span class="percentage">-{{$product->discount}}</span>
-						<span class="old_price">Rp <?php echo number_format(($product->price), 0, '', '.'); ?></span>
+						</span>
+						{!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='old_price ml-1'>Rp " . number_format(($product->price), 0, '', '.') . "</span>" !!}
+
+
 					</div>
 				</div>
 				<!-- /grid_item -->
 			</div>
 			@endforeach
+
+			<div class="pagination__wrapper">
+				<ul class="pagination">
+					<li><a href="{{ $data->products->previousPageUrl() }}" class="prev" title="previous page">&#10094;</a></li>
+					@for ($i=1; $i < ($data->products->total() / $data->products->perPage()) + 1; $i++)
+						<li>
+
+							<a href="{{ $data->products->url($i) }}" class="{{ $data->products->currentPage() == $i ? "active" : "" }}">{{ $i }}</a>
+						</li>
+					@endfor
+					<li><a href="{{ $data->products->nextPageUrl() }}" class="next" title="next page">&#10095;</a></li>
+				</ul>
+			</div>
+
 			<!-- /col -->
 		</div>
 		<!-- /row -->

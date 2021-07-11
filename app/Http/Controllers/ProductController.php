@@ -242,11 +242,18 @@ class ProductController extends Controller
       ->orderBy('rate', 'desc')
       ->get();
 
+    $ratings = Feedback::join('products', 'feedbacks.product_id', '=', 'products.id')
+      ->select('rate')
+      ->where('feedbacks.product_id', $id)
+      ->sum('rate');
+
     $wishlists = Wishlist::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
       ->orderBy('wishlists.created_at', 'desc')->get();
 
     $cart = Cart::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
       ->orderBy('carts.created_at', 'desc')->get();
+
+
 
     $isWishlist = false;
     $isCart = false;
@@ -254,11 +261,12 @@ class ProductController extends Controller
     if ($cart->isNotEmpty()) $isCart = true;
 
     $data = (object)[
-      'product' => $product,
-      'categories' => $categories,
-      'feedbacks' => $feedbacks,
-      'isWishlist' => $isWishlist,
-      'isCart' => $isCart,
+      'product'     => $product,
+      'categories'  => $categories,
+      'feedbacks'   => $feedbacks,
+      'rating'      => $ratings, 
+      'isWishlist'  => $isWishlist,
+      'isCart'      => $isCart,
     ];
     return view('ecommerce.detail', ['data' => $data]);
   }

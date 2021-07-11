@@ -11,148 +11,151 @@
 @section('content')
 <main>
   <div class="container margin_30">
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="all">
-        <div class="slider pl-3">
-          <div class="owl-carousel owl-theme main">
-            <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item-box">
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item-box"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/3.jpg') }});" class="item-box"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/4.jpg') }});" class="item-box"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/5.jpg') }});" class="item-box"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/6.jpg') }});" class="item-box"></div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="all">
+          <div class="slider pl-3">
+            <div class="owl-carousel owl-theme main">
+              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item-box">
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item-box"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/3.jpg') }});" class="item-box"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/4.jpg') }});" class="item-box"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/5.jpg') }});" class="item-box"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/6.jpg') }});" class="item-box"></div>
+              </div>
+              <div class="left nonl"><i class="ti-angle-left"></i></div>
+              <div class="right"><i class="ti-angle-right"></i></div>
             </div>
-            <div class="left nonl"><i class="ti-angle-left"></i></div>
-            <div class="right"><i class="ti-angle-right"></i></div>
-          </div>
-          <div class="slider-two">
-            <div class="owl-carousel owl-theme thumbs">
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item active"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/3.jpg') }});" class="item"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/4.jpg') }});" class="item"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/5.jpg') }});" class="item"></div>
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/6.jpg') }});" class="item"></div>
+            <div class="slider-two">
+              <div class="owl-carousel owl-theme thumbs">
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item active"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/3.jpg') }});" class="item"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/4.jpg') }});" class="item"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/5.jpg') }});" class="item"></div>
+                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/6.jpg') }});" class="item"></div>
+              </div>
+              <div class="left-t nonl-t"></div>
+              <div class="right-t"></div>
             </div>
-            <div class="left-t nonl-t"></div>
-            <div class="right-t"></div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-6">
-      <div class="breadcrumbs" style="padding : 10px; margin : 2px;">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">{{$data->product->product_category}}</a></li>
-          <li>
-            <?php echo substr($data->product->product_name, 0, 30) . '...' ?>
-          </li>
-        </ul>
-      </div>
-      <!-- /page_header -->
-      <div class="prod_info" style="padding : 10px; margin : 2px;">
-        <h1>
-          {{$data->product->product_name}}
-        </h1>
-        <?php $total_rate = 0;
-        $count = 0 ?>
-        @foreach($data->feedbacks as $feedback)
-        <?php $total_rate += $feedback->rate;
-        $count++; ?>
-        @endforeach
-        <span class="rating"><i class="icon-star voted"></i><em>
-            <?php if ($total_rate && $count) echo number_format(floor($total_rate) / $count, 2, '. ', '');
-            else echo 0 ?>
-          </em></span>
-        <p><small>SKU: {{$data->product->id}}</small><br>
-          <?php echo substr($data->product->description, 0, 50) . '...' ?></p>
-        <div class="row" style="margin-bottom: 10px;">
-          <div class="col-lg-5 col-md-6">
-            <div class="price_main">
-              <span class="new_price">Rp
-                <?php
-                $oldprice = $data->product->price;
-                $disc = $data->product->discount;
-                $new = ($oldprice * (100 - $disc)) / 100;
-                echo number_format($new, 0, '', '.');
-                ?>
-              </span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
-                <?php echo number_format(($data->product->price), 0, '', '.'); ?>
-              </span>
-            </div>
-          </div>
+      <div class="col-md-6">
+        <div class="breadcrumbs" style="padding : 10px; margin : 2px;">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">{{$data->product->product_category}}</a></li>
+            <li>
+              <?php echo substr($data->product->product_name, 0, 30) . '...' ?>
+            </li>
+          </ul>
         </div>
-        <div class="prod_options">
-          <form method="POST" action="{{ route('cart.store') }}">
-            @csrf
-            <div class="row">
-              <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
-              <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>{{($data->product->color)}}</strong></label>
-            </div>
-            @if(Auth::id())
-            <div class="row">
-              <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
-              <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-                <div class="numbers-row">
-                  <input type="text" value="1" id="quantity" class="qty2" name="quantity">
-                </div>
-              </div>
-            </div>
-            @endif
-            <div class="row">
-              <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
-              <div class="col-lg-4">
-                <div class="btn_add_to_cart">
-                  @if(!$data->isCart && Auth::id())
-                  <button class="btn_1">
-                    <span> Add to Cart</span>
-                  </button>
-                  @endif
-                </div>
-              </div>
-            </div>
-          </form>
-          <div class="row" style="margin-top: 10px;">
-            <div class="col-lg-4">
-              @if($data->isWishlist)
-              <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
-                <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
-                  <span style="white-space: nowrap;"> Remove from Wishlist</span>
-                </button>
-              </form>
+
+        <div class="prod_info">
+          <h1>{{$data->product->product_name}}</h1>
+          <span class="rating">
+            @php
+              $rating = 0;
+              if(count($data->feedbacks) != null || count($data->feedbacks) != 0){
+                $rating = $data->rating / count($data->feedbacks);
+                var_dump($rating);
+              }
+            @endphp
+            @for ($i=1; $i < 6; $i++)
+              @if ($i <= $rating)
+                <i class="icon-star voted"></i>
               @else
-              <form method="POST" action="{{ route('wishlist.store') }}">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
-                @if(Auth::id())
-                <button class="btn_1">
-                  <i class="ti-heart"></i><span> Add to Wishlist</span>
-                </button>
-                @endif
-              </form>
+                <i class="icon-star"></i>
               @endif
-              @if (session('status'))
-              <div style="margin-top: 10px;">
-                <p style="color: green">{{ session('status') }}</p>
+            @endfor
+            <em>{{count($data->feedbacks) . " reviews"}}</em>
+          </span>
+          <p>
+            <small>{{"SKU: " . $data->product->id}}</small>
+            <br>
+          </p>
+        <div class="prod_options">
+          <div class="row">
+            <label class="col-xl-7 col-lg-7  col-md-6 col-6 pt-0"><strong>Color</strong></label>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
+              <ul>
+                @php
+                  $colors = explode(";", $data->product->color);
+                @endphp
+                @foreach ($colors as $key=>$color)
+                  <li><a href="#0" class="color color-shadow {{$key == 1 ? "active" : ""}}" style="background:{{str_replace(' ', '', $color)}}; {{$color == 'white' ? 'color:black;' : ''}}"></a></li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-xl-7 col-lg-7  col-md-6 col-6"><strong>Quantity</strong></label>
+            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+              <div class="numbers-row">
+                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1" min="1">
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="price_main">
+              <span class="new_price">
+                {{ $data->product->discount != null ||  $data->product->discount != 0 ? "Rp." . number_format($data->product->price - ($data->product->price * (10 / $data->product->discount)), 0, '.', '.') : "Rp." . number_format($data->product->price, 0, '.', '.') }}
+              </span>
+              @if ($data->product->discount != null ||  $data->product->discount != 0)
+                <span class="percentage">{{ "-" . $data->product->discount }}</span>
+                <span class="old_price ml-2">{{ "Rp." . number_format($data->product->price, 0, '.', '.') }}</span>
               @endif
             </div>
           </div>
         </div>
-
-        <div class="product_actions">
-
+        @if(!$data->isCart && Auth::id())
+          <div class="row">
+            <div class="col-lg-7 col-md-6"></div>
+            <div class="col-lg-4 col-md-6">
+              <div class="btn_add_to_cart">
+                <button class="btn_1">
+                  <span> Add to Cart</span>
+                </button>
+              </div>
+            </div>
+          @endif
         </div>
       </div>
+      <!-- /prod_info -->
+      <div class="product_actions">
+        <form method="POST" action="{{ route('wishlist.store') }}">
+          @csrf
+          <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+          <ul>
+            <li>
+              @if($data->isWishlist)
+                <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
+                  {{ csrf_field() }}
+                  {{ method_field('DELETE') }}
+                  <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
+                    <span style="white-space: nowrap;"> Remove from Wishlist</span>
+                  </button>
+                </form>
+              @else
+                <form method="POST" action="{{ route('wishlist.store') }}">
+                  @csrf
+                  <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+                  @if(Auth::id())
+                    <button class="btn_1">
+                      <i class="ti-heart"></i><span> Add to Wishlist</span>
+                    </button>
+                  @endif
+                </form>
+              @endif
+            </li>
+          </ul>
+        </form>
+      </div>
+      <!-- /product_actions -->
     </div>
-    <!-- /product_actions -->
-  </div>
-  </div>
   <!-- /row -->
   </div>
   <!-- /container -->

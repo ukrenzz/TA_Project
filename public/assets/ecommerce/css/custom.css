@@ -159,3 +159,14 @@ a.badge:hover, a.badge:focus {
   transform: scale(1.3);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+.color-shadow{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  transition:all 0.3s ease;
+}
+.color-shadow:hover{
+  -webkit-transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  transform: scale(1.3);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

@@ -27,13 +27,13 @@
               <li>
                 <a href="{{ route('product.index') }}">Home</a>
               </li>
+              <li>
+                <a href="{{ route('search.visual') }}">Visual Search</a>
+              </li>
               @if(Route::has('login'))
               @auth
               <li>
                 <a href="{{ route('transaction.order') }}">Order</a>
-              </li>
-              <li>
-                <a href="{{ route('search.visual') }}">Visual Search</a>
               </li>
               <li>
                 <form method="POST" action="{{ route('logout') }}">

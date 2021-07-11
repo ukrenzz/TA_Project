@@ -32,7 +32,6 @@
 				<tr>
 					<th>Product</th>
 					<th>Price</th>
-					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -65,7 +64,7 @@
 						<form method="POST" action="{{ route('wishlist.delete', ['id'=>   $wishlist->product_id , 'from'=>'wishlist']) }}">
 							{{ csrf_field() }}
 							{{ method_field('DELETE') }}
-							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i></button>
+							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i> <span style="font-size: smaller; color: red;"> Delete </span></button>
 						</form>
 					</td>
 				</tr>

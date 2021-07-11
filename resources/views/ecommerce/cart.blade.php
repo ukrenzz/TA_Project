@@ -69,10 +69,10 @@
 						</strong>
 					</td>
 					<td class="options">
-						<form method="POST" action="{{ route('cart.delete', ['id'=>   $cart->product_id , 'from'=>'cart']) }}">
+						<form method="POST" action="{{ route('cart.delete', ['id'=> $cart->product_id , 'from'=>'cart']) }}">
 							{{ csrf_field() }}
 							{{ method_field('DELETE') }}
-							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i></button>
+							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i> <span style="font-size: smaller; color: red;"> Delete </span></button>
 						</form>
 					</td>
 				</tr>

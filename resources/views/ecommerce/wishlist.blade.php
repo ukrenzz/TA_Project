@@ -51,20 +51,20 @@
 						</strong>
 					</td>
 					<td class="options">
+						<form method="POST" action="{{ route('wishlist.delete', ['id'=>   $wishlist->product_id , 'from'=>'wishlist']) }}">
+							{{ csrf_field() }}
+							{{ method_field('DELETE') }}
+							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i> <span style="font-size: smaller; color: red;"> Delete </span></button>
+						</form>
+					</td>
+					<td class="options">
 						<form method="POST" action="{{ route('cart.store') }}">
 							@csrf
 							<input type="hidden" name="product_id" value="{{ isset($data) ? $wishlist->product_id : '' }}">
 							<input type="hidden" name="quantity" value="1">
 							<button class="btn_1">
-								<span> Add to Cart</span>
+								<span style="white-space: nowrap;"> Add to Cart</span>
 							</button>
-						</form>
-					</td>
-					<td class="options">
-						<form method="POST" action="{{ route('wishlist.delete', ['id'=>   $wishlist->product_id , 'from'=>'wishlist']) }}">
-							{{ csrf_field() }}
-							{{ method_field('DELETE') }}
-							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i> <span style="font-size: smaller; color: red;"> Delete </span></button>
 						</form>
 					</td>
 				</tr>

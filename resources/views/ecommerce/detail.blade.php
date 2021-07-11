@@ -43,34 +43,56 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div class="breadcrumbs">
+      <div class="breadcrumbs" style="padding : 10px; margin : 2px;">
         <ul>
           <li><a href="#">Home</a></li>
           <li><a href="#">{{$data->product->product_category}}</a></li>
-          <li>{{$data->product->product_name}}</li>
+          <li>
+            <?php echo substr($data->product->product_name, 0, 30) . '...' ?>
+          </li>
         </ul>
       </div>
       <!-- /page_header -->
-      <form method="POST" action="{{ route('cart.store') }}">
-        @csrf
-        <div class="prod_info">
-          <h1>{{$data->product->product_name}}</h1>
-          <?php $total_rate = 0;
-          $count = 0 ?>
-          @foreach($data->feedbacks as $feedback)
-          <?php $total_rate += $feedback->rate;
-          $count++; ?>
-          @endforeach
-          <span class="rating"><i class="icon-star voted"></i><em>
-              <?php if ($total_rate && $count) echo number_format(floor($total_rate) / $count, 2, '. ', '');
-              else echo 0 ?>
-            </em></span>
-          <p><small>SKU: {{$data->product->id}}</small><br>{{$data->product->description}}</p>
-          <div class="prod_options">
+      <div class="prod_info" style="padding : 10px; margin : 2px;">
+        <h1>
+          {{$data->product->product_name}}
+        </h1>
+        <?php $total_rate = 0;
+        $count = 0 ?>
+        @foreach($data->feedbacks as $feedback)
+        <?php $total_rate += $feedback->rate;
+        $count++; ?>
+        @endforeach
+        <span class="rating"><i class="icon-star voted"></i><em>
+            <?php if ($total_rate && $count) echo number_format(floor($total_rate) / $count, 2, '. ', '');
+            else echo 0 ?>
+          </em></span>
+        <p><small>SKU: {{$data->product->id}}</small><br>
+          <?php echo substr($data->product->description, 0, 50) . '...' ?></p>
+        <div class="row" style="margin-bottom: 10px;">
+          <div class="col-lg-5 col-md-6">
+            <div class="price_main">
+              <span class="new_price">Rp
+                <?php
+                $oldprice = $data->product->price;
+                $disc = $data->product->discount;
+                $new = ($oldprice * (100 - $disc)) / 100;
+                echo number_format($new, 0, '', '.');
+                ?>
+              </span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
+                <?php echo number_format(($data->product->price), 0, '', '.'); ?>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="prod_options">
+          <form method="POST" action="{{ route('cart.store') }}">
+            @csrf
             <div class="row">
               <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>Color</strong></label>
               <label class="col-xl-5 col-lg-5  col-md-6 col-6 pt-0"><strong>{{($data->product->color)}}</strong></label>
             </div>
+            @if(Auth::id())
             <div class="row">
               <label class="col-xl-5 col-lg-5  col-md-6 col-6"><strong>Quantity</strong></label>
               <div class="col-xl-4 col-lg-5 col-md-6 col-6">
@@ -79,66 +101,57 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-5 col-md-6">
-              <div class="price_main">
-                <span class="new_price">Rp
-                  <?php
-                  $oldprice = $data->product->price;
-                  $disc = $data->product->discount;
-                  $new = ($oldprice * (100 - $disc)) / 100;
-                  echo number_format($new, 0, '', '.');
-                  ?>
-                </span><span class="percentage">-{{$data->product->discount}}</span> <span class="old_price">Rp
-                  <?php echo number_format(($data->product->price), 0, '', '.'); ?>
-                </span>
+            @endif
+            <div class="row">
+              <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+              <div class="col-lg-4">
+                <div class="btn_add_to_cart">
+                  @if(!$data->isCart && Auth::id())
+                  <button class="btn_1">
+                    <span> Add to Cart</span>
+                  </button>
+                  @endif
+                </div>
               </div>
             </div>
-            <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
-            <div class="col-lg-4 col-md-6">
-              <div class="btn_add_to_cart">
-                @if(!$data->isCart)
+          </form>
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-lg-4">
+              @if($data->isWishlist)
+              <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
+                {{ csrf_field() }}
+                {{ method_field('DELETE') }}
+                <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
+                  <span style="white-space: nowrap;"> Remove from Wishlist</span>
+                </button>
+              </form>
+              @else
+              <form method="POST" action="{{ route('wishlist.store') }}">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
+                @if(Auth::id())
                 <button class="btn_1">
-                  <span> Add to Cart</span>
+                  <i class="ti-heart"></i><span> Add to Wishlist</span>
                 </button>
                 @endif
+              </form>
+              @endif
+              @if (session('status'))
+              <div style="margin-top: 10px;">
+                <p style="color: green">{{ session('status') }}</p>
               </div>
+              @endif
             </div>
           </div>
         </div>
-      </form>
 
-      <div class="product_actions">
-        <ul>
-          <li>
-            @if($data->isWishlist)
-            <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
-              {{ csrf_field() }}
-              {{ method_field('DELETE') }}
-              <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
-                <span> Remove from Wishlist</span>
-              </button>
-            </form>
-            @else
-            <form method="POST" action="{{ route('wishlist.store') }}">
-              @csrf
-              <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
-              <button class="btn_1">
-                <i class="ti-heart"></i><span> Add to Wishlist</span>
-              </button>
-            </form>
-            @endif
-            @if (session('status'))
-            <div style="margin-top: 10px;">
-              <p style="color: green">{{ session('status') }}</p>
-            </div>
-            @endif
-          </li>
-        </ul>
+        <div class="product_actions">
+
+        </div>
       </div>
-      <!-- /product_actions -->
     </div>
+    <!-- /product_actions -->
+  </div>
   </div>
   <!-- /row -->
   </div>
@@ -214,6 +227,11 @@
             </h5>
           </div>
           <div id="collapse-B" class="collapse" role="tabpanel" aria-labelledby="heading-B">
+            @if(($data->feedbacks)->isEmpty())
+            <div class="d-flex justify-content-center">
+              <h5 style="color:#dd710e">No reviews yet.</h5>
+            </div>
+            @else
             <div class="card-body">
               <div class="row justify-content-between">
                 @foreach($data->feedbacks as $feedback)
@@ -229,6 +247,7 @@
                 @endforeach
               </div>
             </div>
+            @endif
             <!-- /card-body -->
           </div>
         </div>

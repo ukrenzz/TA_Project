@@ -39,22 +39,27 @@ class CartController extends Controller
 
   function store(Request $request)
   {
-    // Form validation
-    $request->validate([
-      'product_id' => ['required'],
-      'quantity' => ['required'],
-    ]);
+    $isInCart = DB::table('carts')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->get();
+    if ($isInCart->isNotEmpty()) {
+      DB::table('wishlists')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->delete();
+      return  back()->with('status', 'Product is already in Cart.');
+    } else {
+      // Form validation
+      $request->validate([
+        'product_id' => ['required'],
+        'quantity' => ['required'],
+      ]);
 
-    Cart::create([
-      'product_id' => strtolower($request['product_id']),
-      'user_id' => Auth::id(),
-      'quantity' => strtolower($request['quantity'])
-    ]);
+      Cart::create([
+        'product_id' => strtolower($request['product_id']),
+        'user_id' => Auth::id(),
+        'quantity' => strtolower($request['quantity'])
+      ]);
 
-    // Delete from Wishlist 
-    DB::table('wishlists')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->delete();
-
-    return back()->with('status', 'Product is added to Cart!!');
+      // Delete from Wishlist 
+      DB::table('wishlists')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->delete();
+      return back()->with('status', 'Product is added to Cart!!');
+    }
   }
 
   function update(Request $request)

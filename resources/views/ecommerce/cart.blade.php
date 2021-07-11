@@ -63,8 +63,7 @@
 						</form>
 					</td>
 					<td>
-						<strong>Rp
-							<?php echo number_format((($cart->price) * ($cart->quantity)), 0, '', '.'); ?>
+						<strong>Rp<?php echo number_format((($cart->price) * ($cart->quantity)), 0, '', '.'); ?>
 							<?php $total += ($cart->price) * ($cart->quantity) ?>
 						</strong>
 					</td>

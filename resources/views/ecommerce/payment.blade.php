@@ -50,7 +50,9 @@
                     <div class="thumb_cart">
                       <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
                     </div>
-                    <span class="item_cart"><a href="" class="product-link">{{$cart->product_name}}</a></span>
+                    <span class="item_cart"><a href="" class="product-link">
+                        <?php echo substr($cart->product_name, 0, 30) . '...' ?>
+                      </a></span>
                   </td>
                   <td>
                     <strong>Rp<?php echo number_format(($cart->price), 0, '', '.'); ?></strong>

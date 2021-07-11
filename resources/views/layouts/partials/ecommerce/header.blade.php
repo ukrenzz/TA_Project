@@ -27,9 +27,6 @@
               <li>
                 <a href="{{ route('product.index') }}">Home</a>
               </li>
-              <li>
-                <a href="{{ route('product.category', ['cat_id' => 0]) }}">Categories</a>
-              </li>
               @if(Route::has('login'))
               @auth
               <li>

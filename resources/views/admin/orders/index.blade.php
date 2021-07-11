@@ -43,9 +43,9 @@
           <tr>
             <th>No</th>
             <th>Reference</th>
-            <th>User ID </th>
+            <th>User </th>
             <th>Status</th>
-            <th>Discount</th>
+            <th>Disc.</th>
             <th>Shipping Cost</th>
             <th>Payment Method</th>
             <th>Created At</th>
@@ -63,6 +63,43 @@
             <td>{{ $order->shipping_cost }}</td>
             <td>{{ $order->payment_method}}</td>
             <td>{{ $order->created_at }}</td>
+            <td>
+              <ul style="list-style-type: none;">
+                <li>
+                  <form method="post" action="{{ route('order.update') }}">
+                    @csrf
+                    @if(isset($order))
+                    @method('PUT')
+                    @endif
+                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
+                    <input type="hidden" name="status" value="confirmed">
+                    <button type="submit" style="color:white;" class="btn btn-sm btn-success"><i class="far fa-check-circle"></i></button>
+                  </form>
+                </li>
+                <li>
+                  <form method="post" action="{{ route('order.update') }}">
+                    @csrf
+                    @if(isset($order))
+                    @method('PUT')
+                    @endif
+                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
+                    <input type="hidden" name="status" value="sending">
+                    <button type="submit" style="color:white;" class="btn btn-sm btn-warning"><i class="fas fa-truck-moving"></i></button>
+                  </form>
+                </li>
+                <li>
+                  <form method="post" action="{{ route('order.update') }}">
+                    @csrf
+                    @if(isset($order))
+                    @method('PUT')
+                    @endif
+                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
+                    <input type="hidden" name="status" value="rejected">
+                    <button type="submit" style="color:white;" class="btn btn-sm btn-danger"><i class="far fa-times-circle"></i></button>
+                  </form>
+                </li>
+              </ul>
+            </td>
           </tr>
           @endforeach
         </tbody>

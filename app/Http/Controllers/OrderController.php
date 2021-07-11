@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-
 
 class OrderController extends Controller
 {
@@ -16,7 +16,7 @@ class OrderController extends Controller
 	public function index()
 	{
 		$orders = Transaction::join('users', 'users.id', '=', 'transactions.user_id')
-			->select('transactions.id', 'ref', 'users.name as username', 'ppn', 'status', 'discount', 'shipping_cost', 'payment_method', 'transactions.created_at', 'transactions.updated_at')
+			->select('transactions.id as id', 'ref', 'users.name as username', 'ppn', 'status', 'discount', 'shipping_cost', 'payment_method', 'transactions.created_at', 'transactions.updated_at')
 			->orderBy('ref', 'desc')
 			->get();
 		$data = (object)[
@@ -75,9 +75,12 @@ class OrderController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id)
+	public function update(Request $request)
 	{
-		//
+		Transaction::where(	'id','=',$request['transaction_id']
+		)->update(['status' => $request['status']]);
+
+		return back()->with('status', 'Status is updated!');
 	}
 
 	/**

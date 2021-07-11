@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->string('ref', 100);
             $table->foreignId('user_id')->constrained('users');
             $table->smallInteger('ppn');
-            $table->smallInteger('status');
+            $table->string('status', 50);
             $table->bigInteger('discount');
             $table->bigInteger('shipping_cost');
             $table->string('payment_method', 100);

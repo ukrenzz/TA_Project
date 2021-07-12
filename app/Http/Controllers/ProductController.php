@@ -178,10 +178,10 @@ class ProductController extends Controller
     // Remove image from public path
     $images = ProductImages::where('product_id', $id)->get();
     $_imageDeletedCheck = 0;
-    if(count($images) > 0){
+    if (count($images) > 0) {
       foreach ($images as $image) {
-        if(File::exists(public_path('images/products/'. $image->url))){
-          $del = File::delete(public_path('images/products/'. $image->url));
+        if (File::exists(public_path('images/products/' . $image->url))) {
+          $del = File::delete(public_path('images/products/' . $image->url));
         }
       }
       ProductImages::where('product_id', $id)->delete();
@@ -274,8 +274,9 @@ class ProductController extends Controller
 
   function categories($cat_id)
   {
-    if ($cat_id) $products = Product::where('category_id', '=', $cat_id)->orderBy('created_at', 'asc')->take(20)->get();
-    else  $products = Product::orderBy('created_at', 'asc')->take(20)->get();
+    if ($cat_id) $products = Product::where('category_id', '=', $cat_id)->orderBy('created_at', 'asc')->paginate(20);
+    else  $products = Product::orderBy('created_at', 'asc')->paginate(20);
+    $products->load('product_images');
     $categories = Category::orderBy('name', 'asc')->get();
     $data = (object)[
       'categories' => $categories,

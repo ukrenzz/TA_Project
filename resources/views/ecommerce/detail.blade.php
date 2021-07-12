@@ -114,27 +114,27 @@
         @if(!$data->isCart && Auth::id())
           <div class="row">
             <div class="col-lg-7 col-md-6"></div>
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-4 col-md-6 mt-3">
               <div class="btn_add_to_cart">
                 <button class="btn_1">
                   <span> Add to Cart</span>
                 </button>
               </div>
             </div>
-          @endif
-        </div>
+          </div>
+        @endif
       </div>
       <!-- /prod_info -->
-      <div class="product_actions">
-          <ul>
-            <li>
-              <meta name="csrf-token" content="{{ csrf_token() }}"/>
-              <a href="" style="" id="wishlistBtn">
-                <i class="mr-2" id="wishlistIcon"></i>
-                <span id="wishlistText"></span>
-              </a>
-            </li>
-          </ul>
+      <div class="row mt-3 mb-5">
+        @if (Auth::id())
+          <div class="col-12">
+            <meta name="csrf-token" content="{{ csrf_token() }}"/>
+            <a href="" style="" id="wishlistBtn">
+              <i class="mr-2" id="wishlistIcon"></i>
+              <span id="wishlistText"></span>
+            </a>
+          </div>
+        @endif
       </div>
       <!-- /product_actions -->
     </div>
@@ -296,7 +296,7 @@
 
 <script type="text/javascript">
   function checkWishlist() {
-    $wishlistCheckin = {{ $data->isWishlist ? 1 : 0}};
+    $wishlistCheckin = {{ $data->isWishlist ? 1 : 0 }};
 
     if($wishlistCheckin == 1){
       $('#wishlistText').text("Remove to Wishlist");

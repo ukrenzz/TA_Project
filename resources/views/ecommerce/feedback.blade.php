@@ -24,7 +24,9 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-8">
 				<div class="write_review">
-					<h1>Leave a Review for {{ isset($data) ? $data->transaction->product_name : '' }}</h1>
+					<h5>Leave a Review for <span style="color : #DD710E">
+							{{ isset($data) ? $data->transaction->product_name : '' }}
+						</span> </h5>
 					@if ($errors->any())
 					<div class="row">
 						<div style="color : red;">

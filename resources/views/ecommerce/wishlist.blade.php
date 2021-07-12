@@ -42,7 +42,7 @@
 							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
 						</div>
 						<span class="item_cart"><a href="{{ route('product.show',['id' => $wishlist->product_id]) }}" class="product-link">
-								<?php echo substr($wishlist->product_name, 0, 30) . '...' ?>
+								<?php echo substr($wishlist->product_name, 0, 60) . '...' ?>
 							</a></span>
 					</td>
 					<td>
@@ -54,7 +54,7 @@
 						<form method="POST" action="{{ route('wishlist.delete', ['id'=>   $wishlist->product_id , 'from'=>'wishlist']) }}">
 							{{ csrf_field() }}
 							{{ method_field('DELETE') }}
-							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i> <span style="font-size: smaller; color: red;"> Delete </span></button>
+							<button type="submit" style="border:none; font-size:larger;"><i class="ti-trash"></i> <span style="font-size: smaller;"> Delete </span></button>
 						</form>
 					</td>
 					<td class="options">

@@ -84,7 +84,7 @@
                   $colors = explode(";", $data->product->color);
                 @endphp
                 @foreach ($colors as $key=>$color)
-                  <li><a href="#0" class="color color-shadow {{$key == 1 ? "active" : ""}}" style="background:{{str_replace(' ', '', $color)}}; {{$color == 'white' ? 'color:black;' : ''}}"></a></li>
+                  <li><a href="#0" class="color color-shadow {{$key == 0 ? "active" : ""}}" style="background:{{str_replace(' ', '', $color)}}; {{$color == 'white' ? 'color:black;' : ''}}"></a></li>
                 @endforeach
               </ul>
             </div>
@@ -114,45 +114,27 @@
         @if(!$data->isCart && Auth::id())
           <div class="row">
             <div class="col-lg-7 col-md-6"></div>
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-4 col-md-6 mt-3">
               <div class="btn_add_to_cart">
                 <button class="btn_1">
                   <span> Add to Cart</span>
                 </button>
               </div>
             </div>
-          @endif
-        </div>
+          </div>
+        @endif
       </div>
       <!-- /prod_info -->
-      <div class="product_actions">
-        <form method="POST" action="{{ route('wishlist.store') }}">
-          @csrf
-          <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
-          <ul>
-            <li>
-              @if($data->isWishlist)
-                <form method="POST" action="{{ route('wishlist.delete', ['id'=>  $data->product->id, 'from'=>'detail']) }}">
-                  {{ csrf_field() }}
-                  {{ method_field('DELETE') }}
-                  <button class="btn_1" type="submit" style="background-color: white; color: #DD710E; border: 2px solid #DD710E;">
-                    <span style="white-space: nowrap;"> Remove from Wishlist</span>
-                  </button>
-                </form>
-              @else
-                <form method="POST" action="{{ route('wishlist.store') }}">
-                  @csrf
-                  <input type="hidden" name="product_id" value="{{ isset($data) ? $data->product->id : '' }}">
-                  @if(Auth::id())
-                    <button class="btn_1">
-                      <i class="ti-heart"></i><span> Add to Wishlist</span>
-                    </button>
-                  @endif
-                </form>
-              @endif
-            </li>
-          </ul>
-        </form>
+      <div class="row mt-3 mb-5">
+        @if (Auth::id())
+          <div class="col-12">
+            <meta name="csrf-token" content="{{ csrf_token() }}"/>
+            <a href="" style="" id="wishlistBtn">
+              <i class="mr-2" id="wishlistIcon"></i>
+              <span id="wishlistText"></span>
+            </a>
+          </div>
+        @endif
       </div>
       <!-- /product_actions -->
     </div>
@@ -196,20 +178,29 @@
                     <table class="table table-sm table-striped">
                       <tbody>
                         <tr>
-                          <td><strong>Color</strong></td>
-                          <td>{{$data->product->color}}</td>
+                          <td style="vertical-align:middle"><strong>Color</strong></td>
+                          <td>
+                            @php
+                              $colors_data = explode(";", $data->product->color)
+                            @endphp
+                            @foreach ($colors_data as $color)
+                              <span class="color_box mr-2" data-toggle="tooltip" data-placement="bottom" title="{{ ucwords($color) }}" style="background:{{str_replace(' ', '', ucwords($color))}};"></span>
+                            @endforeach
+                          </td>
                         </tr>
                         <tr>
-                          <td><strong>Size</strong></td>
-                          <td>150x100x100</td>
+                          <td><strong>Unit Type</strong></td>
+                          <td>{{ ucfirst($data->product->unit) }}</td>
                         </tr>
                         <tr>
-                          <td><strong>Weight</strong></td>
-                          <td>0.6kg</td>
+                          <td><strong>Status</strong></td>
+                          <td>
+                              {{ ucfirst($data->product->status) }}
+                          </td>
                         </tr>
                         <tr>
                           <td><strong>Manifacturer</strong></td>
-                          <td>{{$data->product->brand}}</td>
+                          <td>{{ $data->product->brand }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -302,4 +293,50 @@
 
 @section('user_defined_script')
 <script src="{{ asset('ecommerce/js/carousel_with_thumbs.js') }}"></script>
+
+<script type="text/javascript">
+  function checkWishlist() {
+    $wishlistCheckin = {{ $data->isWishlist ? 1 : 0 }};
+
+    if($wishlistCheckin == 1){
+      $('#wishlistText').text("Remove to Wishlist");
+      $('#wishlistIcon').addClass("ri-heart-fill color-primary");
+    } else {
+      $('#wishlistText').text("Add to Wishlist");
+      $('#wishlistIcon').addClass("ri-heart-line");
+    }
+  }
+  checkWishlist();
+  $('#wishlistBtn').click(function(e) {
+    e.preventDefault();
+
+    var product_id = "{{ $data->product->id }}";
+    var token = $("meta[name='csrf-token']").attr("content");
+
+    $.ajax({
+      url: "{{ route('wishlist.process') }}",
+      type: 'POST',
+      data: {
+        "product_id": product_id,
+        "_token": token,
+      },
+      success: function(data) {
+        if(data.action == "store" && data.status == "success"){
+          $('#wishlistText').text("Remove to Wishlist");
+          $('#wishlistIcon').removeClass("ri-heart-line");
+          $('#wishlistIcon').addClass("ri-heart-fill color-primary");
+        }
+        else if(data.action == "deleted" && data.status == "success"){
+          $('#wishlistText').text("Add to Wishlist");
+          $('#wishlistIcon').removeClass("ri-heart-fill color-primary");
+          $('#wishlistIcon').addClass("ri-heart-line");
+        }
+        console.log(data);
+      }
+    });
+
+  })
+
+</script>
+
 @endsection

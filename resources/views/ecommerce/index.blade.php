@@ -138,8 +138,6 @@
 									?>
 						</span>
 						{!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='old_price ml-1'>Rp " . number_format(($product->price), 0, '', '.') . "</span>" !!}
-
-
 					</div>
 				</div>
 				<!-- /grid_item -->
@@ -151,7 +149,6 @@
 					<li><a href="{{ $data->products->previousPageUrl() }}" class="prev" title="previous page">&#10094;</a></li>
 					@for ($i=1; $i < ($data->products->total() / $data->products->perPage()) + 1; $i++)
 						<li>
-
 							<a href="{{ $data->products->url($i) }}" class="{{ $data->products->currentPage() == $i ? "active" : "" }}">{{ $i }}</a>
 						</li>
 					@endfor

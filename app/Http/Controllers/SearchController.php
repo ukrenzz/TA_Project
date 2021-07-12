@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SearchController extends Controller
 {
@@ -19,8 +22,8 @@ class SearchController extends Controller
 		$term = trim($request['term']);
 		$products = Product::where('name', 'LIKE', '%' . $term . '%')
 			->orderBy('name', 'asc')
-			->take(20)
-			->get();
+			->paginate(20);
+		$products->load('product_images');
 		$data = (object)[
 			'products' => $products,
 			'categories' => $categories,
@@ -38,7 +41,7 @@ class SearchController extends Controller
 	 */
 	public function visualSearchIndex()
 	{
-		$products = Product::orderBy('name', 'asc')->get();
+		$products = Product::orderBy('name', 'asc')->paginate(20);
 		$categories = Category::orderBy('name', 'asc')->get();
 		$data = (object)[
 			'products' => $products,

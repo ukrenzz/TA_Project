@@ -296,7 +296,7 @@
 
 <script type="text/javascript">
   function checkWishlist() {
-    $wishlistCheckin = {{ $data->isWishlist }};
+    $wishlistCheckin = {{ $data->isWishlist ? 1 : 0}};
 
     if($wishlistCheckin == 1){
       $('#wishlistText').text("Remove to Wishlist");

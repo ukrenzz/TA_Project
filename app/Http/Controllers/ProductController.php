@@ -102,12 +102,18 @@ class ProductController extends Controller
           $imageThumbnail = Image::make($image);
           $named   = 'product_' . $image_product_id . '_' . $image_product_date . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
+          $color = shell_exec('python scripts/generate_rgb_mean.py "' . public_path() . '/images/products/'. $named . '"');
+          $lbp = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/products/'. $named . '"');
+          $edge = shell_exec('python scripts/generate_cannyedge.py "' . public_path() . '/images/products/'. $named . '"');
           $dataImage = [
             'product_id'  => $image_product_id,
             'url'         => $named,
             'width'       => $imageThumbnail->width(),
             'height'      => $imageThumbnail->height(),
-            'size'        => $filesize
+            'size'        => $filesize,
+            'color_feature' => $color,
+            'shape_feature' => $lbp,
+            'edge_feature' => $edge
           ];
           array_push($dataImageProducts, $dataImage);
         }

@@ -73,7 +73,7 @@
               @endphp
               <td class="text-center">
                 @foreach ($colors_data as $color)
-                  <span class="color_box mr-2" data-toggle="tooltip" data-placement="bottom" title="{{ ucwords($color) }}" style="background:{{$color}};"></span>
+                  <span class="color_box mr-2" data-toggle="tooltip" data-placement="bottom" title="{{ ucwords($color) }}" style="background:{{str_replace(' ', '', ucwords($color))}};"></span>
                 @endforeach
               </td>
               <td>

@@ -84,7 +84,7 @@
                   $colors = explode(";", $data->product->color);
                 @endphp
                 @foreach ($colors as $key=>$color)
-                  <li><a href="#0" class="color color-shadow {{$key == 1 ? "active" : ""}}" style="background:{{str_replace(' ', '', $color)}}; {{$color == 'white' ? 'color:black;' : ''}}"></a></li>
+                  <li><a href="#0" class="color color-shadow {{$key == 0 ? "active" : ""}}" style="background:{{str_replace(' ', '', $color)}}; {{$color == 'white' ? 'color:black;' : ''}}"></a></li>
                 @endforeach
               </ul>
             </div>
@@ -196,20 +196,29 @@
                     <table class="table table-sm table-striped">
                       <tbody>
                         <tr>
-                          <td><strong>Color</strong></td>
-                          <td>{{$data->product->color}}</td>
+                          <td style="vertical-align:middle"><strong>Color</strong></td>
+                          <td>
+                            @php
+                              $colors_data = explode(";", $data->product->color)
+                            @endphp
+                            @foreach ($colors_data as $color)
+                              <span class="color_box mr-2" data-toggle="tooltip" data-placement="bottom" title="{{ ucwords($color) }}" style="background:{{str_replace(' ', '', ucwords($color))}};"></span>
+                            @endforeach
+                          </td>
                         </tr>
                         <tr>
-                          <td><strong>Size</strong></td>
-                          <td>150x100x100</td>
+                          <td><strong>Unit Type</strong></td>
+                          <td>{{ ucfirst($data->product->unit) }}</td>
                         </tr>
                         <tr>
-                          <td><strong>Weight</strong></td>
-                          <td>0.6kg</td>
+                          <td><strong>Status</strong></td>
+                          <td>
+                              {{ ucfirst($data->product->status) }}
+                          </td>
                         </tr>
                         <tr>
                           <td><strong>Manifacturer</strong></td>
-                          <td>{{$data->product->brand}}</td>
+                          <td>{{ $data->product->brand }}</td>
                         </tr>
                       </tbody>
                     </table>

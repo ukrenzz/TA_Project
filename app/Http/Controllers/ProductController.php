@@ -231,7 +231,7 @@ class ProductController extends Controller
     $categories = Category::orderBy('name', 'asc')->get();
 
     $product = Product::join('categories', 'products.category_id', '=', 'categories.id')
-      ->select('products.name as product_name', 'categories.name as product_category', 'products.id as id', 'brand', 'unit', 'color', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
+      ->select('products.name as product_name', 'categories.name as product_category', 'products.id as id', 'brand', 'unit', 'color', 'status', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
       ->orderBy('product_name', 'asc')
       ->where('products.id', $id)
       ->get()->first();
@@ -264,7 +264,7 @@ class ProductController extends Controller
       'product'     => $product,
       'categories'  => $categories,
       'feedbacks'   => $feedbacks,
-      'rating'      => $ratings, 
+      'rating'      => $ratings,
       'isWishlist'  => $isWishlist,
       'isCart'      => $isCart,
     ];

@@ -38,19 +38,44 @@ class WishlistController extends Controller
     return view('ecommerce.categories');
   }
 
-  function store(Request $request)
+  function process(Request $request)
   {
     // Form validation
     $request->validate([
       'product_id' => ['required'],
     ]);
 
-    Wishlist::create([
-      'product_id' => strtolower($request['product_id']),
-      'user_id' => Auth::id(),
-    ]);
+    $status = "";
+    $action = "";
 
-    return back()->with('status', 'Product is added to Wishlist!!');
+    $isWishlist = Wishlist::where(['product_id' => $request->product_id, 'user_id'=>Auth::id()])->count();
+
+
+    if($isWishlist == 0){
+
+      $action = "store";
+
+      $createWishlist = Wishlist::create([
+        'product_id' => strtolower($request['product_id']),
+        'user_id' => Auth::id(),
+      ]);
+
+      $status = $createWishlist != null ? "success" : "failed";
+
+    } else if($isWishlist > 0) {
+      
+      $action = "deleted";
+
+      $deletedWishlist = Wishlist::where(['product_id' => $request->product_id, 'user_id'=>Auth::id()])->delete();
+
+      $status = $deletedWishlist != null ? "success" : "failed";
+
+    }
+
+    return response()->json([
+      'action' => $action,
+      'status' => $status
+    ]);
   }
 
   function update()

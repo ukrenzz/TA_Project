@@ -78,7 +78,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
 
   Route::name('wishlist.')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('index');
-    Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('store');
+    Route::post('/wishlist/process', [WishlistController::class, 'process'])->name('process');
     Route::delete('/wishlist/delete/{id}', [WishlistController::class, 'delete'])->name('delete');
   });
 

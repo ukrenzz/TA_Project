@@ -190,8 +190,9 @@ class ProductController extends Controller
 
 
     Product::find($id)->delete();
+
     return response()->json([
-      'success' => 'Record deleted successfully!'
+      'success' => 'Item was wishlisted!'
     ]);
   }
 

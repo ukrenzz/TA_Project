@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
 import sys
+import multiprocessing
 import json
 from matplotlib import pyplot as plt
+from itertools import product
 
 	
 def get_pixel(img, center, x, y):
@@ -68,6 +70,12 @@ def lbp_calculated_pixel(img, x, y):
 		
 	return val
 
+def generate_lbp(img_lbp, width, height):
+	for i in range(0, height):
+		for j in range(0, width):
+			img_lbp[i, j] = lbp_calculated_pixel(img_gray, i, j)
+	return img_lbp
+
 imgInput = sys.argv[1]
 img_bgr = cv2.imread(imgInput, 1)
 
@@ -85,9 +93,9 @@ img_gray = cv2.cvtColor(img_bgr,
 img_lbp = np.zeros((height, width),
 				np.uint8)
 
-for i in range(0, height):
-	for j in range(0, width):
-		img_lbp[i, j] = lbp_calculated_pixel(img_gray, i, j)
+p = multiprocessing.Pool()
+args = [(img_lbp, width, height)]
+img_lbp = p.starmap(generate_lbp, args)
 
 # res = ""
 

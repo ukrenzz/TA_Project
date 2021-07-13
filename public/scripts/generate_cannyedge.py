@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 import cv2
+import multiprocessing
 import matplotlib.pyplot as plt
 
 
@@ -94,24 +95,40 @@ def Canny_detector(img, weak_th = None, strong_th = None):
 	
 	# finally returning the magnitude of
 	# gradients of edges
-	return mag
+	with np.printoptions(threshold=np.inf):
+		print(mag, end="")
+	print(";", end="")
 
+if __name__ == "__main__": 
+	imgInput = sys.argv[1]
+	img = cv2.imread(imgInput, 1)
+	imgR, imgG, imgB = cv2.split(img)
 
-imgInput = sys.argv[1]
-img = cv2.imread(imgInput, 1)
-imgR, imgG, imgB = cv2.split(img)
+	canny_img = []
+	# creating processes
+	p1 = multiprocessing.Process(target=Canny_detector, args=([imgR]))
+	p2 = multiprocessing.Process(target=Canny_detector, args=([imgG]))
+	p3 = multiprocessing.Process(target=Canny_detector, args=([imgB]))
+    # starting process 1
+	p1.start()
+    # starting process 2
+	p2.start()
+	p3.start()
+    # wait until process 1 is finished
+	p1.join()
+    # wait until process 2 is finished
+	p2.join()
+	p3.join()
+	# calling the designed function for
+	# finding edges
+	# canny_img.append(Canny_detector(imgR)) 
+	# canny_img.append(Canny_detector(imgG)) 
+	# canny_img.append(Canny_detector(imgB)) 
 
-# calling the designed function for
-# finding edges
-canny_img = []
-canny_img.append(Canny_detector(imgR)) 
-canny_img.append(Canny_detector(imgG)) 
-canny_img.append(Canny_detector(imgB)) 
+	# res = ""
 
-# res = ""
-
-with np.printoptions(threshold=np.inf):
-	print(canny_img)
+	# with np.printoptions(threshold=np.inf):
+	# 	print(canny_img)
 	# res += str(canny_img)
 
 # res = str(canny_img)

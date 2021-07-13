@@ -174,3 +174,11 @@ a.badge:hover, a.badge:focus {
 .color-primary{
   color: #DD710E;
 }
+
+.out-stock{
+  border-radius: 1px;
+  border: 4px solid #d63031;
+  padding: 10px 20px;
+  background: #d63031;
+  color: #FFF;
+}

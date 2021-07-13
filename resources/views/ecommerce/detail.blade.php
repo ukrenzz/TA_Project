@@ -111,7 +111,7 @@
           <div class="col-lg-12 col-md-12">
             <div class="price_main">
               <span class="new_price">
-                {{ $data->product->discount != null ||  $data->product->discount != 0 ? "Rp." . number_format($data->product->price - ($data->product->price * (10 / $data->product->discount)), 0, '.', '.') : "Rp." . number_format($data->product->price, 0, '.', '.') }}
+                {{ $data->product->discount != null ||  $data->product->discount != 0 ? "Rp." . number_format((int)$data->product->price - ((int)$data->product->price * ((int)$data->product->discount) / 100), 0, '.', '.') : "Rp." . number_format($data->product->price, 0, '.', '.') }}
               </span>
               @if ($data->product->discount != null ||  $data->product->discount != 0)
                 <span class="percentage">{{ "-" . $data->product->discount }}</span>

@@ -92,6 +92,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
   Route::name('transaction.')->group(function () {
     // E-Com
     Route::get('/payment', [TransactionController::class, 'create'])->name('payment');
+    Route::post('/checkout', [TransactionController::class, 'storeCheckout'])->name('checkout');
     Route::get('/order', [TransactionController::class, 'order'])->name('order');
     Route::get('/payment/success', [TransactionController::class, 'success'])->name('success');
     Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');

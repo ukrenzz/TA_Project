@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Cart;
+use App\Models\Product;
+use App\Models\CheckoutTemps;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -22,6 +24,76 @@ class TransactionController extends Controller
     ];
 
     return view('ecommerce.payment', compact('data'));
+  }
+  function storeCheckout(Request $req)
+  {
+
+    $status = "Success";
+    $error = "";
+    $text = "";
+
+    $_productData = [];
+
+    foreach ($req->data as $products) {
+      $product = (object)$products;
+
+      $_product = Product::find($product->product_id);
+
+      // dd((int)$product->quantity, (int)$_product->stock, (int)$product->quantity > (int)$_product->stock);
+      if($_product == null)
+      {
+        $status = "Failed";
+        $error  = "Product Missing";
+        $text   = "The product you purchased is not registered.";
+        break;
+      }
+      else if((int)$product->quantity < 0)
+      {
+        $status = "Failed";
+        $error  = "Quantity";
+        $text   = "Quantity must be more than 1.";
+        break;
+      }
+      else if((int)$product->quantity > (int)$_product->stock)
+      {
+        $status = "Failed";
+        $error  = "Out of Stock";
+        $text   = "Purchase over stock.";
+        break;
+      }
+      else
+      {
+        $_data = [
+          'product_id'  => (int)$product->product_id,
+          'user_id'     => Auth::id(),
+          'quantity'    => (int)$product->quantity
+        ];
+
+        array_push($_productData, $_data);
+      }
+    }
+
+    if($status == "Success")
+    {
+      CheckoutTemps::where('user_id', Auth::id())->delete();
+      $storeCheck = CheckoutTemps::insert($_productData);
+
+      // dd($storeCheck);
+      return response()->json([
+        'status' => $status
+      ]);
+    }
+    else
+    {
+      return response()->json([
+        'status'  => $status,
+        'error'   => $error,
+        'text'    => $text
+      ]);
+    }
+
+
+    // return Redirect::route('transaction.payment')->with( ['productData' => $req] );
   }
   function order()
   {
@@ -42,16 +114,18 @@ class TransactionController extends Controller
   function create()
   {
     $categories = Category::orderBy('name', 'asc')->get();
-    $carts = Cart::join('products', 'carts.product_id', '=', 'products.id')
-      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at')
+    $_products = CheckoutTemps::join('products', 'checkout_temps.product_id', '=', 'products.id')
+      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'checkout_temps.created_at as created_at', 'checkout_temps.updated_at as updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('created_at', 'desc')->get();
-    $user = User::where('id', '=', Auth::id())->get()->first();
+    $user = User::where('id', '=', Auth::id())->first();
+
     $data = (object)[
-      'carts' => $carts,
+      'products' => $_products,
       'categories' => $categories,
       'user' => $user,
     ];
+
     // dd($data);
     return view('ecommerce.payment', compact('data'));
   }

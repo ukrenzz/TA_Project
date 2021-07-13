@@ -44,26 +44,26 @@
               </thead>
               <tbody>
                 <?php $total = 0 ?>
-                @foreach ($data->carts as $cart)
+                @foreach ($data->products as $product)
                 <tr>
                   <td>
                     <div class="thumb_cart">
                       <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
                     </div>
                     <span class="item_cart"><a href="" class="product-link">
-                        <?php echo substr($cart->product_name, 0, 30) . '...' ?>
+                        <?php echo substr($product->product_name, 0, 30) . '...' ?>
                       </a></span>
                   </td>
                   <td>
-                    <strong>Rp<?php echo number_format(($cart->price), 0, '', '.'); ?></strong>
+                    <strong>Rp<?php echo number_format(($product->price), 0, '', '.'); ?></strong>
                   </td>
                   <td>
-                    <strong>{{$cart->quantity}}</strong>
+                    <strong>{{$product->quantity}}</strong>
                   </td>
                   <td>
                     <strong>Rp<?php
-                              $total += ($cart->price) * ($cart->quantity);
-                              echo number_format((($cart->price) * ($cart->quantity)), 0, '', '.'); ?>
+                              $total += ($product->price) * ($product->quantity);
+                              echo number_format((($product->price) * ($product->quantity)), 0, '', '.'); ?>
                     </strong>
                   </td>
                 </tr>

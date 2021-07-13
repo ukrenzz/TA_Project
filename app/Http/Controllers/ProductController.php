@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\CategoryController;
 use App\Models\Product;
 use App\Models\ProductImages;
@@ -12,9 +11,6 @@ use App\Models\Category;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use App\Models\Feedback;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Image;
@@ -102,9 +98,9 @@ class ProductController extends Controller
           $imageThumbnail = Image::make($image);
           $named   = 'product_' . $image_product_id . '_' . $image_product_date . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
-          $color = shell_exec('python scripts/generate_rgb_mean.py "' . public_path() . '/images/products/'. $named . '"');
-          $lbp = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/products/'. $named . '"');
-          $edge = shell_exec('python scripts/generate_cannyedge.py "' . public_path() . '/images/products/'. $named . '"');
+          $color = shell_exec('python scripts/generate_rgb_mean.py "' . public_path() . '/images/products/' . $named . '"');
+          $lbp = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/products/' . $named . '"');
+          $edge = shell_exec('python scripts/generate_cannyedge.py "' . public_path() . '/images/products/' . $named . '"');
           $dataImage = [
             'product_id'  => $image_product_id,
             'url'         => $named,
@@ -160,18 +156,25 @@ class ProductController extends Controller
           $imageThumbnail = Image::make($image);
           $named   = 'product_' . $image_product_id . '_' . $image_product_date . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
+          $color = shell_exec('python scripts/generate_rgb_mean.py "' . public_path() . '/images/products/' . $named . '"');
+          $lbp = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/products/' . $named . '"');
+          $edge = shell_exec('python scripts/generate_cannyedge.py "' . public_path() . '/images/products/' . $named . '"');
           $dataImage = [
             'product_id'  => $image_product_id,
             'url'         => $named,
             'width'       => $imageThumbnail->width(),
             'height'      => $imageThumbnail->height(),
-            'size'        => $filesize
+            'size'        => $filesize,
+            'color_feature' => $color,
+            'shape_feature' => $lbp,
+            'edge_feature' => $edge
           ];
           array_push($dataImageProducts, $dataImage);
         }
         ProductImages::insert($dataImageProducts);
         // dd($dataImageProducts);
       }
+
 
       return response()->json(['success' => true]);
     } catch (Exception $ex) {
@@ -192,9 +195,6 @@ class ProductController extends Controller
       }
       ProductImages::where('product_id', $id)->delete();
     }
-
-
-
     Product::find($id)->delete();
 
     return response()->json([

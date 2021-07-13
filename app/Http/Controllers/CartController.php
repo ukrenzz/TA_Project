@@ -14,7 +14,7 @@ class CartController extends Controller
   function index()
   {
     $carts = Cart::join('products', 'carts.product_id', '=', 'products.id')
-      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at')
+      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'discount', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('created_at', 'desc')->get();
 
@@ -37,29 +37,48 @@ class CartController extends Controller
     return view('ecommerce.cart');
   }
 
+  function refresh()
+  {
+
+  }
+
   function store(Request $request)
   {
     $isInCart = DB::table('carts')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->get();
-    if ($isInCart->isNotEmpty()) {
-      DB::table('wishlists')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->delete();
-      return  back()->with('status', 'Product is already in Cart.');
-    } else {
-      // Form validation
-      $request->validate([
-        'product_id' => ['required'],
-        'quantity' => ['required'],
-      ]);
+    $status = "";
+    $action = "carting";
+    $request->validate([
+      'product_id' => ['required'],
+      'quantity' => ['required'],
+    ]);
+
+    if ($isInCart->isEmpty()) {
 
       Cart::create([
-        'product_id' => strtolower($request['product_id']),
+        'product_id' => $request['product_id'],
         'user_id' => Auth::id(),
-        'quantity' => strtolower($request['quantity'])
+        'quantity' => $request['quantity']
       ]);
 
-      // Delete from Wishlist 
-      DB::table('wishlists')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->delete();
-      return back()->with('status', 'Product is added to Cart!!');
+      $status = "success";
+
+    } else if($isInCart->isEmpty() == false){
+      // Form validation
+      $carts = Cart::where(['product_id'=> $request['product_id'], 'user_id'=>Auth::id()])->first();
+
+      $carts->quantity = ((int)$request->quantity + (int)$carts->quantity);
+
+      $carts->save();
+
+      $status = "success";
+
     }
+
+    return response()->json([
+      'action' => $action,
+      'status' => $status
+    ]);
+
   }
 
   function update(Request $request)

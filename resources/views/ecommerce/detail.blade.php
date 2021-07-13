@@ -89,13 +89,22 @@
               </ul>
             </div>
           </div>
-          <div class="row">
-            <label class="col-xl-7 col-lg-7  col-md-6 col-6"><strong>Quantity</strong></label>
-            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+          <div class="row {{ $data->product->stock > 0 ? "" : "text-center mt-4 mb-4" }}">
+            @if ($data->product->stock > 0)
+              <label class="col-xl-7 col-lg-7  col-md-6 col-6"><strong>Quantity</strong></label>
+              <div class="col-xl-4 col-lg-5 col-md-6 col-6">
               <div class="numbers-row">
-                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1" min="1">
+                <input type="text" value="1" id="quantity" class="qty2" name="quantity" min="1" max="{{ $data->product->stock }}" required>
+              </div>
+              <div class="col-12 text-center">
+                <small class="text-secondary">Available : {{ $data->product->stock }} {{ $data->product->unit }}</small>
               </div>
             </div>
+            @else
+              <div class="col-12">
+                <span class="out-stock w-100 d-block"><b>Sorry</b>, Stock not available!</span>
+              </div>
+            @endif
           </div>
         </div>
         <div class="row">
@@ -111,12 +120,12 @@
             </div>
           </div>
         </div>
-        @if(!$data->isCart && Auth::id())
+        @if(Auth::id())
           <div class="row">
             <div class="col-lg-7 col-md-6"></div>
             <div class="col-lg-4 col-md-6 mt-3">
               <div class="btn_add_to_cart">
-                <button class="btn_1">
+                <button class="btn_1" id="cartBtn">
                   <span> Add to Cart</span>
                 </button>
               </div>
@@ -295,6 +304,30 @@
 <script src="{{ asset('ecommerce/js/carousel_with_thumbs.js') }}"></script>
 
 <script type="text/javascript">
+
+  $('.dec').click(function(e) {
+    if(parseInt($('#quantity').val()) > 0){
+
+      $('#quantity').val(parseInt($('#quantity').val()));
+
+    } else {
+      $('#quantity').val(1);
+
+    }
+
+  })
+
+  $('.inc').click(function(e) {
+    if(parseInt($('#quantity').val()) < {{ $data->product->stock > 1 ? (int)$data->product->stock : 0 }}){
+
+      $('#quantity').val(parseInt($('#quantity').val()));
+
+    } else {
+      $('#quantity').val({{ $data->product->stock > 1 ? (int)$data->product->stock : 0 }});
+    }
+
+  })
+
   function checkWishlist() {
     $wishlistCheckin = {{ $data->isWishlist ? 1 : 0 }};
 
@@ -306,7 +339,9 @@
       $('#wishlistIcon').addClass("ri-heart-line");
     }
   }
+
   checkWishlist();
+
   $('#wishlistBtn').click(function(e) {
     e.preventDefault();
 
@@ -331,10 +366,43 @@
           $('#wishlistIcon').removeClass("ri-heart-fill color-primary");
           $('#wishlistIcon').addClass("ri-heart-line");
         }
-        console.log(data);
+        // console.log(data);
       }
     });
 
+  })
+
+  $('#cartBtn').click(function(e) {
+    e.preventDefault();
+    var product_id  = "{{ $data->product->id }}";
+    var quantity    = $('#quantity').val();
+    var _token      = $("meta[name='csrf-token']").attr("content");
+
+    console.log(quantity);
+
+    if(parseInt(quantity) > 0){
+      console.log("Ok");
+      $.ajax({
+        url: "{{ route('cart.store') }}",
+        type: 'POST',
+        data: {
+          "product_id": product_id,
+          "quantity" : quantity,
+          "_token": _token,
+        },
+        success: function(data) {
+          swal({
+            title : "Product added to cart!",
+            text : "Check cart for payment.",
+            icon: "success",
+            timer: 1300
+          });
+        }
+      });
+    } else {
+      console.log("No");
+      console.log(quantity);
+    }
   })
 
 </script>

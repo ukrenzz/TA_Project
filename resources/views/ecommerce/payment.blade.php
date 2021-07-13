@@ -45,28 +45,42 @@
               <tbody>
                 <?php $total = 0 ?>
                 @foreach ($data->products as $product)
-                <tr>
-                  <td>
-                    <div class="thumb_cart">
-                      <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
-                    </div>
-                    <span class="item_cart"><a href="" class="product-link">
-                        <?php echo substr($product->product_name, 0, 30) . '...' ?>
-                      </a></span>
-                  </td>
-                  <td>
-                    <strong>Rp<?php echo number_format(($product->price), 0, '', '.'); ?></strong>
-                  </td>
-                  <td>
-                    <strong>{{$product->quantity}}</strong>
-                  </td>
-                  <td>
-                    <strong>Rp<?php
-                              $total += ($product->price) * ($product->quantity);
-                              echo number_format((($product->price) * ($product->quantity)), 0, '', '.'); ?>
-                    </strong>
-                  </td>
-                </tr>
+                  @php
+        						$discount = $product->discount != null ||  $product->discount != 0 ? $product->discount : 0;
+        						$newPrice = ((int)$product->price - ((int)$product->price * ((int)$product->discount) / 100));
+        					@endphp
+
+                  <tr>
+                    <td>
+                      <div class="thumb_cart">
+                        <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
+                      </div>
+                      <span class="item_cart"><a href="" class="product-link">
+                          <?php echo substr($product->product_name, 0, 30) . '...' ?>
+                        </a></span>
+                    </td>
+                    <td>
+                      <strong>
+        								{{ $discount != 0 ? "Rp." . number_format($newPrice, 0, '.', '.') : "Rp." . number_format($product->price, 0, '.', '.') }}
+        							</strong>
+        							@if ($discount != 0)
+        								<br>
+        								<small style="text-decoration:line-through;">
+        									{{ "Rp ". number_format($product->price, 0, '.', '.') }}
+        								</small>
+        							@endif
+                    </td>
+                    <td>
+                      <strong>{{$product->quantity}}</strong>
+                    </td>
+                    <td>
+                      <strong>Rp<?php echo number_format(($discount != 0 ? $newPrice : $product->price)  * ($product->quantity), 0, '', '.'); ?>
+        								@php
+        									$total += ($discount != 0 ? $newPrice : $product->price)  * ($product->quantity);
+        								@endphp
+        							</strong>
+                    </td>
+                  </tr>
                 @endforeach
               </tbody>
             </table>

@@ -115,7 +115,7 @@ class TransactionController extends Controller
   {
     $categories = Category::orderBy('name', 'asc')->get();
     $_products = CheckoutTemps::join('products', 'checkout_temps.product_id', '=', 'products.id')
-      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'products.price as price', 'checkout_temps.created_at as created_at', 'checkout_temps.updated_at as updated_at')
+      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'discount', 'products.price as price', 'checkout_temps.created_at as created_at', 'checkout_temps.updated_at as updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('created_at', 'desc')->get();
     $user = User::where('id', '=', Auth::id())->first();

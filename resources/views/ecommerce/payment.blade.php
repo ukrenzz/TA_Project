@@ -23,6 +23,7 @@
         <div class="billing-information-box box_general">
           <h5 class="mb-4">Billing address</h5>
           <div class="billing-information">
+            <meta name="csrf-token" content="{{ csrf_token() }}"/>
             <h6>{{$data->user->name}} <span class="badge badge-info p-1 ml-2">Primary</span></h6>
             <div>Jl. B Hamid dan No. 8 Kec. Medan Johor</div>
             <div>Kota Medan, Sumatera Utara. 20145</div>
@@ -43,7 +44,11 @@
                 </tr>
               </thead>
               <tbody>
-                <?php $total = 0 ?>
+                @php
+                  $total    = 0;
+                  $ppn      = 0.05;
+                  $ppnTotal = 0;
+                @endphp
                 @foreach ($data->products as $product)
                   @php
         						$discount = $product->discount != null ||  $product->discount != 0 ? $product->discount : 0;
@@ -82,6 +87,9 @@
                     </td>
                   </tr>
                 @endforeach
+                @php
+                  $ppnTotal = $total * $ppn;
+                @endphp
               </tbody>
             </table>
           </div>
@@ -99,7 +107,7 @@
                   <ul>
                     <li>
                       <label class="container_radio">Neko Flash <small>3-7 Hari | Rp.30.000</small>
-                        <input type="radio" name="shipping_method" checked>
+                        <input type="radio" name="shipping_method" value="neko flash" checked>
                         <span class="checkmark"></span>
                       </label>
                     </li>
@@ -111,6 +119,12 @@
         </div>
       </div>
       <div class="col-lg-4 col-md-5 col-sm-12">
+        <div class="col-12 box_general">
+          <h5 class="pb-4">Note</h5>
+          <p class="mb-2 text-justify" style="font-size:0.9em;">Write some to our. Noted our like your specific address, more feature, or something.</p>
+          <small>This form not required.</small>
+          <textarea name="note" rows="3" class="form-control mb-3" style="resize:none;" placeholder="Your message..."></textarea>
+        </div>
         <div class="box_general">
           {{-- Summary --}}
           <div class="summary-box">
@@ -121,10 +135,13 @@
                     <?php echo number_format($total, 0, '', '.');  ?>
                   </span></li>
                 <li class="clearfix"><em><strong>Shipping</strong></em> <span>Rp 30.000</span></li>
+                <li class="clearfix"><em><strong>PPN (5%)</strong></em> <span>Rp {{number_format($ppnTotal, 0, '', '.')}}</span></li>
               </ul>
-              <div class="total clearfix">TOTAL <span>Rp
-                  <?php echo number_format($total + 30000, 0, '', '.');  ?>
-                </span></div>
+              <div class="total clearfix">TOTAL
+                <span>Rp
+                  <?php echo number_format($total + 30000 + $ppnTotal, 0, '', '.');  ?>
+                </span>
+              </div>
             </div>
 
             <h5 class="mt-5">Payment method</h5>
@@ -136,13 +153,13 @@
                       <i class="ri-currency-line mr-1 payment-item-icon"></i>
                       <span class="payment-item-name">Cash on Delivery</span>
                     </span>
-                    <input type="radio" name="payments_method" checked>
+                    <input type="radio" name="payments_method" value="cod" checked>
                     <span class="checkmark"></span>
                   </label>
                 </li>
                 </li>
               </ul>
-              <a href="{{route('transaction.success')}}" class="btn_1 full-width mb-4 mt-3">Confirm and Order</a>
+              <a href="#" class="btn_1 full-width mb-4 mt-3" id="orderBtn">Confirm and Order</a>
             </div>
           </div>
         </div>
@@ -154,23 +171,7 @@
 </main>
 <!-- /main -->
 
-<!-- Modal Payments Method-->
-<div class="modal fade" id="payments_method" tabindex="-1" role="dialog" aria-labelledby="payments_method_title" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="payments_method_title">Payments Methods</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Lorem ipsum dolor sit amet, oratio possim ius cu. Labore prompta nominavi sea ei. Sea no animal saperet gloriatur, ius iusto ullamcorper ad. Qui ignota reformidans ei, vix in elit conceptam adipiscing, quaestio repudiandae delicatissimi vis ei. Fabulas accusamus no has.</p>
-        <p>Et nam vidit zril, pri elaboraret suscipiantur ut. Duo mucius gloriatur at, in vis integre labitur dolores, mei omnis utinam labitur id. An eum prodesset appellantur. Ut alia nemore mei, at velit veniam vix, nonumy propriae conclusionemque ea cum.</p>
-      </div>
-    </div>
-  </div>
-</div>
+
 @endsection
 
 
@@ -183,5 +184,39 @@
     else
       $('#other_addr_c').fadeOut('fast');
   });
+
+  $('#orderBtn').click(function(e) {
+    e.preventDefault();
+
+    var _token = $("meta[name='csrf-token']").attr("content");
+    var shipping_method = $('input[name="shipping_method"]').val();
+    var note            = $('input[name="note"]').val();
+    var payment_method  = $('input[name="payments_method"]').val();
+
+    // console.log($('textarea[name="note"]').val());
+
+    $.ajax({
+      url: "{{ route('transaction.store.payment') }}",
+      type: 'POST',
+      data: {
+        "shipping_method" : shipping_method,
+        "note"            : note,
+        "payment_method"  : payment_method,
+        "_token": _token,
+      },
+      success: function(data) {
+        swal({
+          title : "Product added to order!",
+          text  : "Check cart for payment.",
+          icon  : "success",
+          timer : 1300
+        });
+
+        setTimeout(function() {
+          top.location.href = "{{route('transaction.success')}}";
+        }, 500);
+      }
+    });
+  })
 </script>
 @endsection

@@ -9,6 +9,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\CheckoutTemps;
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -129,9 +130,60 @@ class TransactionController extends Controller
     // dd($data);
     return view('ecommerce.payment', compact('data'));
   }
-  function store()
+  function storePayment(Request $req)
   {
-    return view('ecommerce.cart');
+    $_products = CheckoutTemps::join('products', 'checkout_temps.product_id', '=', 'products.id')
+      ->select('products.id as id', 'quantity', 'discount', 'stock', 'products.price as price')
+      ->where('user_id', '=', Auth::id())->get();
+
+    $_productData = [];
+    $_idProductWillDeleted = [];
+
+    $_shippingCost    = 30000;
+    $_ppn             = 0.05;
+    $_status          = "pending";
+    $_paymentMethod   = $req->payment_method;
+    $_shippingMethod  = $req->shipping_method;
+    $_note            = $req->note;
+
+
+    if($_products->isNotEmpty()){
+      $createTransaction = Transaction::create([
+        'note'            => $_note,
+        'user_id'         => Auth::id(),
+        'ppn'             => $_ppn,
+        'status'          => $_status,
+        'discount'        => 0,
+        'shipping_cost'   => $_shippingCost,
+        'shipping_method' => $_shippingMethod,
+        'payment_method'  => $_paymentMethod
+      ]);
+
+      if($createTransaction){
+
+        foreach ($_products as $product) {
+          $_productTemp = [
+            'transaction_id'  => $createTransaction->id,
+            'product_id'      => $product->id,
+            'quantity'        => $product->quantity,
+            'discount'        => $product->discount,
+            'price'           => $product->price
+          ];
+
+          array_push($_productData, $_productTemp);
+          array_push($_idProductWillDeleted, $product->id);
+        }
+
+        $createTransactionDetail = TransactionDetail::insert($_productData);
+
+        if($createTransactionDetail){
+
+          // dd($_idProductWillDeleted);
+          Cart::where('user_id', Auth::id())->whereIn('product_id', $_idProductWillDeleted)->delete();
+          CheckoutTemps::where('user_id', Auth::id())->whereIn('product_id', $_idProductWillDeleted)->delete();
+        }
+      }
+    }
   }
   function success()
   {

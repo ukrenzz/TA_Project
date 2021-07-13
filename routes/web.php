@@ -95,7 +95,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Member'], function () {
     Route::post('/checkout', [TransactionController::class, 'storeCheckout'])->name('checkout');
     Route::get('/order', [TransactionController::class, 'order'])->name('order');
     Route::get('/payment/success', [TransactionController::class, 'success'])->name('success');
-    Route::post('/payment/store', [TransactionController::class, 'store'])->name('store');
+    Route::post('/payment/store', [TransactionController::class, 'storePayment'])->name('store.payment');
   });
 
   Route::name('feedback.')->group(function () {

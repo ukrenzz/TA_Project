@@ -22,59 +22,18 @@
     </div>
     <div class="row">
       <!-- /col -->
-      <div class="col-lg-12">
-        <!-- /toolbox -->
-        <div class="row small-gutters">
-          @foreach($data->products as $product)
-          <div class="col-6 col-md-3">
-            <div class="grid_item">
-              <span class="ribbon off">-{{$product->discount}}%</span>
-              <figure>
-                {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
-                <a href="{{ route('product.show',['id' => $product->id]) }}">
-                  @if (count($product->product_images) > 0)
-                  <img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
-                  <img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
-                  @else
-                  <img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
-                  @endif
-                </a>
-              </figure>
-              <a href="{{ route('product.show',['id' => $product->id]) }}">
-                <h3>
-                  <?php echo substr($product->name, 0, 20) . '...' ?>
-                </h3>
-              </a>
-              <div class="price_box">
-                <span class="new_price">
-                  Rp <?php
-                      $oldprice = $product->price;
-                      $disc = $product->discount;
-                      $new = ($oldprice * (100 - $disc)) / 100;
-                      echo number_format($new, 0, '', '.');
-                      ?>
-                </span><span class="percentage">-{{$product->discount}}</span>
-                <span class="old_price">Rp <?php echo number_format(($product->price), 0, '', '.'); ?></span>
-              </div>
-            </div>
-            <!-- /grid_item -->
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <button id="startAndStop" class="btn_1"><i class="ri-live-line"></i> Start Video</button>
           </div>
-          @endforeach
-          <!-- /col -->
+          <div class="col-12">
+            <video id="videoInput" width="400" height="400"></video>
+          </div>
         </div>
-        <!-- /row -->
-        <div class="pagination__wrapper">
-          <ul class="pagination">
-            <li><a href="{{ $data->products->previousPageUrl() }}" class="prev" title="previous page">&#10094;</a></li>
-            @for ($i=1; $i < ($data->products->total() / $data->products->perPage()) + 1; $i++)
-              <li>
-
-                <a href="{{ $data->products->url($i) }}" class="{{ $data->products->currentPage() == $i ? "active" : "" }}">{{ $i }}</a>
-              </li>
-              @endfor
-              <li><a href="{{ $data->products->nextPageUrl() }}" class="next" title="next page">&#10095;</a></li>
-          </ul>
-        </div>
+      </div>
+      <div class="col-lg-6">
+        <canvas id="canvasOutput" style="visibility: hidden;" width="400" height="400"></canvas>
       </div>
       <!-- /col -->
     </div>
@@ -87,6 +46,48 @@
 
 
 @section('user_defined_script')
-<script src="{{ asset('ecommerce/js/sticky_sidebar.min.js') }}"></script>
-<script src="{{ asset('ecommerce/js/specific_listing.js') }}"></script>
+  {{-- <script src="{{ asset('ecommerce/js/sticky_sidebar.min.js') }}"></script> --}}
+  {{-- <script src="{{ asset('ecommerce/js/specific_listing.js') }}"></script> --}}
+  <script src="{{ asset('vendors/opencv/opencv.js') }}"></script>
+  <script src="{{ asset('vendors/opencv/utils.js') }}"></script>
+
+  <script type="text/javascript">
+
+    let utils = new Utils('errorMessage');
+
+    let videoInput = document.getElementById('videoInput');
+    let streaming = false;
+    let startAndStop = document.getElementById('startAndStop');
+    startAndStop.addEventListener('click', () => {
+        if (!streaming) {
+            // utils.clearError();
+            utils.startCamera('qvga', onVideoStarted, 'videoInput');
+        } else {
+            utils.stopCamera();
+            onVideoStopped();
+        }
+    });
+
+    function onVideoStarted() {
+        streaming = true;
+        startAndStop.innerHTML = '<i class="ri-stop-fill"></i> Stop';
+        videoInput.width = videoInput.videoWidth;
+        videoInput.height = videoInput.videoHeight;
+    }
+
+    function onVideoStopped() {
+        streaming = false;
+        startAndStop.innerHTML = '<i class="ri-live-line"></i> Start Video';
+        initStatus();
+    }
+
+    function initStatus() {
+        document.getElementById('status').innerHTML = '';
+        document.getElementById('canvasOutput').style.visibility = "hidden";
+        utils.clearError();
+    }
+
+
+
+  </script>
 @endsection

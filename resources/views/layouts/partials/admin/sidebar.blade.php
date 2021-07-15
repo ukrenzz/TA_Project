@@ -50,14 +50,6 @@
 					<span class="title">Feedbacks</span>
 				</a>
 			</li>
-			<li class="nav-item">
-				<a href="{{ route('admin.dashboard') }}" class="">
-					<span class="icon-holder" style="font-size: 0.8rem;">
-						<i class="far fa-file-pdf"></i>
-					</span>
-					<span class="title">Export to PDF </span>
-				</a>
-			</li>
 		</ul>
 	</div>
 </div>

@@ -26,12 +26,13 @@
 			<thead>
 				<tr>
 					<th>Product</th>
-					<th>Ref</th>
+					<th>Transaction ID</th>
 					<th>Price</th>
 					<th>Qty.</th>
 					<th>Tax</th>
 					<th>Disc</th>
 					<th>Shipping</th>
+					<th>Note</th>
 					<th>Total</th>
 					<th></th>
 				</tr>
@@ -46,7 +47,7 @@
 						<span class="item_cart"><a href="{{ route('product.show', ['id' => $transaction->product_id]) }}" class="product-link">{{$transaction->product_name}}</a></span>
 					</td>
 					<td>
-						<strong>{{$transaction->ref}}</strong>
+						<strong> {{$transaction->id}}</strong>
 					</td>
 					<td>
 						<strong>Rp
@@ -63,6 +64,9 @@
 					</td>
 					<td>
 						<strong>({{$transaction->payment_method}}) Rp{{$transaction->shipping_cost}}</strong>
+					</td>
+					<td>
+						<strong>{{$transaction->ref}}</strong>
 					</td>
 					<td>
 						<strong>Rp<?php

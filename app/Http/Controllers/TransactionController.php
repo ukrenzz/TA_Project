@@ -102,7 +102,7 @@ class TransactionController extends Controller
     $transactions = Transaction::join('users', 'users.id', '=', 'transactions.user_id')
       ->join('transaction_details', 'transaction_details.transaction_id', '=', 'transactions.id')
       ->join('products', 'products.id', '=', 'transaction_details.product_id')
-      ->select('transactions.id', 'ref', 'users.name as username', 'products.name as product_name',  'products.id as product_id', 'ppn', 'transactions.status as status', 'transactions.discount', 'shipping_cost', 'payment_method', 'transaction_details.quantity as quantity', 'transaction_details.price as price', 'transactions.created_at', 'transactions.updated_at')
+      ->select('transactions.id as id', 'note', 'users.name as username', 'products.name as product_name',  'products.id as product_id', 'ppn', 'transactions.status as status', 'transactions.discount', 'shipping_method', 'shipping_cost', 'payment_method', 'transaction_details.quantity as quantity', 'transaction_details.price as price', 'transactions.created_at', 'transactions.updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('updated_at', 'desc')
       ->get();

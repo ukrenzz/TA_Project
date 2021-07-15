@@ -18,7 +18,7 @@
 						<div class="row justify-content-center justify-content-md-end">
 							<div class="col-lg-6 static">
 								<div class="slide-text text-right white">
-									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a></div>
+									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{ route('product.category', ['cat_id' => 1]) }}" role="button">Shop Now</a></div>
 								</div>
 							</div>
 						</div>
@@ -36,7 +36,7 @@
 									<p class="owl-slide-animated owl-slide-subtitle">
 										Limited items available at this price
 									</p>
-									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a></div>
+									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{ route('product.category', ['cat_id' => 3]) }}" role="button">Shop Now</a></div>
 								</div>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 									<p class="owl-slide-animated owl-slide-subtitle">
 										X Series Mirrorless
 									</p>
-									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a></div>
+									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="{{ route('product.category', ['cat_id' => 6]) }}" role="button">Shop Now</a></div>
 								</div>
 							</div>
 						</div>
@@ -69,7 +69,7 @@
 
 	<ul id="banners_grid" class="clearfix">
 		<li>
-			<a href="#0" class="img_container">
+			<a href="{{ route('product.category', ['cat_id' => 1]) }}" class="img_container">
 				<img src="{{ asset('ecommerce/img/XierraMouse.png') }}" data-src="{{ asset('ecommerce/img/XierraMouse.png') }}" alt="" class="lazy">
 				<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 					<h3>Mouse and Keyboard's Collection</h3>
@@ -78,7 +78,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="#0" class="img_container">
+			<a href="{{ route('product.category', ['cat_id' => 4]) }}" class="img_container">
 				<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/HuaweiMatePad4Inch.png') }}" alt="" class="lazy">
 				<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 					<h3>Laptop and Tablet's Collection</h3>
@@ -87,7 +87,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="#0" class="img_container">
+			<a href="{{ route('product.category', ['cat_id' => 6]) }}" class="img_container">
 				<img src="{{ asset('ecommerce/img/banners_cat_placeholder.jpg') }}" data-src="{{ asset('ecommerce/img/FujifilmXA3Square.png') }}" alt="" class="lazy">
 				<div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
 					<h3>Camera's Collection</h3>

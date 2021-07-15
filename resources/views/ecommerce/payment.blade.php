@@ -60,7 +60,7 @@
                     <div class="thumb_cart">
                       <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
                     </div>
-                    <span class="item_cart"><a href="" class="product-link">
+                    <span class="item_cart"><a href="{{ route('product.show',['id' => $product->product_id]) }}" class="product-link">
                         <?php echo substr($product->product_name, 0, 30) . '...' ?>
                       </a></span>
                   </td>

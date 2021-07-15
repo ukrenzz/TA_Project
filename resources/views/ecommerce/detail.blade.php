@@ -59,7 +59,6 @@
               $rating = 0;
               if(count($data->feedbacks) != null || count($data->feedbacks) != 0){
                 $rating = $data->rating / count($data->feedbacks);
-                var_dump($rating);
               }
             @endphp
             @for ($i=1; $i < 6; $i++)

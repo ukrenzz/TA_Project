@@ -23,7 +23,7 @@
         <div class="billing-information-box box_general">
           <h5 class="mb-4">Billing address</h5>
           <div class="billing-information">
-            <meta name="csrf-token" content="{{ csrf_token() }}"/>
+            <meta name="csrf-token" content="{{ csrf_token() }}" />
             <h6>{{$data->user->name}} <span class="badge badge-info p-1 ml-2">Primary</span></h6>
             <div>Jl. B Hamid dan No. 8 Kec. Medan Johor</div>
             <div>Kota Medan, Sumatera Utara. 20145</div>
@@ -45,50 +45,50 @@
               </thead>
               <tbody>
                 @php
-                  $total    = 0;
-                  $ppn      = 0.05;
-                  $ppnTotal = 0;
+                $total = 0;
+                $ppn = 0.05;
+                $ppnTotal = 0;
                 @endphp
                 @foreach ($data->products as $product)
-                  @php
-        						$discount = $product->discount != null ||  $product->discount != 0 ? $product->discount : 0;
-        						$newPrice = ((int)$product->price - ((int)$product->price * ((int)$product->discount) / 100));
-        					@endphp
+                @php
+                $discount = $product->discount != null || $product->discount != 0 ? $product->discount : 0;
+                $newPrice = ((int)$product->price - ((int)$product->price * ((int)$product->discount) / 100));
+                @endphp
 
-                  <tr>
-                    <td>
-                      <div class="thumb_cart">
-                        <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
-                      </div>
-                      <span class="item_cart"><a href="" class="product-link">
-                          <?php echo substr($product->product_name, 0, 30) . '...' ?>
-                        </a></span>
-                    </td>
-                    <td>
-                      <strong>
-        								{{ $discount != 0 ? "Rp." . number_format($newPrice, 0, '.', '.') : "Rp." . number_format($product->price, 0, '.', '.') }}
-        							</strong>
-        							@if ($discount != 0)
-        								<br>
-        								<small style="text-decoration:line-through;">
-        									{{ "Rp ". number_format($product->price, 0, '.', '.') }}
-        								</small>
-        							@endif
-                    </td>
-                    <td>
-                      <strong>{{$product->quantity}}</strong>
-                    </td>
-                    <td>
-                      <strong>Rp<?php echo number_format(($discount != 0 ? $newPrice : $product->price)  * ($product->quantity), 0, '', '.'); ?>
-        								@php
-        									$total += ($discount != 0 ? $newPrice : $product->price)  * ($product->quantity);
-        								@endphp
-        							</strong>
-                    </td>
-                  </tr>
+                <tr>
+                  <td>
+                    <div class="thumb_cart">
+                      <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
+                    </div>
+                    <span class="item_cart"><a href="" class="product-link">
+                        <?php echo substr($product->product_name, 0, 30) . '...' ?>
+                      </a></span>
+                  </td>
+                  <td>
+                    <strong>
+                      {{ $discount != 0 ? "Rp." . number_format($newPrice, 0, '.', '.') : "Rp." . number_format($product->price, 0, '.', '.') }}
+                    </strong>
+                    @if ($discount != 0)
+                    <br>
+                    <small style="text-decoration:line-through;">
+                      {{ "Rp ". number_format($product->price, 0, '.', '.') }}
+                    </small>
+                    @endif
+                  </td>
+                  <td>
+                    <strong>{{$product->quantity}}</strong>
+                  </td>
+                  <td>
+                    <strong>Rp<?php echo number_format(($discount != 0 ? $newPrice : $product->price)  * ($product->quantity), 0, '', '.'); ?>
+                      @php
+                      $total += ($discount != 0 ? $newPrice : $product->price) * ($product->quantity);
+                      @endphp
+                    </strong>
+                  </td>
+                </tr>
                 @endforeach
                 @php
-                  $ppnTotal = $total * $ppn;
+                $ppnTotal = $total * $ppn;
                 @endphp
               </tbody>
             </table>
@@ -121,8 +121,8 @@
       <div class="col-lg-4 col-md-5 col-sm-12">
         <div class="col-12 box_general">
           <h5 class="pb-4">Note</h5>
-          <p class="mb-2 text-justify" style="font-size:0.9em;">Write some to our. Noted our like your specific address, more feature, or something.</p>
-          <small>This form not required.</small>
+          <p class="mb-2 text-justify" style="font-size:0.9em;">Write some notes for us. Tell us your specific address, more feature, or anything.</p>
+          <small>This form is optional.</small>
           <textarea name="note" rows="3" class="form-control mb-3" style="resize:none;" placeholder="Your message..."></textarea>
         </div>
         <div class="box_general">
@@ -190,8 +190,8 @@
 
     var _token = $("meta[name='csrf-token']").attr("content");
     var shipping_method = $('input[name="shipping_method"]').val();
-    var note            = $('input[name="note"]').val();
-    var payment_method  = $('input[name="payments_method"]').val();
+    var note = $('input[name="note"]').val();
+    var payment_method = $('input[name="payments_method"]').val();
 
     // console.log($('textarea[name="note"]').val());
 
@@ -199,17 +199,17 @@
       url: "{{ route('transaction.store.payment') }}",
       type: 'POST',
       data: {
-        "shipping_method" : shipping_method,
-        "note"            : note,
-        "payment_method"  : payment_method,
+        "shipping_method": shipping_method,
+        "note": note,
+        "payment_method": payment_method,
         "_token": _token,
       },
       success: function(data) {
         swal({
-          title : "Product added to order!",
-          text  : "Check cart for payment.",
-          icon  : "success",
-          timer : 1300
+          title: "Product added to order!",
+          text: "Check cart for payment.",
+          icon: "success",
+          timer: 1300
         });
 
         setTimeout(function() {

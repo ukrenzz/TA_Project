@@ -52,7 +52,7 @@
 								<div class="slide-text text-center black">
 									<h2 class="owl-slide-animated owl-slide-title">Fujifilm XA3</h2>
 									<p class="owl-slide-animated owl-slide-subtitle">
-									 X Series Mirrorless 
+									 X Series Mirrorless
 									</p>
 									<div class="owl-slide-animated owl-slide-cta"><a class="btn_1" href="listing-grid-1-full.html" role="button">Shop Now</a></div>
 								</div>
@@ -111,8 +111,7 @@
 						{!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
 						<a href="{{ route('product.show',['id' => $product->id]) }}">
 							@if (count($product->product_images) > 0)
-								<img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
-								<img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
+								<div class="image-thumbnail" style="background: url('{{ url('/images/products/' . $product->product_images[0]->url) }}')"></div>
 							@else
 								<img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
 							@endif
@@ -164,4 +163,10 @@
 
 @section('user_defined_script')
 <script src="{{ asset('ecommerce/js/carousel-home.min.js') }}"></script>
+<script type="text/javascript">
+  var img_thumb = $('.image-thumbnail');
+  console.log(img_thumb.width())
+  // $('.image-thumbnail').css("height", img_thumb.width() + " !important");
+  $('.image-thumbnail').height(img_thumb.width());
+</script>
 @endsection

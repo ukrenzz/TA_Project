@@ -28,7 +28,6 @@
           @foreach($data->products as $product)
           <div class="col-6 col-md-3">
             <div class="grid_item">
-              <span class="ribbon off">-{{$product->discount}}%</span>
               <figure>
                 {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
                 <a href="{{ route('product.show',['id' => $product->id]) }}">

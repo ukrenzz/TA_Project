@@ -32,8 +32,7 @@
                 {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
                 <a href="{{ route('product.show',['id' => $product->id]) }}">
                   @if (count($product->product_images) > 0)
-                  <img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
-                  <img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
+                    <div class="image-thumbnail" style="background: url('{{ url('/images/products/' . $product->product_images[0]->url) }}')"></div>
                   @else
                   <img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
                   @endif
@@ -86,6 +85,12 @@
 
 
 @section('user_defined_script')
-<script src="{{ asset('ecommerce/js/sticky_sidebar.min.js') }}"></script>
-<script src="{{ asset('ecommerce/js/specific_listing.js') }}"></script>
+{{-- <script src="{{ asset('ecommerce/js/sticky_sidebar.min.js') }}"></script>
+<script src="{{ asset('ecommerce/js/specific_listing.js') }}"></script> --}}
+<script type="text/javascript">
+  var img_thumb = $('.image-thumbnail');
+  console.log(img_thumb.width())
+  // $('.image-thumbnail').css("height", img_thumb.width() + " !important");
+  $('.image-thumbnail').height(img_thumb.width());
+</script>
 @endsection

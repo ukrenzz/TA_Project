@@ -32,9 +32,9 @@
                 {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
                 <a href="{{ route('product.show',['id' => $product->id]) }}">
                   @if (count($product->product_images) > 0)
-                    <div class="image-thumbnail" style="background: url('{{ url('/images/products/' . $product->product_images[0]->url) }}')"></div>
+                  <div class="image-thumbnail" style="background: url('{{ url('/images/products/' . $product->product_images[0]->url) }}')"></div>
                   @else
-                  <img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
+                  <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" alt="">
                   @endif
                 </a>
               </figure>
@@ -50,9 +50,8 @@
                       $new = ($oldprice * (100 - $disc)) / 100;
                       echo number_format($new, 0, '', '.');
                       ?>
-                </span><span class="percentage">-{{$product->discount}}</span>
-                <span class="old_price">Rp </span>
-                <?php echo number_format(($product->price), 0, '', '.'); ?>
+                </span>
+                {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='old_price ml-1'>Rp " . number_format(($product->price), 0, '', '.') . "</span>" !!}
               </div>
             </div>
             <!-- /grid_item -->

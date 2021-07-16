@@ -113,7 +113,7 @@
 							@if (count($product->product_images) > 0)
 							<div class="image-thumbnail" style="background: url('{{ url('/images/products/' . $product->product_images[0]->url) }}')"></div>
 							@else
-							<img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
+							<img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" alt="">
 							@endif
 						</a>
 					</figure>

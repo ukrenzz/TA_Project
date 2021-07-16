@@ -29,7 +29,6 @@
           @foreach($data->products as $product)
           <div class="col-6 col-md-3">
             <div class="grid_item">
-              <span class="ribbon off">-{{$product->discount}}%</span>
               <figure>
                 {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='ribbon off'>-" . $product->discount . "%</span>" !!}
                 <a href="{{ route('product.show',['id' => $product->id]) }}">
@@ -37,7 +36,7 @@
                   <img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
                   <img class="img-fluid lazy" src="{{ url('/images/products/' . $product->product_images[0]->url) }}" data-src="{{ url('/images/products/' . $product->product_images[0]->url) }}" alt="">
                   @else
-                  <img class="img-fluid lazy" src="{{ url('/images/products/placeholder_medium.jpg') }}" data-src="{{ url('/images/products/placeholder_medium.jpg') }}" alt="">
+                  <img class="img-fluid lazy" src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('ecommerce/img/products/product_placeholder_square_medium.jpg') }}" alt="">
                   @endif
                 </a>
               </figure>
@@ -54,8 +53,8 @@
                       $new = ($oldprice * (100 - $disc)) / 100;
                       echo number_format($new, 0, '', '.');
                       ?>
-                </span><span class="percentage">-{{$product->discount}}</span>
-                <span class="old_price">Rp <?php echo number_format(($product->price), 0, '', '.'); ?></span>
+                </span>
+                {!! $product->discount == 0 | $product->discount == "" ? "" : "<span class='old_price ml-1'>Rp " . number_format(($product->price), 0, '', '.') . "</span>" !!}
               </div>
             </div>
             <!-- /grid_item -->

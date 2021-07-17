@@ -49,6 +49,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
 
   Route::name('order.')->group(function () {
     Route::get('/manage/order', [OrderController::class, 'index'])->name('manage');
+    Route::get('/manage/order/detail/{id}', [OrderController::class, 'show'])->name('show');
     Route::put('/manage/order/update', [OrderController::class, 'update'])->name('update');
   });
 

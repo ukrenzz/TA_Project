@@ -10,4 +10,9 @@ class TransactionDetail extends Model
     use HasFactory;
     protected $table = "transaction_details";
     protected $guarded = [];
+
+    public function product_images()
+    {
+      return $this->hasMany(ProductImages::class);
+    }
 }

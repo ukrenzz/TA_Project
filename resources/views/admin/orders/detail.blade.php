@@ -41,8 +41,7 @@
       <table id="order-data-table" class="table">
         <thead>
           <tr>
-            {{-- <th class="text-center">No</th> --}}
-            <th class="text-center">ID </th>
+            <th class="text-center">No</th>
             <th class="text-center">User </th>
             <th class="text-center">Quantity </th>
             <th class="text-center">Total </th>
@@ -54,67 +53,67 @@
         </thead>
         <tbody>
           @foreach ($data->orders as $order)
-            <tr>
-              {{-- <td class="text-center">{{ $loop->iteration }}</td> --}}
-              <td class="text-center">{{ $order->id }}</td>
-              <td class="text-center">{{ $order->username }}</td>
-              <td class="text-center">{{ $order->quantity }}</td>
-              <td class="text-center">{{ "Rp. " . number_format($order->total, 0, '', '.') }}</td>
-              <td class="text-center">
-                <span class=" btn btn-tone {{
-                  $order->status == 'pending' ? "btn-warning" :
-                  ( $order->status == 'confirmed' ? "btn-success" :
-                  ( $order->status == 'sending' ? "btn-secondary" :
-                  ( $order->status == 'rejected' ? "btn-danger" : "btn-info")))  }}">
+          <tr>
+            <td class="text-center">{{ $loop->iteration }}</td>
+            <td class="text-center">{{ $order->id }}</td>
+            <td class="text-center">{{ $order->username }}</td>
+            <td class="text-center">{{ $order->quantity }}</td>
+            <td class="text-center">{{ "Rp. " . number_format($order->total, 0, '', '.') }}</td>
+            <td class="text-center">
+              <span class=" btn btn-tone {{
+                $order->status == 'pending' ? "btn-warning" :
+                ( $order->status == 'confirmed' ? "btn-success" :
+                ( $order->status == 'sending' ? "btn-secondary" :
+                ( $order->status == 'rejected' ? "btn-danger" : "btn-info")))  }}">
 
-                  {{ ucfirst($order->status) }}
+                {{ ucfirst($order->status) }}
 
-                </span>
-              </td>
-              <td class="text-center">{{ $order->payment_method}}</td>
-              <td>{{ $order->created_at }}</td>
-              <td>
-                <meta name="csrf-token" content="{{ csrf_token() }}"/>
-                <ul class="d-flex" style="list-style-type: none;">
-                  <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Detail">
-                    <a href="#" class="btn btn-sm btn-info"><i class="fas fa-info-circle" ></i></a>
-                  </li>
-                  <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Confirm">
-                    {{-- <form method="post" action="{{ route('order.update') }}">
-                      @csrf
-                      @if(isset($order))
-                      @method('PUT')
-                      @endif
-                      <input type="hidden" name="transaction_id" value="{{$order->id}}">
-                      <input type="hidden" name="status" value="confirmed"> --}}
-                      <button type="button" style="color:white;" class="btn btn-sm btn-success btn-submit" data-id="{{$order->id}}" data-status="confirmed"><i class="far fa-check-circle"></i></button>
-                    {{-- </form> --}}
-                  </li>
-                  <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Sending">
-                    {{-- <form method="post" action="{{ route('order.update') }}">
-                      @csrf
-                      @if(isset($order))
-                      @method('PUT')
-                      @endif
-                      <input type="hidden" name="transaction_id" value="{{$order->id}}">
-                      <input type="hidden" name="status" value="sending"> --}}
-                      <button type="button" style="color:white;" class="btn btn-sm btn-warning btn-submit" data-id="{{$order->id}}" data-status="sending"><i class="fas fa-truck-moving"></i></button>
-                    {{-- </form> --}}
-                  </li>
-                  <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Reject">
-                    {{-- <form method="post" action="{{ route('order.update') }}">
-                      @csrf
-                      @if(isset($order))
-                      @method('PUT')
-                      @endif
-                      <input type="hidden" name="transaction_id" value="{{$order->id}}">
-                      <input type="hidden" name="status" value="rejected"> --}}
-                      <button type="button" style="color:white;" class="btn btn-sm btn-danger btn-submit" data-id="{{$order->id}}" data-status="rejected"><i class="far fa-times-circle"></i></button>
-                    {{-- </form> --}}
-                  </li>
-                </ul>
-              </td>
-            </tr>
+              </span>
+            </td>
+            <td class="text-center">{{ $order->payment_method}}</td>
+            <td>{{ $order->created_at }}</td>
+            <td>
+              <meta name="csrf-token" content="{{ csrf_token() }}"/>
+              <ul class="d-flex" style="list-style-type: none;">
+                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Detail">
+                  <a href="#" class="btn btn-sm btn-info"><i class="fas fa-info-circle" ></i></a>
+                </li>
+                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Confirm">
+                  {{-- <form method="post" action="{{ route('order.update') }}">
+                    @csrf
+                    @if(isset($order))
+                    @method('PUT')
+                    @endif
+                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
+                    <input type="hidden" name="status" value="confirmed"> --}}
+                    <button type="button" style="color:white;" class="btn btn-sm btn-success btn-submit" data-id="{{$order->id}}" data-status="confirmed"><i class="far fa-check-circle"></i></button>
+                  {{-- </form> --}}
+                </li>
+                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Sending">
+                  {{-- <form method="post" action="{{ route('order.update') }}">
+                    @csrf
+                    @if(isset($order))
+                    @method('PUT')
+                    @endif
+                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
+                    <input type="hidden" name="status" value="sending"> --}}
+                    <button type="button" style="color:white;" class="btn btn-sm btn-warning btn-submit" data-id="{{$order->id}}" data-status="sending"><i class="fas fa-truck-moving"></i></button>
+                  {{-- </form> --}}
+                </li>
+                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Reject">
+                  {{-- <form method="post" action="{{ route('order.update') }}">
+                    @csrf
+                    @if(isset($order))
+                    @method('PUT')
+                    @endif
+                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
+                    <input type="hidden" name="status" value="rejected"> --}}
+                    <button type="button" style="color:white;" class="btn btn-sm btn-danger btn-submit" data-id="{{$order->id}}" data-status="rejected"><i class="far fa-times-circle"></i></button>
+                  {{-- </form> --}}
+                </li>
+              </ul>
+            </td>
+          </tr>
           @endforeach
         </tbody>
       </table>

@@ -16,9 +16,10 @@
         <ul>
           <li><a href="#">Home</a></li>
           <li>Categories</li>
+          <li>{{$data->categoryname->name}}</li>
         </ul>
       </div>
-      <h1>Categories</h1>
+      <h1>{{$data->categoryname->name}}</h1>
     </div>
     <div class="row">
       <!-- /col -->

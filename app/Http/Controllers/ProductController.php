@@ -284,9 +284,11 @@ class ProductController extends Controller
     else  $products = Product::orderBy('created_at', 'asc')->paginate(20);
     $products->load('product_images');
     $categories = Category::orderBy('name', 'asc')->get();
+    $categoryname = Category::where('id', '=', $cat_id)->first();
     $data = (object)[
       'categories' => $categories,
       'products' => $products,
+      'categoryname' => $categoryname,
     ];
     return view('ecommerce.categories', compact('data'));
   }

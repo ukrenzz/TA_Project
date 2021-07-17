@@ -44,11 +44,11 @@
 							<div class="form-group">
 								<label class="d-block">Overall rating</label>
 								<span class="rating mb-0">
-									<input type="radio" class="rating-input" name="rate" value="5"><label for="5_star" class="rating-star"></label>
-									<input type="radio" class="rating-input" name="rate" value="4"><label for="4_star" class="rating-star"></label>
-									<input type="radio" class="rating-input" name="rate" value="3"><label for="3_star" class="rating-star"></label>
-									<input type="radio" class="rating-input" name="rate" value="2"><label for="2_star" class="rating-star"></label>
 									<input type="radio" class="rating-input" name="rate" value="1"><label for="1_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="2"><label for="2_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="3"><label for="3_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="4"><label for="4_star" class="rating-star"></label>
+									<input type="radio" class="rating-input" name="rate" value="5"><label for="5_star" class="rating-star"></label>
 								</span>
 							</div>
 						</div>

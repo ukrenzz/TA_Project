@@ -59,6 +59,45 @@
     let streaming = false;
     let startAndStop = document.getElementById('startAndStop');
 
+    loadModel = async function(e) {
+      return new Promise((resolve) => {
+      let path = e.split(/(\\|\/)/g).pop();
+      var request = new XMLHttpRequest();
+      request.open('GET', e, true);
+      request.responseType = 'arraybuffer';
+      request.onload = function(ev) {
+        request = this;
+        if (request.readyState === 4) {
+            if (request.status === 200) {
+                let data = new Uint8Array(request.response);
+                cv.FS_createDataFile('/', path, data, true, false, false);
+                resolve(path);
+            } else {
+                console.error('Failed to load ' + url + ' status: ' + request.status);
+            }
+        }
+        // let reader = new FileReader();
+        // // reader.readAsArrayBuffer(request.response);
+        // reader.onload = function(ev) {
+        //   if (reader.readyState === 2) {
+        //     // let buffer = reader.result;
+        //     let data = new Uint8Array(request.response);
+        //     cv.FS_createDataFile('/', path, data, true, false, false);
+        //     resolve(path);
+        //   }
+        // }
+      };
+      request.send();        
+      });
+    }
+
+    loadLables = async function(labelsUrl) {
+      let response = await fetch(labelsUrl);
+      let label = await response.text();
+      label = label.split('\n');
+      return label;
+    }
+
     inputSize = [640, 480];
     mean = [127.5, 127.5, 127.5];
     std = 0.007843;
@@ -66,13 +105,12 @@
     confThreshold = 0.5;
     nmsThreshold = 0.4;
 
+
     // the type of output, can be YOLO or SSD
     outType = "YOLO";
 
     // url for label file, can from local or Internet
     labelsUrl = "{{ asset('yolo/yolov4.txt') }}";
-    modelPath = "{{ asset('yolo/yolov4.weights') }}";
-    configPath = "{{ asset('yolo/yolov4.cfg') }}";
 
     cv['onRuntimeInitialized']=()=>{
       let videoInput = document.getElementById('videoInput');
@@ -82,6 +120,9 @@
       let utils = new Utils('errorMessage');
 
       main = async function(frame) {
+        try{
+          const configPath = await loadModel("{{ asset('yolo/yolov4.cfg') }}");
+          const modelPath = await loadModel("{{ asset('yolo/yolov4.weights') }}");
           const labels = await loadLables(labelsUrl);
           const input = getBlobFromImage(inputSize, mean, std, swapRB, frame);
           let net = cv.readNet(configPath, modelPath);
@@ -96,6 +137,9 @@
           input.delete();
           net.delete();
           result.delete();
+        } catch (e) {
+          console.error(e);
+        }        
       }
 
       function processVideo() {
@@ -104,21 +148,16 @@
                 return;
             }
             cap.read(frame);
-            main(frame);
+            main(frame).then().catch(e => {
+              console.error(e);
+            });
         } catch (err) {
             // utils.printError(err);
             console.error(err);
         }
       }
 
-      setTimeout(processVideo, 0);
-
-      loadLables = async function(labelsUrl) {
-        let response = await fetch(labelsUrl);
-        let label = await response.text();
-        label = label.split('\n');
-        return label;
-      }
+      setTimeout(processVideo, 0);      
 
       getBlobFromImage = function(inputSize, mean, std, swapRB, image) {
         let mat;
@@ -135,23 +174,6 @@
 
         matC3.delete();
         return input;
-      }
-
-      loadModel = async function(e) {
-        return new Promise((resolve) => {
-        let file = e.target.files[0];
-        let path = file.name;
-        let reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onload = function(ev) {
-          if (reader.readyState === 2) {
-            let buffer = reader.result;
-            let data = new Uint8Array(buffer);
-            cv.FS_createDataFile('/', path, data, true, false, false);
-            resolve(path);
-          }
-        }
-        });
       }
 
       postProcess = function(result, labels, frame) {
@@ -295,7 +317,11 @@
           startAndStop.innerHTML = '<i class="ri-stop-fill"></i> Stop';
           videoInput.width = videoInput.videoWidth;
           videoInput.height = videoInput.videoHeight;
-          processVideo();
+          try {
+            processVideo();
+          } catch (e) {
+            console.error(e);
+          }
       }
 
       function onVideoStopped() {
@@ -305,10 +331,22 @@
       }
 
       function initStatus() {
-          document.getElementById('status').innerHTML = '';
-          document.getElementById('canvasOutput').style.visibility = "hidden";
-          utils.clearError();
+        document.getElementById('status').innerHTML = '';
+        document.getElementById('canvasOutput').style.visibility = "hidden";
+        utils.clearError();
       }
+
+      function updateResult(output, time) {
+        try{
+            let canvasOutput = document.getElementById('canvasOutput');
+            canvasOutput.style.visibility = "visible";
+            cv.imshow('canvasOutput', output);
+            document.getElementById('status').innerHTML = `<b>Model:</b> ${modelPath}<br>
+                                                           <b>Inference time:</b> ${time.toFixed(2)} ms`;
+        } catch(e) {
+            console.log(e);
+        }
+      }      
     }
   </script>
 @endsection

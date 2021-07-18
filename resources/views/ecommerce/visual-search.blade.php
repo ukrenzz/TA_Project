@@ -295,7 +295,7 @@
           startAndStop.innerHTML = '<i class="ri-stop-fill"></i> Stop';
           videoInput.width = videoInput.videoWidth;
           videoInput.height = videoInput.videoHeight;
-          // processVideo();
+          processVideo();
       }
 
       function onVideoStopped() {

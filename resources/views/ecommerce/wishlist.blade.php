@@ -25,7 +25,7 @@
 			<p style="color: #2fec00; margin:0">{{ session('status') }}</p>
 		</div>
 		@endif
-		@if(($data->wishlists)->isNotEmpty())
+		@if(($data->wishlists) != null)
 		<!-- /page_header -->
 		<table class="table table-striped cart-list">
 			<thead>
@@ -39,7 +39,11 @@
 				<tr>
 					<td>
 						<div class="thumb_cart">
-							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
+							@if ($wishlist->thumbnail != "" || $wishlist->thumbnail != null)
+								<img src="{{ url('images/products/' . $wishlist->thumbnail) }}" data-src="{{ url('images/products/' . $wishlist->thumbnail) }}" class="lazy" alt="Image">
+							@else
+								<img src="{{ url('images/products/placeholder_medium.jpg') }}" data-src="{{ url('images/products/placeholder_medium.jpg') }}" class="lazy" alt="Image">
+							@endif
 						</div>
 						<span class="item_cart"><a href="{{ route('product.show',['id' => $wishlist->product_id]) }}" class="product-link">
 								<?php echo substr($wishlist->product_name, 0, 60) . '...' ?>

@@ -20,7 +20,7 @@
 			</div>
 			<h1>Cart page</h1>
 		</div>
-		@if(($data->carts)->isNotEmpty())
+		@if(($data->carts) != null)
 		<!-- /page_header -->
 		<table class="table table-striped cart-list">
 			<thead>
@@ -47,7 +47,11 @@
 					</td>
 					<td>
 						<div class="thumb_cart">
-							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
+							@if ($cart->thumbnail != "" || $cart->thumbnail != null)
+								<img src="{{ url('images/products/' . $cart->thumbnail) }}" data-src="{{ url('images/products/' . $cart->thumbnail) }}" class="lazy" alt="Image">
+							@else
+								<img src="{{ url('images/products/placeholder_medium.jpg') }}" data-src="{{ url('images/products/placeholder_medium.jpg') }}" class="lazy" alt="Image">
+							@endif
 						</div>
 						<span class="item_cart"><a href="{{ route('product.show', ['id' => $cart->product_id]) }}" class="product-link">
 								<?php echo substr($cart->product_name, 0, 30) . '...' ?></a>

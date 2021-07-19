@@ -34,6 +34,7 @@
       </div>
       <div class="col-lg-6">
         <canvas id="canvasOutput" style="visibility: hidden;" width="320" height="240"></canvas>
+        <div id="status"></div>
       </div>
       <!-- /col -->
     </div>
@@ -98,7 +99,7 @@
       return label;
     }
 
-    inputSize = [640, 480];
+    inputSize = [320, 240];
     mean = [127.5, 127.5, 127.5];
     std = 0.007843;
     swapRB = false;
@@ -115,28 +116,48 @@
     cv['onRuntimeInitialized']=()=>{
       let videoInput = document.getElementById('videoInput');
       let frame = new cv.Mat(videoInput.height, videoInput.width, cv.CV_8UC4);
-      let startAndStop = document.getElementById('startAndStop');
       let cap = new cv.VideoCapture(videoInput);
       let utils = new Utils('errorMessage');
+      let configPath = ("{{ asset('yolo/yolov4.cfg') }}");
+      let modelPath = ("{{ asset('yolo/yolov4.weights') }}");
+      let load = 0;
+      let label = "";
+
+      init = async function() {
+        try{
+          if(load == 0){
+            configPath = await loadModel("{{ asset('yolo/yolov4.cfg') }}");
+            modelPath = await loadModel("{{ asset('yolo/yolov4.weights') }}");
+            labels = await loadLables(labelsUrl);
+            console.log(configPath);
+            console.log(modelPath);
+            startAndStop.enabled = false;
+            load = 1;
+          } 
+        } catch (e){
+          console.error(e);
+        }               
+      }
+
+      init();
 
       main = async function(frame) {
         try{
-          const configPath = await loadModel("{{ asset('yolo/yolov4.cfg') }}");
-          const modelPath = await loadModel("{{ asset('yolo/yolov4.weights') }}");
-          const labels = await loadLables(labelsUrl);
           const input = getBlobFromImage(inputSize, mean, std, swapRB, frame);
+          console.log(configPath);
+          console.log(modelPath);
           let net = cv.readNet(configPath, modelPath);
           net.setInput(input);
           const start = performance.now();
-          const result = net.forward();
-          const time  = performance.now()-start;
-          const output = postProcess(result, labels, frame);
+          // const result = net.forward();
+          // const time  = performance.now()-start;
+          // const output = postProcess(result, labels, frame);
 
-          updateResult(output, time);
-          setTimeout(processVideo, 0);
-          input.delete();
-          net.delete();
-          result.delete();
+          // updateResult(output, time);
+          // setTimeout(processVideo, 0);
+          // input.delete();
+          // net.delete();
+          // result.delete();
         } catch (e) {
           console.error(e);
         }        
@@ -338,11 +359,12 @@
 
       function updateResult(output, time) {
         try{
+            console.log("OK");
             let canvasOutput = document.getElementById('canvasOutput');
             canvasOutput.style.visibility = "visible";
             cv.imshow('canvasOutput', output);
             document.getElementById('status').innerHTML = `<b>Model:</b> ${modelPath}<br>
-                                                           <b>Inference time:</b> ${time.toFixed(2)} ms`;
+                                                          <b>Inference time:</b> ${time.toFixed(2)} ms`;
         } catch(e) {
             console.log(e);
         }

@@ -8,6 +8,7 @@ def get_mean_rgb(img):
 
 imgInput = sys.argv[1]
 img = cv2.imread(imgInput)
+resized_img = cv2.resize(img, (576, 576))
 res = get_mean_rgb(img)
 converted_list = [str(element) for element in res]
 print(";".join(converted_list))

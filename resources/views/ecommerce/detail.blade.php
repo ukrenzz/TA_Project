@@ -14,32 +14,26 @@
     <div class="row">
       <div class="col-md-6">
         <div class="all">
-          <div class="slider pl-3">
-            <div class="owl-carousel owl-theme main">
-              <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item-box">
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item-box"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/3.jpg') }});" class="item-box"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/4.jpg') }});" class="item-box"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/5.jpg') }});" class="item-box"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/6.jpg') }});" class="item-box"></div>
-              </div>
-              <div class="left nonl"><i class="ti-angle-left"></i></div>
-              <div class="right"><i class="ti-angle-right"></i></div>
+            <div class="slider">
+                <div class="owl-carousel owl-theme main">
+                  @foreach ($data->product->product_images as $image)
+                    <div style="background-size: contain !important;background-image: url({{ url('images/products/' . $image->url) }});" class="item-box"></div>
+                  @endforeach
+                </div>
+                <div class="left nonl"><i class="ti-angle-left"></i></div>
+                <div class="right"><i class="ti-angle-right"></i></div>
             </div>
             <div class="slider-two">
-              <div class="owl-carousel owl-theme thumbs">
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item active"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/2.jpg') }});" class="item"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/3.jpg') }});" class="item"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/4.jpg') }});" class="item"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/5.jpg') }});" class="item"></div>
-                <div style="background-image: url({{ asset('ecommerce/img/products/shoes/6.jpg') }});" class="item"></div>
-              </div>
-              <div class="left-t nonl-t"></div>
-              <div class="right-t"></div>
+                <div class="owl-carousel owl-theme thumbs">
+                  @foreach ($data->product->product_images as $image)
+                    <div style="background-size: contain !important;background-image: url({{ url('images/products/' . $image->url) }});" class="item {{ $loop->index == 0 ? "active" : ""}}"></div>
+                  @endforeach
+                </div>
+                <div class="left-t nonl-t"></div>
+                <div class="right-t"></div>
             </div>
-          </div>
         </div>
+        {{-- <div style="background-image: url({{ asset('ecommerce/img/products/shoes/1.jpg') }});" class="item-box"></div> --}}
       </div>
       <div class="col-md-6">
         <div class="breadcrumbs" style="padding : 10px; margin : 2px;">
@@ -178,7 +172,7 @@
               <div class="row justify-content-between">
                 <div class="col-lg-6">
                   <h3>Details</h3>
-                  <p>{{$data->product->description}}</p>
+                  <p>{!! $data->product->description !!}</p>
                 </div>
                 <div class="col-lg-5">
                   <h3>Specifications</h3>

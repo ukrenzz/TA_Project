@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\ProductImages;
 
 use Illuminate\Http\Request;
 
@@ -13,13 +14,33 @@ class CartController extends Controller
 {
   function index()
   {
-    $carts = Cart::join('products', 'carts.product_id', '=', 'products.id')
+    $_carts = Cart::join('products', 'carts.product_id', '=', 'products.id')
       ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'discount', 'products.price as price', 'carts.created_at as created_at', 'carts.updated_at as updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('created_at', 'desc')->get();
 
     $categories = Category::orderBy('name', 'asc')->get();
 
+    $carts = [];
+
+    foreach ($_carts as $cart) {
+
+      $_images  = ProductImages::where('product_id', $cart->product_id)->select('url')->first();
+
+      $_tempCart = (object)[
+        'product_id'    => $cart->product_id,
+        'product_name'  => $cart->product_name,
+        'quantity'      => $cart->quantity,
+        'discount'      => $cart->discount,
+        'price'         => $cart->price,
+        'created_at'    => $cart->created_at,
+        'thumbnail'     => isset($_images) ? $_images->url : "",
+      ];
+
+      array_push($carts, $_tempCart);
+
+    }
+    // dd($carts);
     $data = (object)[
       'carts' => $carts,
       'categories' => $categories

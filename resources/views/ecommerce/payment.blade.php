@@ -58,7 +58,11 @@
                 <tr>
                   <td>
                     <div class="thumb_cart">
-                      <img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
+                      @if ($product->thumbnail != "" || $product->thumbnail != null)
+        								<img src="{{ url('images/products/' . $product->thumbnail) }}" data-src="{{ url('images/products/' . $product->thumbnail) }}" class="lazy" alt="Image">
+        							@else
+        								<img src="{{ url('images/products/placeholder_medium.jpg') }}" data-src="{{ url('images/products/placeholder_medium.jpg') }}" class="lazy" alt="Image">
+        							@endif
                     </div>
                     <span class="item_cart"><a href="{{ route('product.show',['id' => $product->product_id]) }}" class="product-link">
                         <?php echo substr($product->product_name, 0, 30) . '...' ?>

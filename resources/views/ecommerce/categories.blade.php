@@ -63,15 +63,35 @@
         <!-- /row -->
         <div class="pagination__wrapper">
           <ul class="pagination">
-            <li><a href="{{ $data->products->previousPageUrl() }}" class="prev" title="previous page">&#10094;</a></li>
-            @for ($i=1; $i < ($data->products->total() / $data->products->perPage()) + 1; $i++)
-              <li>
+  					@php
+  						$_limitation = 1;
+  						$_totalPage = (int)ceil($data->products->total() / $data->products->perPage());
+  						$_lowLimit = $data->products->currentPage() > $_limitation && $_totalPage > $_limitation ? $data->products->currentPage() - $_limitation : $data->products->currentPage();
+  						$_highLimit = $data->products->currentPage() + $_limitation < $_totalPage ? $data->products->currentPage() + $_limitation : $_totalPage;
+  					@endphp
 
-                <a href="{{ $data->products->url($i) }}" class="{{ $data->products->currentPage() == $i ? "active" : "" }}">{{ $i }}</a>
-              </li>
-              @endfor
-              <li><a href="{{ $data->products->nextPageUrl() }}" class="next" title="next page">&#10095;</a></li>
-          </ul>
+  					@if ((int)$data->products->currentPage() > $_limitation)
+  						<li><a href="{{ $data->products->url(1) }}" class="prev" title="first page">&#10094;&#10094;</a></li>
+  					@endif
+
+  					@if ((int)$data->products->currentPage() > 1)
+  						<li><a href="{{ $data->products->previousPageUrl() }}" class="prev" title="previous page">&#10094;</a></li>
+  					@endif
+
+  					@for ($i=$_lowLimit; $i < $_highLimit + 1; $i++)
+  						<li>
+  							<a href="{{ $data->products->url($i) }}" class="{{ $data->products->currentPage() == $i ? "active" : "" }}">{{ $i }}</a>
+  						</li>
+  					@endfor
+
+  					@if ((int)$data->products->currentPage() < $_totalPage)
+  						<li><a href="{{ $data->products->nextPageUrl() }}" class="next" title="next page">&#10095;</a></li>
+  					@endif
+
+  					@if ((int)$data->products->currentPage() < $_totalPage - 1)
+  						<li><a href="{{ $data->products->url($_totalPage) }}" class="next" title="last page">&#10095;&#10095;</a></li>
+  					@endif
+  				</ul>
         </div>
       </div>
       <!-- /col -->

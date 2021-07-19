@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\User;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductImages;
 use App\Models\CheckoutTemps;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
@@ -116,13 +117,42 @@ class TransactionController extends Controller
   {
     $categories = Category::orderBy('name', 'asc')->get();
     $_products = CheckoutTemps::join('products', 'checkout_temps.product_id', '=', 'products.id')
-      ->select('products.id as product_id', 'products.name as product_name', 'quantity', 'discount', 'products.price as price', 'checkout_temps.created_at as created_at', 'checkout_temps.updated_at as updated_at')
+      ->select(
+        'products.id as product_id',
+        'products.name as product_name',
+        'quantity',
+        'discount',
+        'products.price as price',
+        'checkout_temps.created_at as created_at',
+        'checkout_temps.updated_at as updated_at')
       ->where('user_id', '=', Auth::id())
       ->orderBy('created_at', 'desc')->get();
+
     $user = User::where('id', '=', Auth::id())->first();
 
+    $products = [];
+
+    foreach ($_products as $product) {
+
+      $_images  = ProductImages::where('product_id', $product->product_id)->select('url')->first();
+
+      $_tempProduct = (object)[
+        'product_id'    => $product->product_id,
+        'product_name'  => $product->product_name,
+        'quantity'      => $product->quantity,
+        'discount'      => $product->discount,
+        'price'         => $product->price,
+        'created_at'    => $product->created_at,
+        'updated_at'    => $product->updated_at,
+        'thumbnail'     => isset($_images) ? $_images->url : "",
+      ];
+
+      array_push($products, $_tempProduct);
+
+    }
+
     $data = (object)[
-      'products' => $_products,
+      'products' => $products,
       'categories' => $categories,
       'user' => $user,
     ];
@@ -140,7 +170,7 @@ class TransactionController extends Controller
     $_idProductWillDeleted = [];
 
     $_shippingCost    = 30000;
-    $_ppn             = 0.05;
+    $_ppn             = 5;
     $_status          = "pending";
     $_paymentMethod   = $req->payment_method;
     $_shippingMethod  = $req->shipping_method;

@@ -77,7 +77,7 @@
                 <meta name="csrf-token" content="{{ csrf_token() }}"/>
                 <ul class="d-flex" style="list-style-type: none;">
                   <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Detail">
-                    <a href="#" class="btn btn-sm btn-info"><i class="fas fa-info-circle" ></i></a>
+                    <a href=" {{ route('order.show', $order->id) }} " class="btn btn-sm btn-info"><i class="fas fa-info-circle" ></i></a>
                   </li>
                   <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Confirm">
                     {{-- <form method="post" action="{{ route('order.update') }}">

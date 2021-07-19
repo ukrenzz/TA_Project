@@ -243,6 +243,8 @@ class ProductController extends Controller
       ->where('products.id', $id)
       ->get()->first();
 
+      $product->load('product_images');
+
     $feedbacks = Feedback::join('products', 'feedbacks.product_id', '=', 'products.id')
       ->select('feedbacks.id as id ', 'products.name as product_name', 'rate', 'comment', 'feedbacks.created_at as created_at', 'feedbacks.updated_at as updated_at')
       ->where('feedbacks.product_id', $id)
@@ -275,6 +277,7 @@ class ProductController extends Controller
       'isWishlist'  => $isWishlist,
       'isCart'      => $isCart,
     ];
+    // dd($product);
     return view('ecommerce.detail', ['data' => $data]);
   }
 
@@ -285,6 +288,7 @@ class ProductController extends Controller
     $products->load('product_images');
     $categories = Category::orderBy('name', 'asc')->get();
     $categoryname = Category::where('id', '=', $cat_id)->first();
+
     $data = (object)[
       'categories' => $categories,
       'products' => $products,

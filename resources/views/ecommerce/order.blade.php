@@ -32,7 +32,7 @@
 					<th>Tax</th>
 					<th>Disc</th>
 					<th>Shipping</th>
-					<th>Note</th>
+					<th>Status</th>
 					<th>Total</th>
 					<th></th>
 				</tr>
@@ -63,10 +63,18 @@
 						<strong> {{$transaction->discount}}%</strong>
 					</td>
 					<td>
-						<strong>({{$transaction->payment_method}}) Rp{{$transaction->shipping_cost}}</strong>
+						<strong>({{strtoupper($transaction->payment_method)}}) Rp{{$transaction->shipping_cost}}</strong>
 					</td>
 					<td>
-						<strong>{{$transaction->ref}}</strong>
+						<strong>
+							<span style=" {{
+                  $transaction->status == 'pending' ? "color: #FFC107;" :
+                  ( $transaction->status == 'confirmed' ? "color: #28A745;" :
+                  ( $transaction->status == 'sending' ? "color: #6C757D;" :
+                  ( $transaction->status == 'rejected' ? "color: #DC3545;" : "color: #17A288;")))  }}">
+								{{ ucfirst($transaction->status) }}
+							</span>
+						</strong>
 					</td>
 					<td>
 						<strong>Rp<?php

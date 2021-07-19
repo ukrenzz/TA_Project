@@ -77,14 +77,15 @@ def generate_lbp(img_lbp, width, height):
 	return img_lbp
 
 imgInput = sys.argv[1]
-img_bgr = cv2.imread(imgInput, 1)
+img = cv2.imread(imgInput, 1)
+resized_img = cv2.resize(img, (576, 576))
 
-height, width, _ = img_bgr.shape
+height, width, _ = resized_img.shape
 
 # We need to convert RGB image
 # into gray one because gray
 # image has one channel only.
-img_gray = cv2.cvtColor(img_bgr,
+img_gray = cv2.cvtColor(resized_img,
 						cv2.COLOR_BGR2GRAY)
 
 # Create a numpy array as

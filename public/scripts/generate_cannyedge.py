@@ -102,7 +102,8 @@ def Canny_detector(img, weak_th = None, strong_th = None):
 if __name__ == "__main__": 
 	imgInput = sys.argv[1]
 	img = cv2.imread(imgInput, 1)
-	imgR, imgG, imgB = cv2.split(img)
+	resized_img = cv2.resize(img, (576, 576))
+	imgR, imgG, imgB = cv2.split(resized_img)
 
 	canny_img = []
 	# creating processes

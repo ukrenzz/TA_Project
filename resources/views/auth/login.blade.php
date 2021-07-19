@@ -60,7 +60,7 @@
 											<a class="" href="{{ route('register')}}"> Signup</a>
 										</span>
 
-										<button type="submit" class="btn btn-primary" tabindex="4">{{ __('Log in') }}</button>
+										<button type="submit" style="white-space: nowrap;" class="btn btn-primary" tabindex="4">{{ __('Log in') }}</button>
 									</div>
 								</div>
 							</form>

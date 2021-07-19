@@ -140,7 +140,7 @@ class TransactionController extends Controller
     $_idProductWillDeleted = [];
 
     $_shippingCost    = 30000;
-    $_ppn             = 0.05;
+    $_ppn             = 5;
     $_status          = "pending";
     $_paymentMethod   = $req->payment_method;
     $_shippingMethod  = $req->shipping_method;

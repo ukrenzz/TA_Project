@@ -9,12 +9,133 @@
 
 @section('breadcrumb_item')
 <a href="{{ route('admin.dashboard')}}" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
-<span class="breadcrumb-item active">Orders</span>
+<a href="{{ route('order.manage')}}" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Orders</a>
+<span class="breadcrumb-item active">Detail</span>
 @endsection
 
 @section('content')
+  @php
+    $order = $data->orders;
+  @endphp
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <h4 class="card-title">Order Information</h4>
+        <meta name="csrf-token" content="{{ csrf_token() }}"/>
+      </div>
+      <div class="col-sm-12 col-md-6 d-flex justify-content-end">
+        {{-- <div class=""> --}}
+
+          <ul class="d-flex align-items-center my-0" style="list-style-type: none;">
+            <li class="mx-1  d-inline" data-toggle="tooltip" data-placement="bottom" title="Confirm">
+              <button type="button" style="color:white;" class="btn btn-sm btn-success btn-submit" data-id="{{$order->id}}" data-status="confirmed"><i class="far fa-check-circle"></i></button>
+            </li>
+            <li class="mx-1 d-inline" data-toggle="tooltip" data-placement="bottom" title="Sending">
+              <button type="button" style="color:white;" class="btn btn-sm btn-warning btn-submit" data-id="{{$order->id}}" data-status="sending"><i class="fas fa-truck-moving"></i></button>
+            </li>
+            <li class="mx-1 d-inline" data-toggle="tooltip" data-placement="bottom" title="Reject">
+              <button type="button" style="color:white;" class="btn btn-sm btn-danger btn-submit" data-id="{{$order->id}}" data-status="rejected"><i class="far fa-times-circle"></i></button>
+            </li>
+          </ul>
+        {{-- </div> --}}
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row mb-1">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Actual Date</div>
+          <div class="col col-sm-6 col-md-3">: <b class="text-primary">{{ $order->created_at }} </b></div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Transaction ID</div>
+          <div class="col col-sm-6 col-md-3">: <b class="text-primary">{{ $order->id }}</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Username</div>
+          <div class="col col-sm-6 col-md-9">: {{ ucwords($order->username) }}</div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Discount</div>
+          <div class="col col-sm-6 col-md-9">: {{ $order->discount }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Status</div>
+          <div class="col col-sm-6 col-md-9">:
+              {{ ucfirst($order->status) }}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Total Quantity</div>
+          <div class="col col-sm-6 col-md-9">: {{ $data->total->quantity . " Unit" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Shipping Method</div>
+          <div class="col col-sm-6 col-md-9">: {{ strtoupper($order->shipping_method) }}</div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Shipping Cost</div>
+          <div class="col col-sm-6 col-md-9">: {{ "Rp. " . number_format($order->shipping_cost, 0, ',', '.') }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Payment Method</div>
+          <div class="col col-sm-6 col-md-9">: {{ strtoupper($order->payment_method) }}</div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">PPN</div>
+          <div class="col col-sm-6 col-md-9">: {{ $order->ppn . "%" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-1">
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Note</div>
+          <div class="col col-sm-6 col-md-9">: {{ $order->note != "" ? ucfirst($order->note) : "-" }}</div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col col-sm-6 col-md-3">Total Price</div>
+          <div class="col col-sm-6 col-md-9">: <b class="text-primary">{{ "Rp. " . number_format($data->total->price, 0, ',', '.') }}</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="card">
+  <div class="card-header">
+    <h4 class="card-title">Products</h4>
+  </div>
   <div class="card-body">
     @if (session('status'))
     <div class="alert alert-success">
@@ -33,86 +154,57 @@
       <div class="col-sm-12 col-md-3 col-lg-3">
         <div class="input-affix m-b-10">
           <i class="prefix-icon anticon anticon-search"></i>
-          <input type="text" class="form-control" id="order-name-search" placeholder="Search orders">
+          <input type="text" class="form-control" id="product-name-search" placeholder="Search orders">
         </div>
       </div>
     </div>
     <div class="table-responsive">
-      <table id="order-data-table" class="table">
+      <table id="product-data-table" class="table">
         <thead>
           <tr>
             <th class="text-center">No</th>
-            <th class="text-center">User </th>
-            <th class="text-center">Quantity </th>
-            <th class="text-center">Total </th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Payment Method</th>
-            <th>Ordered at</th>
-            <th style="white-space: nowrap !important;"></th>
+            <th class="text-center">Name </th>
+            <th class="text-center">Brand </th>
+            <th class="text-center">Unit </th>
+            <th class="text-center">Discount </th>
+            <th class="text-center">Quantity</th>
+            <th class="text-center">Price</th>
+            <th style="white-space: nowrap !important;">Subtotal</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($data->orders as $order)
+          @foreach ($data->products as $product)
           <tr>
             <td class="text-center">{{ $loop->iteration }}</td>
-            <td class="text-center">{{ $order->id }}</td>
-            <td class="text-center">{{ $order->username }}</td>
-            <td class="text-center">{{ $order->quantity }}</td>
-            <td class="text-center">{{ "Rp. " . number_format($order->total, 0, '', '.') }}</td>
-            <td class="text-center">
-              <span class=" btn btn-tone {{
-                $order->status == 'pending' ? "btn-warning" :
-                ( $order->status == 'confirmed' ? "btn-success" :
-                ( $order->status == 'sending' ? "btn-secondary" :
-                ( $order->status == 'rejected' ? "btn-danger" : "btn-info")))  }}">
-
-                {{ ucfirst($order->status) }}
-
-              </span>
-            </td>
-            <td class="text-center">{{ $order->payment_method}}</td>
-            <td>{{ $order->created_at }}</td>
             <td>
-              <meta name="csrf-token" content="{{ csrf_token() }}"/>
-              <ul class="d-flex" style="list-style-type: none;">
-                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Detail">
-                  <a href="#" class="btn btn-sm btn-info"><i class="fas fa-info-circle" ></i></a>
-                </li>
-                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Confirm">
-                  {{-- <form method="post" action="{{ route('order.update') }}">
-                    @csrf
-                    @if(isset($order))
-                    @method('PUT')
-                    @endif
-                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
-                    <input type="hidden" name="status" value="confirmed"> --}}
-                    <button type="button" style="color:white;" class="btn btn-sm btn-success btn-submit" data-id="{{$order->id}}" data-status="confirmed"><i class="far fa-check-circle"></i></button>
-                  {{-- </form> --}}
-                </li>
-                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Sending">
-                  {{-- <form method="post" action="{{ route('order.update') }}">
-                    @csrf
-                    @if(isset($order))
-                    @method('PUT')
-                    @endif
-                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
-                    <input type="hidden" name="status" value="sending"> --}}
-                    <button type="button" style="color:white;" class="btn btn-sm btn-warning btn-submit" data-id="{{$order->id}}" data-status="sending"><i class="fas fa-truck-moving"></i></button>
-                  {{-- </form> --}}
-                </li>
-                <li class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Reject">
-                  {{-- <form method="post" action="{{ route('order.update') }}">
-                    @csrf
-                    @if(isset($order))
-                    @method('PUT')
-                    @endif
-                    <input type="hidden" name="transaction_id" value="{{$order->id}}">
-                    <input type="hidden" name="status" value="rejected"> --}}
-                    <button type="button" style="color:white;" class="btn btn-sm btn-danger btn-submit" data-id="{{$order->id}}" data-status="rejected"><i class="far fa-times-circle"></i></button>
-                  {{-- </form> --}}
-                </li>
-              </ul>
+              <a href="{{ route('product.show', $product->id) }}">
+                <div class="d-flex align-items-center">
+                  @if (count($product->images) > 0)
+                    <img class="img-fluid rounded" src="{{ url('images/products/'. $product->images[0]->url) }}" style="max-width: 60px" alt="">
+                  @else
+                    <img class="img-fluid rounded" src="{{ url('images/products/placeholder_medium.jpg') }}" style="max-width: 60px" alt="">
+                  @endif
+                    <h6 class="m-b-0 m-l-10">{{ $product->name }}</h6>
+                </div>
+              </a>
             </td>
+            <td>{{ $product->brand }}</td>
+            <td class="text-center">{{ $product->unit }}</td>
+            <td class="text-center">{{ $product->discount }}</td>
+            <td class="text-center">{{ $product->quantity}}</td>
+            <td>
+              @if ($product->discountPrice != 0)
+                {{ "Rp. " . number_format($product->discountPrice, 0, '', '.') }}
+                <br>
+                <small class="text-muted" style="text-decoration:line-through !important;">
+                  {{ "Rp. " . number_format($product->price, 0, '', '.') }}
+                </small>
+              @else
+                {{ "Rp. " . number_format($product->price, 0, '', '.') }}
+              @endif
+
+            </td>
+            <td>{{ "Rp. " . number_format($product->subtotal, 0, '', '.') }}</td>
           </tr>
           @endforeach
         </tbody>
@@ -132,68 +224,64 @@
   // TODO  : need to be edit
   $.fn.dataTable.ext.search.push(
     function(settings, data, dataIndex) {
-      var _search = $('#order-name-search').val();
-      var _dataId = data[0]; // use data for the id column
-      var _dataUsername = data[1]; // use data for the username column
-      var _dataQuantity = data[2]; // use data for the quantity column
-      var _dataTotal = data[3]; // use data for the total column
-      var _dataStatus = data[4]; // use data for the status column
+      var _search = $('#product-name-search').val();
+      var _dataName = data[1].toLowerCase(); // use data for the name column
+      var _dataBrand = data[2].toLowerCase(); // use data for the brand column
+      var _dataQuantity = data[5]; // use data for the quantity column
 
+      console.log(_dataName, _search);
       if (
-        _dataId.includes(_search) ||
-        _dataUsername.includes(_search) ||
-        _dataQuantity.includes(_search) ||
-        _dataTotal.includes(_search) ||
-        _dataStatus.includes(_search)) {
+        _dataName.includes(_search) ||
+        _dataBrand.includes(_search) ||
+        _dataQuantity.includes(_search)) {
         return true;
       }
       return false;
     }
   );
-
   $(document).ready(function() {
-    var orders_table = $('#order-data-table').DataTable({
+    var products_table = $('#product-data-table').DataTable({
       "columns": [
         {
-          'searchable': true,
+          'searchable': false,
           'orderable': true,
-        }, // index id
+        }, // index no
         {
           'searchable': true,
           'orderable': true,
-        }, // index username
+        }, // index name
+        {
+          'searchable': true,
+          'orderable': true,
+        }, // index brand
+        {
+          'searchable': false,
+          'orderable': false,
+        }, // index unit
+        {
+          'searchable': false,
+          'orderable': false,
+        }, // index discount
         {
           'searchable': true,
           'orderable': true,
         }, // index quantity
         {
-          'searchable': true,
+          'searchable': false,
           'orderable': false,
-        }, // index total
-        {
-          'searchable': true,
-          'orderable': true,
-        }, // index status
+        }, // index price
         {
           'searchable': false,
           'orderable': false,
-        }, // index payment method
-        {
-          'searchable': false,
-          'orderable': false,
-        }, // index ordered at
-        {
-          'searchable': false,
-          'orderable': false,
-        }, // index action
+        }, // index subtotal
       ],
       lengthChange: false,
       // searching : false
     });
-    $('#order-data-table_wrapper').children().first().remove();
+    $('#product-data-table_wrapper').children().first().remove();
 
-    $('#order-name-search').keyup(function() {
-      orders_table.search($(this).val()).draw();
+    $('#product-name-search').keyup(function() {
+      products_table.search($(this).val()).draw();
     });
 
     $('.btn-submit').click(function() {

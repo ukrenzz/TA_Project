@@ -23,12 +23,10 @@ class OrderController extends Controller
 		$_tempQuantity	= 0;
 		$_tempTotal			= 0;
 
-		foreach ($products as $product) {
-			$_subTotal = ((int)$product->price * (int)$product->quantity);
 
-			if((int)$product->discount != 0 || (int)$product->discount != null || $product->discount != ""){
-				$_subTotal *= ((int)$product->discount / 100);
-			}
+		foreach ($products as $product) {
+			$_price = $product->discount != 0 || $product->discount != null ? (int)$product->price - ((int)$product->price * ((int)$product->discount / 100)) : $product->price;
+			$_subTotal = ((int)$_price * (int)$product->quantity);
 
 			$_tempTotal += $_subTotal;
 
@@ -114,8 +112,11 @@ class OrderController extends Controller
 	 */
 	public function show($id)
 	{
-		$_transaction = Transaction::find($id);
-		$transaction = [];
+		$_transaction 	= Transaction::find($id);
+		$transaction 		= [];
+		$totalPrice			= 0;
+		$totalQuantity	= 0;
+
 		if($_transaction != null)
 		{
 			$transaction = Transaction::join('users', 'users.id', '=', 'transactions.user_id')
@@ -153,26 +154,42 @@ class OrderController extends Controller
 
 			foreach ($_products as $_product) {
 				$_tempImages = ProductImages::where('product_id', $_product->id)->select('url')->get();
+				$_discountPrice = $_product->discount != 0 || $_product->discount != null ? ((int)$_product->price - ((int)$_product->price * ((int)$_product->discount) / 100)) : 0;
+				$_subtotal = $_product->discount != 0 || $_product->discount != null ? ((int)$_product->quantity * (int)$_discountPrice) : (int)$_product->quantity * (int)$_product->price;
 
-				$_tempProduct = (object)[
-					'product_id' => $_product->id,
-					'name' => $_product->name,
-					'brand' => $_product->brand,
-					'price' => $_product->price,
-					'category' => $_product->category,
-					'unit' => $_product->unit,
-					'quantity' => $_product->quantity,
-					'images' => $_tempImages,
+				$_tempProduct 	= (object)[
+					'id' 							=> $_product->id,
+					'name' 						=> $_product->name,
+					'brand' 					=> $_product->brand,
+					'price' 					=> $_product->price,
+					'category' 				=> $_product->category,
+					'unit' 						=> $_product->unit,
+					'discount' 				=> $_product->discount,
+					'discountPrice' 	=> $_discountPrice,
+					'quantity' 				=> $_product->quantity,
+					'subtotal'				=> $_subtotal,
+					'images' 					=> $_tempImages,
 				];
+
+				$totalPrice += (int)$_tempProduct->subtotal;
+				$totalQuantity += (int)$_tempProduct->quantity;
 
 				array_push($productsData, $_tempProduct);
 			}
 				// dd($productsData);
 		}
+
+
+
 		$data = (object)[
-			'transaction' => $transaction,
-			'products' => $productsData,
+			'orders' => $transaction,
+			'products' => (object)$productsData,
+			'total' => (object)[
+				'price' => $totalPrice,
+				'quantity' => $totalQuantity,
+			],
 		];
+		// dd($data->products);
 		return view('admin.orders.detail', compact('data'));
 	}
 

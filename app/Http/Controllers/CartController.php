@@ -90,15 +90,10 @@ class CartController extends Controller
       $carts->quantity = ((int)$request->quantity + (int)$carts->quantity);
 
       $carts->save();
-
       $status = "success";
 
     }
-
-    return response()->json([
-      'action' => $action,
-      'status' => $status
-    ]);
+    return back()->with('status', 'Product is added to Cart!!');
 
   }
 

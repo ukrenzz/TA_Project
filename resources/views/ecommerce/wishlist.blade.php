@@ -66,7 +66,7 @@
 							@csrf
 							<input type="hidden" name="product_id" value="{{ isset($data) ? $wishlist->product_id : '' }}">
 							<input type="hidden" name="quantity" value="1">
-							<button class="btn_1">
+							<button type="submit" class="btn_1">
 								<span style="white-space: nowrap;"> Add to Cart</span>
 							</button>
 						</form>

@@ -325,7 +325,7 @@
     $wishlistCheckin = {{ $data->isWishlist ? 1 : 0 }};
 
     if($wishlistCheckin == 1){
-      $('#wishlistText').text("Remove to Wishlist");
+      $('#wishlistText').text("Remove from Wishlist");
       $('#wishlistIcon').addClass("ri-heart-fill color-primary");
     } else {
       $('#wishlistText').text("Add to Wishlist");
@@ -350,7 +350,7 @@
       },
       success: function(data) {
         if(data.action == "store" && data.status == "success"){
-          $('#wishlistText').text("Remove to Wishlist");
+          $('#wishlistText').text("Remove from Wishlist");
           $('#wishlistIcon').removeClass("ri-heart-line");
           $('#wishlistIcon').addClass("ri-heart-fill color-primary");
         }

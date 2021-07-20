@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImages;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -56,9 +57,26 @@ class SearchController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
+	public function visualSearchProcess($filename)
 	{
-		//
+		// dd('"'. public_path() . '/images/search/' . $filename . '"');
+		$threshold = shell_exec('python scripts/generate_ht_lt.py "'. public_path() . '/images/search/' . $filename . '"');
+		$threshold = json_decode($threshold);
+		$dbImages = ProductImages::where('color_feat_r', '>=', $threshold->ltR)
+															->where('color_feat_r', '<=', $threshold->htR)
+															->where('color_feat_g', '>=', $threshold->ltG)
+															->where('color_feat_g', '<=', $threshold->htG)
+															->where('color_feat_b', '>=', $threshold->ltB)
+															->where('color_feat_b', '<=', $threshold->htB)
+															->get();
+		if($dbImages != null){
+			$lbpQ = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/search/' . $filename . '"');
+			// dd(json_encode($lbpQ));
+			foreach($dbImages as $dbImage) {
+				$dbImage->shape_feature = shell_exec('python scripts/sm_lbp.py "' . json_encode($lbpQ) . '" "'. $dbImage->shape_feature . '"');
+				dd($dbImage->shape_feature);
+			}			
+		}
 	}
 
 	/**
@@ -78,7 +96,7 @@ class SearchController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id)
+	public function visualSearchRes()
 	{
 		//
 	}

@@ -95,9 +95,7 @@ def Canny_detector(img, weak_th = None, strong_th = None):
 	
 	# finally returning the magnitude of
 	# gradients of edges
-	with np.printoptions(threshold=np.inf):
-		print(mag, end="")
-	print(";", end="")
+	print(str(mag.tolist()), end=';')
 
 if __name__ == "__main__": 
 	imgInput = sys.argv[1]

@@ -70,7 +70,7 @@ def lbp_calculated_pixel(img, x, y):
 		
 	return val
 
-def generate_lbp(img_lbp, width, height):
+def generate_lbp(img_lbp, width, height, img_gray):
 	for i in range(0, height):
 		for j in range(0, width):
 			img_lbp[i, j] = lbp_calculated_pixel(img_gray, i, j)
@@ -95,13 +95,12 @@ img_lbp = np.zeros((height, width),
 				np.uint8)
 
 p = multiprocessing.Pool()
-args = [(img_lbp, width, height)]
+args = [(img_lbp, width, height, img_gray)]
 img_lbp = p.starmap(generate_lbp, args)
 
-# res = ""
-
-with np.printoptions(threshold=np.inf):
-	print(img_lbp)
+print(str(np.array(img_lbp).tolist()),end='')
+# with np.printoptions(threshold=np.inf):
+# 	print(img_lbp)
 	# res += str(img_lbp)
 # res = str(img_lbp)
 # print(res)

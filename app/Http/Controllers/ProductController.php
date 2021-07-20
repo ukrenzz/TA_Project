@@ -99,6 +99,8 @@ class ProductController extends Controller
           $named   = 'product_' . $image_product_id . '_' . $image_product_date . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
           $color = shell_exec('python scripts/generate_rgb_mean.py "' . public_path() . '/images/products/' . $named . '"');
+          $color = json_decode($color);
+          // dd($color);
           $lbp = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/products/' . $named . '"');
           $edge = shell_exec('python scripts/generate_cannyedge.py "' . public_path() . '/images/products/' . $named . '"');
           $dataImage = [
@@ -107,7 +109,9 @@ class ProductController extends Controller
             'width'       => $imageThumbnail->width(),
             'height'      => $imageThumbnail->height(),
             'size'        => $filesize,
-            'color_feature' => $color,
+            'color_feat_r' => $color->r,
+            'color_feat_g' => $color->g,
+            'color_feat_b' => $color->b,
             'shape_feature' => $lbp,
             'edge_feature' => $edge
           ];
@@ -157,6 +161,7 @@ class ProductController extends Controller
           $named   = 'product_' . $image_product_id . '_' . $image_product_date . '_' . $numbering++ . '.' . $image->getClientOriginalExtension();
           $image->move(public_path() . '/images/products', $named);
           $color = shell_exec('python scripts/generate_rgb_mean.py "' . public_path() . '/images/products/' . $named . '"');
+          $color = json_decode($color);
           $lbp = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/products/' . $named . '"');
           $edge = shell_exec('python scripts/generate_cannyedge.py "' . public_path() . '/images/products/' . $named . '"');
           $dataImage = [
@@ -164,8 +169,10 @@ class ProductController extends Controller
             'url'         => $named,
             'width'       => $imageThumbnail->width(),
             'height'      => $imageThumbnail->height(),
-            'size'        => $filesize,
-            'color_feature' => $color,
+            'size'        => $filesize,            
+            'color_featR' => $color->r,
+            'color_featG' => $color->g,
+            'color_featB' => $color->b,
             'shape_feature' => $lbp,
             'edge_feature' => $edge
           ];

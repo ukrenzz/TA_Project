@@ -1,7 +1,7 @@
 import mysql.connector
 import cv2
 import numpy as np
-import multiprocessing
+from multiprocessing import Pool
 import sys
 from ast import literal_eval
 import json
@@ -208,10 +208,8 @@ def sm_edge(img_edgeR, img_edgeG, img_edgeB, queries):
 	for idx in range(len(queries)):
 		edge_sm = np.empty(576)
 		queries[idx] = list(queries[idx])
-		edge = queries[idx][2].split(";")
-		del edge[3]
-		edge = [literal_eval(edge_element) for edge_element in edge]
-		edge_sm = np.absolute(img_edgeR - np.array(edge[0])) + np.absolute(img_edgeR - np.array(edge[1])) + np.absolute(img_edgeR - np.array(edge[2])) 
+		edge = literal_eval(queries[idx][2])
+		edge_sm = np.absolute(img_edgeR - np.array(edge[0]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[1]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[2]).astype(np.float64)) 
 		queries[idx][2] = edge_sm
 	# 		i+=1
 	# except:
@@ -261,7 +259,7 @@ img_gray = cv2.cvtColor(resized_img,cv2.COLOR_BGR2GRAY)
 
 img_lbp = np.zeros((height, width),np.uint8)
 
-p = multiprocessing.Pool()
+p = Pool()
 args = [(img_lbp, width, height)]
 img_lbp = p.starmap(generate_lbp, args)
 queries = getData(db)
@@ -272,22 +270,15 @@ sm_norm_args = [queries]
 queries = p.map(norm_sm_lbp, sm_norm_args)[0]
 
 imgR, imgG, imgB = cv2.split(resized_img)
-# creating processes
-p1 = multiprocessing.Process(target=Canny_detector, args=([imgR]))
-p2 = multiprocessing.Process(target=Canny_detector, args=([imgG]))
-p3 = multiprocessing.Process(target=Canny_detector, args=([imgB]))
-p1.start()
-p2.start()
-p3.start()
-p1.join()
-p2.join()
-p3.join()
-sm_edge_args = [(imgR, imgG, imgB, queries)]
-queries = p.starmap(sm_edge, sm_edge_args)[0]
-sm_norm_args = [queries]
-queries = p.map(norm_sm_edge, sm_norm_args)[0]
-sm_norm_args = [queries]
-res = p.map(result, sm_norm_args)[0]
+args = (imgR, imgG, imgB)
+with Pool() as pool:
+	res = pool.map(Canny_detector, args)
+imgR = res[0]
+imgG = res[1]
+imgB = res[2]
+queries = sm_edge(imgR, imgG, imgB, queries)
+queries = norm_sm_edge(queries)
+res = result(queries)
 res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
 if(len(color_queries) > 0):
 	for idx in range(len(color_queries)):

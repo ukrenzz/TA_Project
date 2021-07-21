@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 import cv2
-import multiprocessing
+from multiprocessing import Pool
 import matplotlib.pyplot as plt
 
 
@@ -95,7 +95,7 @@ def Canny_detector(img, weak_th = None, strong_th = None):
 	
 	# finally returning the magnitude of
 	# gradients of edges
-	print(str(mag.tolist()), end=';')
+	return str(mag.tolist())
 
 if __name__ == "__main__": 
 	imgInput = sys.argv[1]
@@ -103,21 +103,10 @@ if __name__ == "__main__":
 	resized_img = cv2.resize(img, (576, 576))
 	imgR, imgG, imgB = cv2.split(resized_img)
 
-	canny_img = []
-	# creating processes
-	p1 = multiprocessing.Process(target=Canny_detector, args=([imgR]))
-	p2 = multiprocessing.Process(target=Canny_detector, args=([imgG]))
-	p3 = multiprocessing.Process(target=Canny_detector, args=([imgB]))
-    # starting process 1
-	p1.start()
-    # starting process 2
-	p2.start()
-	p3.start()
-    # wait until process 1 is finished
-	p1.join()
-    # wait until process 2 is finished
-	p2.join()
-	p3.join()
+	args = (imgR, imgG, imgB)
+	with Pool() as pool:
+		res = pool.map(Canny_detector, args)
+	print(",".join(res))
 	# calling the designed function for
 	# finding edges
 	# canny_img.append(Canny_detector(imgR)) 

@@ -6,18 +6,40 @@ import sys
 from ast import literal_eval
 import json
 
-def getDB(): 
-    db = mysql.connector.connect (
-        host="localhost",
-        user="root",
-        password="",
-        database="db_neko_project"
-    )
+def get_mean_rgb(img):
+  avg_color_per_row = np.average(img, axis=0)
+  return np.average(avg_color_per_row, axis=0)
 
-    dbCur = db.cursor()
-    dbCur.execute("select product_id, shape_feature, edge_feature, id from product_images")
+def get_stdev(img):
+  sdv_color_per_row = np.std(img, axis=0)
+  return np.std(sdv_color_per_row, axis=0)
 
-    return dbCur.fetchall()
+def get_ht_lt(img):
+	mean_rgb = get_mean_rgb(resized_img)
+	stdev_rgb = get_stdev(resized_img)
+
+	HT = [0]*3
+	LT = [0]*3
+
+	for i in range(3):
+		HT[i] = mean_rgb[i] + stdev_rgb[i]
+		LT[i] = mean_rgb[i] - stdev_rgb[i]
+	return HT+LT
+
+def getColorThreshold(img, cat, db): 
+	#Get HT and LT
+	color_feat = get_ht_lt(img)
+
+	dbCur = db.cursor()
+	dbCur.execute("select images.product_id, images.shape_feature, images.edge_feature, images.id FROM `product_images` as images WHERE (images.color_feat_r >= {1} and images.color_feat_r <= {2}) or (images.color_feat_g >= {3} and images.color_feat_g <= {4}) or (images.color_feat_b >= {5} and images.color_feat_b <= {6}) and product_id in (select id from `products` where category_id = (select id from `categories` where name = '{0}'))".format(cat, color_feat[3], color_feat[0], color_feat[4], color_feat[1], color_feat[5], color_feat[2]))
+
+	return dbCur.fetchall()
+
+def getData(db):
+	dbCur = db.cursor()
+	dbCur.execute("select images.product_id, images.shape_feature, images.edge_feature, images.id FROM `product_images` as images WHERE product_id in (select id from `products` where category_id = (select id from `categories` where name = '{0}'))".format(cat))
+
+	return dbCur.fetchall()
 
 def get_pixel(img, center, x, y):
 	
@@ -212,17 +234,26 @@ def result(queries):
 		queries[idx][1] = literal_eval(queries[idx][1])
 		queries[idx][1] = np.array(queries[idx][1]).astype(np.float64)
 		queries[idx][2] = np.array(queries[idx][2]).astype(np.float64)
+		# print(idx, queries[idx][0])
 		if((queries[idx][0]) in res):
 			tmp = np.sum(queries[idx][1] + queries[idx][2])
 			if(tmp > res[queries[idx][0]]):
 				res[queries[idx][0]] = tmp			
 		else:
-			res[queries[idx][0]] = np.sum(queries[idx][1] + queries[idx][2])
+			res[queries[idx][0]] = (np.sum(queries[idx][1] + queries[idx][2]))
 	return res
 
 imgInput = sys.argv[1]
+cat = sys.argv[2]
 img = cv2.imread(imgInput, 1)
 resized_img = cv2.resize(img, (576, 576))
+
+db = mysql.connector.connect (
+		host="localhost",
+		user="root",
+		password="",
+		database="db_neko_project"
+)
 
 height, width, _ = resized_img.shape
 
@@ -233,7 +264,8 @@ img_lbp = np.zeros((height, width),np.uint8)
 p = multiprocessing.Pool()
 args = [(img_lbp, width, height)]
 img_lbp = p.starmap(generate_lbp, args)
-queries = getDB()
+queries = getData(db)
+color_queries = getColorThreshold(img, cat, db)
 sm_lbp_args = [(img_lbp, queries)]
 queries = p.starmap(sm_lbp, sm_lbp_args)[0]
 sm_norm_args = [queries]
@@ -257,6 +289,10 @@ queries = p.map(norm_sm_edge, sm_norm_args)[0]
 sm_norm_args = [queries]
 res = p.map(result, sm_norm_args)[0]
 res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
-print(json_dumps(res))
+if(len(color_queries) > 0):
+	for idx in range(len(color_queries)):
+		res[color_queries[idx][0]] *= 10
+	res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
+print(json.dumps(res))
 
 

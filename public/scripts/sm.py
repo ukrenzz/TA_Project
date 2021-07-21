@@ -257,6 +257,6 @@ queries = p.map(norm_sm_edge, sm_norm_args)[0]
 sm_norm_args = [queries]
 res = p.map(result, sm_norm_args)[0]
 res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
-print(res)
+print(json_dumps(res))
 
 

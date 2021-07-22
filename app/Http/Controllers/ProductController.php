@@ -170,9 +170,9 @@ class ProductController extends Controller
             'width'       => $imageThumbnail->width(),
             'height'      => $imageThumbnail->height(),
             'size'        => $filesize,            
-            'color_featR' => $color->r,
-            'color_featG' => $color->g,
-            'color_featB' => $color->b,
+            'color_feat_r' => $color->r,
+            'color_feat_g' => $color->g,
+            'color_feat_b' => $color->b,
             'shape_feature' => $lbp,
             'edge_feature' => $edge
           ];

@@ -26,6 +26,14 @@
         <div class="row">
           <div class="col-12 mb-3">
             <button id="startAndStop" class="btn_1"><i class="ri-live-line"></i> Start Video</button>
+            
+            <form action="{{route('search.visual.result')}}" method="POST" id="visual_process">
+              {{-- <meta name="csrf-token" content="{{ csrf_token() }}" />   --}}
+              @csrf
+              <input type="hidden" name="filename" value="">
+              <input type="hidden" name="category" value="">
+            </form>
+            <button id="processed" class="btn_1"> Testing</button>
           </div>
           <div class="col-12">
             <video id="videoInput" width="320" height="240"></video>
@@ -370,5 +378,46 @@
         }
       }      
     }
+  </script>
+
+  <script type="text/javascript">
+    $('#processed').click(function(e){
+      e.preventDefault();
+
+      $('input[name="filename"]').val("testing-1.png");
+      $('input[name="category"]').val("camera");
+
+      // console.log($('input[name="filename"]').val(), $('input[name="category"]').val())
+
+      $('#visual_process').submit();
+
+      // var _token = $("meta[name='csrf-token']").attr("content"");
+      // var _filename = "testing-1.png";
+      // var _category = "camera";
+
+      // // console.log($('textarea[name="note"]').val());
+
+      // $.ajax({
+      //   url: "",
+      //   type: 'POST',
+      //   data: {
+      //     "filename": _filename,
+      //     "category": _category,
+      //     "_token": _token,
+      //   },
+      //   success: function(data) {
+      //     swal({
+      //       title: "Product added to order!",
+      //       text: "Check cart for payment.",
+      //       icon: "success",
+      //       timer: 1300
+      //     });
+
+      //     setTimeout(function() {
+      //       top.location.href = "{{route('transaction.success')}}";
+      //     }, 500);
+      //   }
+      // });
+    });
   </script>
 @endsection

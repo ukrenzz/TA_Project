@@ -63,7 +63,7 @@
             <tr>
               <td class="text-center">{{ $loop->iteration }}</td>
               <td>
-                <?php echo substr($product->product_name, 0, 20) . '...' ?>
+                <?php echo $product->product_name ?>
               </td>
               <td>{{ $product->brand }}</td>
               <td>{{ $product->product_category }}</td>

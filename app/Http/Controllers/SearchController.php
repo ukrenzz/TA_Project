@@ -59,26 +59,52 @@ class SearchController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function visualSearchProcess($filename)
+	public function visualSearchProcess(Request $req)
 	{
-		// dd('"'. public_path() . '/images/search/' . $filename . '"');
-		$threshold = shell_exec('python scripts/generate_ht_lt.py "'. public_path() . '/images/search/' . $filename . '"');
-		$threshold = json_decode($threshold);
-		$dbImages = ProductImages::where('color_feat_r', '>=', $threshold->ltR)
-															->where('color_feat_r', '<=', $threshold->htR)
-															->where('color_feat_g', '>=', $threshold->ltG)
-															->where('color_feat_g', '<=', $threshold->htG)
-															->where('color_feat_b', '>=', $threshold->ltB)
-															->where('color_feat_b', '<=', $threshold->htB)
-															->get();
-		if($dbImages != null){
-			$lbpQ = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/search/' . $filename . '"');
-			// dd(json_encode($lbpQ));
-			foreach($dbImages as $dbImage) {
-				$dbImage->shape_feature = shell_exec('python scripts/sm_lbp.py "' . json_encode($lbpQ) . '" "'. $dbImage->shape_feature . '"');
-				dd($dbImage->shape_feature);
-			}			
+		$filename = $req->filename;
+		$category = $req->category;
+
+		$_imagePath = '"' . public_path('/images/search/' . $filename) . '"';
+		$_parameter = $_imagePath . " " . $category;
+
+		// dd($_parameter);
+
+		$_searchData = shell_exec('python scripts/sm.py ' . $_parameter);
+		$_searchData = json_decode($_searchData, true);
+
+		$searchData = [];
+
+		// 181, 177, 179
+		foreach($_searchData as $data => $key){
+			array_push($searchData, $data);
 		}
+		$ids_ordered = implode(',', $searchData);
+		// dd($searchData);
+		
+		$products = Product::whereIn('id', $searchData)->orderByRaw("FIELD(id, $ids_ordered)")->paginate(16);
+		$categories = Category::orderBy('name', 'asc')->get();
+		$data = (object)[
+			'products' => $products,
+			'categories' => $categories,
+		];
+
+		return view('ecommerce/visual-search-result', ['data' => $data]);
+
+		// $dbImages = ProductImages::where('color_feat_r', '>=', $threshold->ltR)
+		// 													->where('color_feat_r', '<=', $threshold->htR)
+		// 													->where('color_feat_g', '>=', $threshold->ltG)
+		// 													->where('color_feat_g', '<=', $threshold->htG)
+		// 													->where('color_feat_b', '>=', $threshold->ltB)
+		// 													->where('color_feat_b', '<=', $threshold->htB)
+		// 													->get();
+		// if($dbImages != null){
+		// 	$lbpQ = shell_exec('python scripts/generate_lbp.py "' . public_path() . '/images/search/' . $filename . '"');
+		// 	// dd(json_encode($lbpQ));
+		// 	foreach($dbImages as $dbImage) {
+		// 		$dbImage->shape_feature = shell_exec('python scripts/sm_lbp.py "' . json_encode($lbpQ) . '" "'. $dbImage->shape_feature . '"');
+		// 		dd($dbImage->shape_feature);
+		// 	}			
+		// }
 	}
 
 	/**
@@ -100,7 +126,14 @@ class SearchController extends Controller
 	 */
 	public function visualSearchRes()
 	{
-		//
+		$products = Product::orderBy('name', 'asc')->paginate(20);
+		$categories = Category::orderBy('name', 'asc')->get();
+		$data = (object)[
+			'products' => $products,
+			'categories' => $categories,
+		];
+
+		return view('ecommerce/visual-search-result', ['data' => $data]);
 	}
 
 	/**

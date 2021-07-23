@@ -26,7 +26,7 @@ def get_ht_lt(img):
 		LT[i] = mean_rgb[i] - stdev_rgb[i]
 	return HT+LT
 
-def getColorThreshold(img, cat, db): 
+def getColorThreshold(img, cat, db):
 	#Get HT and LT
 	color_feat = get_ht_lt(img)
 
@@ -42,16 +42,16 @@ def getData(db):
 	return dbCur.fetchall()
 
 def get_pixel(img, center, x, y):
-	
+
 	new_value = 0
-	
+
 	try:
 		if img[x][y] >= center:
 			new_value = 1
-			
+
 	except:
 		pass
-	
+
 	return new_value
 
 # Function for calculating LBP
@@ -60,40 +60,40 @@ def lbp_calculated_pixel(img, x, y):
 	center = img[x][y]
 
 	val_ar = []
-	
+
 	# top_left
 	val_ar.append(get_pixel(img, center, x-1, y-1))
-	
+
 	# top
 	val_ar.append(get_pixel(img, center, x-1, y))
-	
+
 	# top_right
 	val_ar.append(get_pixel(img, center, x-1, y + 1))
-	
+
 	# right
 	val_ar.append(get_pixel(img, center, x, y + 1))
-	
+
 	# bottom_right
 	val_ar.append(get_pixel(img, center, x + 1, y + 1))
-	
+
 	# bottom
 	val_ar.append(get_pixel(img, center, x + 1, y))
-	
+
 	# bottom_left
 	val_ar.append(get_pixel(img, center, x + 1, y-1))
-	
+
 	# left
 	val_ar.append(get_pixel(img, center, x, y-1))
-	
+
 	# Now, we need to convert binary
 	# values to decimal
 	power_val = [1, 2, 4, 8, 16, 32, 64, 128]
 
 	val = 0
-	
+
 	for i in range(len(val_ar)):
 		val += val_ar[i] * power_val[i]
-		
+
 	return val
 
 def generate_lbp(img_lbp, width, height):
@@ -118,61 +118,61 @@ def norm_sm_lbp(queries):
 	return queries
 
 def Canny_detector(img, weak_th = None, strong_th = None):
-		
+
 	# Noise reduction step
 	img = cv2.GaussianBlur(img, (5, 5), 1.4)
-	
+
 	# Calculating the gradients
 	gx = cv2.Sobel(np.float32(img), cv2.CV_64F, 1, 0, 3)
 	gy = cv2.Sobel(np.float32(img), cv2.CV_64F, 0, 1, 3)
-	
+
 	# Conversion of Cartesian coordinates to polar
 	mag, ang = cv2.cartToPolar(gx, gy, angleInDegrees = True)
-	
+
 	# setting the minimum and maximum thresholds
 	# for double thresholding
 	mag_max = np.max(mag)
 	if not weak_th:weak_th = mag_max * 0.1
 	if not strong_th:strong_th = mag_max * 0.5
-	
+
 	# getting the dimensions of the input image
 	height, width = img.shape
-	
+
 	# Looping through every pixel of the grayscale
 	# image
 	for i_x in range(width):
 		for i_y in range(height):
-			
+
 			grad_ang = ang[i_y, i_x]
 			grad_ang = abs(grad_ang-180) if abs(grad_ang)>180 else abs(grad_ang)
-			
+
 			# selecting the neighbours of the target pixel
 			# according to the gradient direction
 			# In the x axis direction
 			if grad_ang<= 22.5:
 				neighb_1_x, neighb_1_y = i_x-1, i_y
 				neighb_2_x, neighb_2_y = i_x + 1, i_y
-			
+
 			# top right (diagnol-1) direction
 			elif grad_ang>22.5 and grad_ang<=(22.5 + 45):
 				neighb_1_x, neighb_1_y = i_x-1, i_y-1
 				neighb_2_x, neighb_2_y = i_x + 1, i_y + 1
-			
+
 			# In y-axis direction
 			elif grad_ang>(22.5 + 45) and grad_ang<=(22.5 + 90):
 				neighb_1_x, neighb_1_y = i_x, i_y-1
 				neighb_2_x, neighb_2_y = i_x, i_y + 1
-			
+
 			# top left (diagnol-2) direction
 			elif grad_ang>(22.5 + 90) and grad_ang<=(22.5 + 135):
 				neighb_1_x, neighb_1_y = i_x-1, i_y + 1
 				neighb_2_x, neighb_2_y = i_x + 1, i_y-1
-			
+
 			# Now it restarts the cycle
 			elif grad_ang>(22.5 + 135) and grad_ang<=(22.5 + 180):
 				neighb_1_x, neighb_1_y = i_x-1, i_y
 				neighb_2_x, neighb_2_y = i_x + 1, i_y
-			
+
 			# Non-maximum suppression step
 			if width>neighb_1_x>= 0 and height>neighb_1_y>= 0:
 				if mag[i_y, i_x]<mag[neighb_1_y, neighb_1_x]:
@@ -184,15 +184,15 @@ def Canny_detector(img, weak_th = None, strong_th = None):
 					mag[i_y, i_x]= 0
 
 	weak_ids = np.zeros_like(img)
-	strong_ids = np.zeros_like(img)			
+	strong_ids = np.zeros_like(img)
 	ids = np.zeros_like(img)
-	
+
 	# double thresholding step
 	for i_x in range(width):
 		for i_y in range(height):
-			
+
 			grad_mag = mag[i_y, i_x]
-			
+
 			if grad_mag<weak_th:
 				mag[i_y, i_x]= 0
 			elif strong_th>grad_mag>= weak_th:
@@ -209,7 +209,7 @@ def sm_edge(img_edgeR, img_edgeG, img_edgeB, queries):
 		edge_sm = np.empty(576)
 		queries[idx] = list(queries[idx])
 		edge = literal_eval(queries[idx][2])
-		edge_sm = np.absolute(img_edgeR - np.array(edge[0]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[1]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[2]).astype(np.float64)) 
+		edge_sm = np.absolute(img_edgeR - np.array(edge[0]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[1]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[2]).astype(np.float64))
 		queries[idx][2] = edge_sm
 	# 		i+=1
 	# except:
@@ -236,7 +236,7 @@ def result(queries):
 		if((queries[idx][0]) in res):
 			tmp = np.sum(queries[idx][1] + queries[idx][2])
 			if(tmp > res[queries[idx][0]]):
-				res[queries[idx][0]] = tmp			
+				res[queries[idx][0]] = tmp
 		else:
 			res[queries[idx][0]] = (np.sum(queries[idx][1] + queries[idx][2]))
 	return res
@@ -283,7 +283,7 @@ res = dict(sorted(res.items(), key=lambda item: item[1]))
 if(len(color_queries) > 0):
 	for idx in range(len(color_queries)):
 		if(color_queries[idx][0] in res):
-			res[color_queries[idx][0]] *= 10
+			res[color_queries[idx][0]] /= 10
 	res = dict(sorted(res.items(), key=lambda item: item[1]))
 print(json.dumps(res))
 

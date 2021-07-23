@@ -65,16 +65,25 @@
 @section('user_defined_script')
   {{-- <script src="{{ asset('ecommerce/js/sticky_sidebar.min.js') }}"></script> --}}
   {{-- <script src="{{ asset('ecommerce/js/specific_listing.js') }}"></script> --}}
-  <script src="{{ asset('vendors/opencv/opencv.js') }}"></script>
+  <script async src="{{ asset('vendors/opencv/loader.js') }}" onload="onOpenCvReady()"></script>
   <script src="{{ asset('vendors/opencv/utils.js') }}"></script>
-
+  <script defer src="{{ asset('yolo/vs.js') }}"></script>
   <script type="text/javascript">
-
+  
+  function onOpenCvReady() {
+    console.log("obisa")
+    setTimeout(() => {
+      console.log(cv.getBuildInformation());
+    }, 0)
     let utils = new Utils('errorMessage');
 
     let videoInput = document.getElementById('videoInput');
     let streaming = false;
     let startAndStop = document.getElementById('startAndStop');
+
+    cv['onRuntimeInitialized']=()=>{
+      console.log("ok")
+    }
 
     loadModel = async function(e) {
       return new Promise((resolve) => {
@@ -93,21 +102,10 @@
                 console.error('Failed to load ' + url + ' status: ' + request.status);
             }
         }
-        // let reader = new FileReader();
-        // // reader.readAsArrayBuffer(request.response);
-        // reader.onload = function(ev) {
-        //   if (reader.readyState === 2) {
-        //     // let buffer = reader.result;
-        //     let data = new Uint8Array(request.response);
-        //     cv.FS_createDataFile('/', path, data, true, false, false);
-        //     resolve(path);
-        //   }
-        // }
       };
       request.send();        
       });
     }
-
     loadLables = async function(labelsUrl) {
       let response = await fetch(labelsUrl);
       let label = await response.text();
@@ -128,12 +126,8 @@
 
     // url for label file, can from local or Internet
     labelsUrl = "{{ asset('yolo/yolov4.txt') }}";
-
-    cv['onRuntimeInitialized']=()=>{
-      let videoInput = document.getElementById('videoInput');
       let frame = new cv.Mat(videoInput.height, videoInput.width, cv.CV_8UC4);
       let cap = new cv.VideoCapture(videoInput);
-      let utils = new Utils('errorMessage');
       let configPath = ("{{ asset('yolo/yolov4.cfg') }}");
       let modelPath = ("{{ asset('yolo/yolov4.weights') }}");
       let load = 0;
@@ -156,6 +150,8 @@
       }
 
       init();
+
+      
 
       main = async function(frame) {
         try{
@@ -340,6 +336,7 @@
       }
 
       startAndStop.addEventListener('click', () => {
+        console.log("iodi")
           if (!streaming) {
               // utils.clearError();
               utils.startCamera('qvga', onVideoStarted, 'videoInput');
@@ -384,8 +381,9 @@
         } catch(e) {
             console.log(e);
         }
-      }      
-    }
+      }
+  }
+    
   </script>
 
   <script type="text/javascript">

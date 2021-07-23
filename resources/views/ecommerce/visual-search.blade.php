@@ -27,11 +27,19 @@
           <div class="col-12 mb-3">
             <button id="startAndStop" class="btn_1"><i class="ri-live-line"></i> Start Video</button>
             
-            <form action="{{route('search.visual.result')}}" method="POST" id="visual_process">
+            <form class="mt-5" action="{{route('search.visual.result')}}" method="POST" id="visual_process">
               {{-- <meta name="csrf-token" content="{{ csrf_token() }}" />   --}}
               @csrf
-              <input type="hidden" name="filename" value="">
-              <input type="hidden" name="category" value="">
+              <input type="text" name="filename" value="">
+              {{-- <input type="text" name="category" value=""> --}}
+              <select name="category" id="">
+                <option value="Camera" selected>Camera</option>
+                <option value="Keyboard">Keyboard</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Mouse">Mouse</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Printer">Printer</option>
+              </select>
             </form>
             <button id="processed" class="btn_1"> Testing</button>
           </div>
@@ -384,11 +392,12 @@
     $('#processed').click(function(e){
       e.preventDefault();
 
-      $('input[name="filename"]').val("testing-1.png");
-      $('input[name="category"]').val("camera");
+      var _category = $('select[name="category"]').val();
+      var _filename = _category + "\\" + $('input[name="filename"]').val();
+      
 
       // console.log($('input[name="filename"]').val(), $('input[name="category"]').val())
-
+      // console.log(_category, _filename);
       $('#visual_process').submit();
 
       // var _token = $("meta[name='csrf-token']").attr("content"");

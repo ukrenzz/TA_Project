@@ -279,11 +279,12 @@ imgB = res[2]
 queries = sm_edge(imgR, imgG, imgB, queries)
 queries = norm_sm_edge(queries)
 res = result(queries)
-res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
+res = dict(sorted(res.items(), key=lambda item: item[1]))
 if(len(color_queries) > 0):
 	for idx in range(len(color_queries)):
-		res[color_queries[idx][0]] *= 10
-	res = dict(sorted(res.items(), key=lambda item: item[1], reverse=True))
+		if(color_queries[idx][0] in res):
+			res[color_queries[idx][0]] *= 10
+	res = dict(sorted(res.items(), key=lambda item: item[1]))
 print(json.dumps(res))
 
 

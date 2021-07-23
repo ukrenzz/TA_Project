@@ -42,6 +42,8 @@ class SearchController extends Controller
 	 */
 	public function visualSearchIndex()
 	{
+		header("Cross-Origin-Embedder-Policy: require-corp");
+		header("Cross-Origin-Opener-Policy: same-origin");
 		$products = Product::orderBy('name', 'asc')->paginate(20);
 		$categories = Category::orderBy('name', 'asc')->get();
 		$data = (object)[

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +11,8 @@
       position: fixed;
       border: 1px solid yellow;
     }
-    .backvideo{
+
+    .backvideo {
       content: " ";
       display: block;
       position: relative;
@@ -18,18 +20,21 @@
       height: 100%;
       width: 100%;
     }
-    .bb-box{
+
+    .bb-box {
       content: " ";
       display: block;
       position: absolute;
     }
-    .boundaryBox{
+
+    .boundaryBox {
       content: " ";
       position: absolute;
       display: inline-block;
-      border:2px solid pink;
+      border: 2px solid pink;
     }
-    .boundary-box-label{
+
+    .boundary-box-label {
       position: absolute;
       width: 100%;
       text-align: center;
@@ -40,6 +45,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="contentarea">
     <div class="camera">
@@ -50,8 +56,6 @@
 
           </div>
         </div>
-        <!-- <div class="boundaryBox bb-1"></div> -->
-        <!-- <div class="boundaryBox bb-2"></div> -->
         <video id="video" class="videos">Video stream not available.</video>
       </div>
       <button id="startbutton">Take photo</button>
@@ -60,7 +64,8 @@
     </canvas>
   </div>
 
-  <script src="http://localhost:3000/assets/vendors/opencv/utils.js?v=1.0"></script>
+  <!-- <script src="http://localhost:3000/assets/vendors/opencv/utils.js?v=1.0"></script> -->
+  <script src="utils.js?v=1.0"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     var width = 320; // We will scale the photo width to this
@@ -94,58 +99,58 @@
     }
 
     function startup() {
-        video = document.getElementById('video');
-        canvas = document.getElementById('canvas');
-        photo = document.getElementById('photo');
-        startbutton = document.getElementById('startbutton');
+      video = document.getElementById('video');
+      canvas = document.getElementById('canvas');
+      photo = document.getElementById('photo');
+      startbutton = document.getElementById('startbutton');
 
-        utils.startCamera('vga', onVideoStarted, 'video');
-        var clicked = false;
+      utils.startCamera('vga', onVideoStarted, 'video');
+      var clicked = false;
 
-        function onVideoStarted() {
-          takepicture();
-          setTimeout(() => {
-            takepicture()
-            onVideoStarted()
-          }, 500);
+      function onVideoStarted() {
+        takepicture();
+        setTimeout(() => {
+          takepicture()
+          onVideoStarted()
+        }, 500);
+      }
+
+      video.addEventListener('canplay', function (ev) {
+        if (!streaming) {
+          height = video.videoHeight / (video.videoWidth / width);
+
+          // Firefox currently has a bug where the height can't be read from
+          // the video, so we will make assumptions if this happens.
+
+          if (isNaN(height)) {
+            height = width / (4 / 3);
+          }
+
+          video.setAttribute('width', width);
+          video.setAttribute('height', height);
+          canvas.setAttribute('width', width);
+          canvas.setAttribute('height', height);
+          streaming = true;
         }
+      }, false);
 
-        video.addEventListener('canplay', function(ev) {
-            if (!streaming) {
-                height = video.videoHeight / (video.videoWidth / width);
+      startbutton.addEventListener('click', function (ev) {
+        takepicture();
+        ev.preventDefault();
+      }, false);
 
-                // Firefox currently has a bug where the height can't be read from
-                // the video, so we will make assumptions if this happens.
-
-                if (isNaN(height)) {
-                    height = width / (4 / 3);
-                }
-
-                video.setAttribute('width', width);
-                video.setAttribute('height', height);
-                canvas.setAttribute('width', width);
-                canvas.setAttribute('height', height);
-                streaming = true;
-            }
-        }, false);
-
-        startbutton.addEventListener('click', function(ev) {
-            takepicture();
-            ev.preventDefault();
-        }, false);
-
-        clearphoto();
+      clearphoto();
     }
 
     // Fill the photo with an indication that none has been
     // captured.
 
     function clearphoto() {
-        var context = canvas.getContext('2d');
-        context.fillStyle = "#AAA";
-        context.fillRect(0, 0, canvas.width, canvas.height);
+      var context = canvas.getContext('2d');
+      context.fillStyle = "#AAA";
+      context.fillRect(0, 0, canvas.width, canvas.height);
 
-        var data = canvas.toDataURL('image/png');
+      var data = canvas.toDataURL('image/png');
     }
 
     // Capture a photo by fetching the current contents of the video
@@ -154,83 +159,81 @@
     // drawing that to the screen, we can change its size and/or apply
     // other changes before drawing it.
 
-      function takepicture() {
-        console.log("masuk");
-        video = document.getElementById('video');
-        var context = canvas.getContext('2d');
-        if (width && height) {
-            canvas.width = width;
-            canvas.height = height;
-            context.drawImage(video, 0, 0, width, height);
+    function takepicture() {
+      console.log("masuk");
+      video = document.getElementById('video');
+      var context = canvas.getContext('2d');
+      if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
 
-            var data = canvas.toDataURL('image/png');
-            data = data.replace("data:image/png;base64,", "");
+        var data = canvas.toDataURL('image/png');
+        data = data.replace("data:image/png;base64,", "");
 
-            $.ajax({
-                type: "POST",
-                url: "http://127.0.0.1:5000/api/v1/yolo",
-                contentType:'application/json;charset=UTF-8',
-                headers: {
-                  'Access-Control-Allow-Origin': '*',
-                },
-                data: JSON.stringify({
-                    imgBase64: data,
-                }),
-                cache: false,
-                success: (data) => {
-                  data = JSON.parse(JSON.stringify(data))
-                  $("div.bbox").remove();
-                  for(var i = 0; i < Object.keys(data).length; i++){
-                    var bbox = document.createElement('div');
-                    bbox.id = 'bbox' + i;
-                    bbox.className = 'bbox';
-                    bbox.style.left = data[i].x;
-                    bbox.style.top = data[i].y;
-                    bbox.style.width = data[i].w;
-                    bbox.style.height = data[i].h;
-                    video.appendChild(bbox);
-                    console.log("ok");
-                  }
-                }
-            }).done(function(o) {
-                console.log('saved');
-            });
-        } else {
-            clearphoto();
-        }
+        $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:5000/api/v1/yolo",
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+          data: JSON.stringify({
+            imgBase64: data,
+          }),
+          cache: false,
+          success: (data) => {
+            data = JSON.parse(JSON.stringify(data))
+            if(!Object.keys(data).length) return; 
+            console.log(Object.keys(data).length, data[0].label, data[0].y, data[0].x, data[0].w, data[0].h)
+            // $(".boundaryBoxList").remove();
+            for (var i = 0; i < Object.keys(data).length; i++) {
+              console.log("creating bbox");
+              addBoundaryBox($('.boundaryBoxList'), data[i].label, data[i].y, data[i].x, data[i].w, data[i].h, i);
+              console.log("bbox created");
+            }
+          }
+        }).done(function (o) {
+          console.log('saved');
+        });
+      } else {
+        clearphoto();
       }
+    }
 
 
-      function addBoundaryBox(videoElement, label, top, left, width, height, numbering = 0){
-        var el = document.createElement("div");
-        var elTitle = document.createElement("div");
-        var classAtt = document.createAttribute("class");
-        var classAttElTittle = document.createAttribute("class");
-        classAtt.value = "boundaryBox bb-"+ numbering;
-        classAttElTittle.value = "boundary-box-label";
-        el.setAttributeNode(classAtt);
-        elTitle.setAttributeNode(classAttElTittle);
+    function addBoundaryBox(videoElement, label, top, left, width, height, numbering = 0) {
+      console.log('bbox process');
+      var el = document.createElement("div");
+      var elTitle = document.createElement("div");
+      var classAtt = document.createAttribute("class");
+      var classAttElTittle = document.createAttribute("class");
+      classAtt.value = "boundaryBox bb-" + numbering;
+      classAttElTittle.value = "boundary-box-label";
+      el.setAttributeNode(classAtt);
+      elTitle.setAttributeNode(classAttElTittle);
 
-        // Set attribute
-        el.style.top = top + "px";
-        el.style.left = left + "px";
-        el.style.width = width + "px";
-        el.style.height = height + "px";
+      // Set attribute
+      el.style.top = top + "px";
+      el.style.left = left + "px";
+      el.style.width = width + "px";
+      el.style.height = height + "px";
 
-        elTitle.innerText = label;
+      elTitle.innerText = label;
 
-        el.append(elTitle);
+      el.append(elTitle);
 
-        videoElement.append(el);
-      }
+      videoElement.append(el);
+    }
 
-      addBoundaryBox($('.boundaryBoxList'), "Camera", 50, 40, 34, 50, 1);
-      addBoundaryBox($('.boundaryBoxList'), "Camera", 80, 90, 95, 100, 2);
+    // addBoundaryBox($('.boundaryBoxList'), "Camera", 50, 40, 34, 50, 1);
+    // addBoundaryBox($('.boundaryBoxList'), "Camera", 80, 90, 95, 100, 2);
 
-      // Set up our event listener to run the startup process
-      // once loading is complete.
-      window.addEventListener('load', startup, false);
+    // Set up our event listener to run the startup process
+    // once loading is complete.
+    window.addEventListener('load', startup, false);
 
-    </script>
+  </script>
 </body>
+
 </html>

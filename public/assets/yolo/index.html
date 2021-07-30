@@ -10,24 +10,67 @@
       position: fixed;
       border: 1px solid yellow;
     }
+    .backvideo{
+      content: " ";
+      display: block;
+      position: relative;
+      background: red;
+      height: 100%;
+      width: 100%;
+    }
+    .bb-box{
+      content: " ";
+      display: block;
+      position: absolute;
+    }
+    .boundaryBox{
+      content: " ";
+      position: absolute;
+      display: inline-block;
+      border:2px solid pink;
+    }
+    .boundary-box-label{
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      top: -10;
+      left: 0;
+      background: pink;
+      font-size: .7rem;
+    }
   </style>
 </head>
 <body>
   <div class="contentarea">
     <div class="camera">
-      <video id="video">Video stream not available.</video>
+      <div class="backvideo">
+        <div class="bb-box">
+
+          <div class="boundaryBoxList">
+
+          </div>
+        </div>
+        <!-- <div class="boundaryBox bb-1"></div> -->
+        <!-- <div class="boundaryBox bb-2"></div> -->
+        <video id="video" class="videos">Video stream not available.</video>
+      </div>
       <button id="startbutton">Take photo</button>
     </div>
     <canvas id="canvas">
     </canvas>
   </div>
 
-  <script src="utils.js?v=1.0"></script>
+  <script src="http://localhost:3000/assets/vendors/opencv/utils.js?v=1.0"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     var width = 320; // We will scale the photo width to this
     var height = 240; // This will be computed based on the input stream
-
+    $('.backvideo').width(width);
+    $('.backvideo').height(height);
+    $('.bb-box').width(width);
+    $('.bb-box').height(height);
+    $('.boundaryBoxList').width(width);
+    $('.boundaryBoxList').height(height);
     // |streaming| indicates whether or not we're currently streaming
     // video from the camera. Obviously, we start at false.
 
@@ -111,7 +154,7 @@
     // drawing that to the screen, we can change its size and/or apply
     // other changes before drawing it.
 
-    function takepicture() {
+      function takepicture() {
         console.log("masuk");
         video = document.getElementById('video');
         var context = canvas.getContext('2d');
@@ -157,9 +200,37 @@
         }
       }
 
+
+      function addBoundaryBox(videoElement, label, top, left, width, height, numbering = 0){
+        var el = document.createElement("div");
+        var elTitle = document.createElement("div");
+        var classAtt = document.createAttribute("class");
+        var classAttElTittle = document.createAttribute("class");
+        classAtt.value = "boundaryBox bb-"+ numbering;
+        classAttElTittle.value = "boundary-box-label";
+        el.setAttributeNode(classAtt);
+        elTitle.setAttributeNode(classAttElTittle);
+
+        // Set attribute
+        el.style.top = top + "px";
+        el.style.left = left + "px";
+        el.style.width = width + "px";
+        el.style.height = height + "px";
+
+        elTitle.innerText = label;
+
+        el.append(elTitle);
+
+        videoElement.append(el);
+      }
+
+      addBoundaryBox($('.boundaryBoxList'), "Camera", 50, 40, 34, 50, 1);
+      addBoundaryBox($('.boundaryBoxList'), "Camera", 80, 90, 95, 100, 2);
+
       // Set up our event listener to run the startup process
       // once loading is complete.
       window.addEventListener('load', startup, false);
+
     </script>
 </body>
 </html>

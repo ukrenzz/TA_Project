@@ -34,23 +34,24 @@
                 <video id="video" class="videos">Video stream not available.</video>
               </div>
             </div>
+            <meta name="csrf-token" content="{{ csrf_token() }}" />
             <canvas id="canvas" style="display: none"></canvas>
-            <div id="canvasImage" >
+            <div id="canvasImage" style="">
               <img alt="" id="imageResult">
             </div>
             <form class="mt-5" action="{{route('search.visual.result')}}" method="POST" id="visual_process">
-              {{-- <meta name="csrf-token" content="{{ csrf_token() }}" />   --}}
               @csrf
-              <input type="text" name="filename" value="">
+              <input type="hidden" id="imageDataInput" name="images">
+              <input type="hidden" id="categoryDataInput" name="category">
               {{-- <input type="text" name="category" value=""> --}}
-              <select name="category" id="">
+              {{-- <select name="category" id="">
                 <option value="Camera" selected>Camera</option>
                 <option value="Keyboard">Keyboard</option>
                 <option value="Laptop">Laptop</option>
                 <option value="Mouse">Mouse</option>
                 <option value="Tablet">Tablet</option>
                 <option value="Printer">Printer</option>
-              </select>
+              </select> --}}
             </form>
             <button id="processed" class="btn_1"> Testing</button>
           </div>
@@ -94,71 +95,99 @@
     $('.boundaryBoxList').width(width);
     $('.boundaryBoxList').height(height);
 
-    function startup() {
-      console.log("Ok");
-      video = document.getElementById('video');
-      canvas = document.getElementById('canvas');
-      photo = document.getElementById('photo');
+      function startup() {
+        console.log("Ok");
+        video = document.getElementById('video');
+        canvas = document.getElementById('canvas');
+        photo = document.getElementById('photo');
 
-      utils.startCamera('vga', onVideoStarted, 'video');
-      var clicked = false;
+        utils.startCamera('vga', onVideoStarted, 'video');
+        var clicked = false;
 
-      function onVideoStarted() {
-        runRT();
-        rt = setTimeout(() => {
-          runRT()
-          onVideoStarted()
-        }, 3000);
+        function onVideoStarted() {
+          runRT();
+          rt = setTimeout(() => {
+            runRT()
+            onVideoStarted()
+          }, 3000);
+        }
+
+        video.addEventListener('canplay', function (ev) {
+          if (!streaming) {
+            height = video.videoHeight / (video.videoWidth / width);
+
+            // Firefox currently has a bug where the height can't be read from
+            // the video, so we will make assumptions if this happens.
+
+            if (isNaN(height)) {
+              height = width / (4 / 3);
+            }
+
+            video.setAttribute('width', width);
+            video.setAttribute('height', height);
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            streaming = true;
+          }
+        }, false);
+        clearphoto();
       }
 
-      video.addEventListener('canplay', function (ev) {
-        if (!streaming) {
-          height = video.videoHeight / (video.videoWidth / width);
+      function bbClick(label, top, left, width, height) {
+        // Stop RT YOLO
+        clearTimeout(rt);
+        var token = $("meta[name='csrf-token']").attr("content");
+        req.abort();
+        // Process BBOX from canvas Images
+        var primaryCanvas = document.getElementById("canvas");
+        var canvas = document.createElement("canvas");
+        var context = canvas.getContext("2d");
+        var canvasElement = $('#canvasImage');
 
-          // Firefox currently has a bug where the height can't be read from
-          // the video, so we will make assumptions if this happens.
+        canvasElement.empty();
+        var imageData = new Image();
+        var imageRes = new Image();
+        dataUrl = primaryCanvas.toDataURL();
+        imageData.src = dataUrl;
+        canvas.width = width;
+        canvas.height = height;
+        var serc = "";
+        imageData.onload = () => {
+            context.drawImage(imageData,
+              left, top,
+              width, height,
+              0, 0,
+              width, height
+            );
+            imageRes.src = canvas.toDataURL();
 
-          if (isNaN(height)) {
-            height = width / (4 / 3);
+            $('#imageDataInput').val(imageRes.src);
+            $('#categoryDataInput').val(label);
+
+            console.log($('#imageDataInput').val(), $('#categoryDataInput').val());
+
+            $('#visual_process').submit();
+
+            // $.ajax({
+            //   type: "POST",
+            //   url: "",
+            //   data: {
+            //     images  : imageRes.src,
+            //     _token  : token
+            //   },
+            //   success: (data) => {
+            //     console.log("Sukses")
+            //   },
+            //   failed: (data) => {
+            //     console.log("Gagal")
+            //   }
+            // });
+
+            canvasElement.append(imageRes);
+            serc = imageRes.src;
           }
 
-          video.setAttribute('width', width);
-          video.setAttribute('height', height);
-          canvas.setAttribute('width', width);
-          canvas.setAttribute('height', height);
-          streaming = true;
-        }
-      }, false);
-      clearphoto();
-    }
 
-    function bbClick(top, left, width, height) {
-      // Stop RT YOLO
-      clearTimeout(rt);
-      req.abort();
-      // Process BBOX from canvas Images
-      var primaryCanvas = document.getElementById("canvas");
-      var canvas = document.createElement("canvas");
-      var context = canvas.getContext("2d");
-      var canvasElement = $('#canvasImage');
-
-      canvasElement.empty();
-      var imageData = new Image();
-      var imageRes = new Image();
-      dataUrl = primaryCanvas.toDataURL();
-      imageData.src = dataUrl;
-      canvas.width = width;
-      canvas.height = height;
-      imageData.onload = () => {
-          context.drawImage(imageData,
-            left, top,
-            width, height,
-            0, 0,
-            width, height
-          );
-          imageRes.src = canvas.toDataURL();
-          canvasElement.append(imageRes);
-        }
       }
 
       function clearphoto() {
@@ -230,6 +259,7 @@
       function clearBoundaryBox(videoElement){
         videoElement.empty();
       }
+
       function addBoundaryBox(videoElement, label, top, left, width, height, numbering = 0) {
         var el = document.createElement("div");
         var elTitle = document.createElement("div");
@@ -238,7 +268,7 @@
         var classAttElTittle = document.createAttribute("class");
 
         classAtt.value = "boundaryBox";
-        onClickAtt.value = "bbClick(" + top + "," + left + "," + width + "," + height + ")";
+        onClickAtt.value = "bbClick('" + label.split(" ")[0] + "', " + top + "," + left + "," + width + "," + height + ")";
         classAttElTittle.value = "boundary-box-label";
 
         el.setAttributeNode(classAtt);

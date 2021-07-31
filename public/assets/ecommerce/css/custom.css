@@ -203,3 +203,42 @@ a.badge:hover, a.badge:focus {
 .image-thumbnail:hover::before{
   transform: scale(1.15);
 }
+
+.bbox {
+  position: fixed;
+  border: 1px solid yellow;
+}
+
+.backvideo {
+  content: " ";
+  display: block;
+  position: relative;
+  background: red;
+  height: 100%;
+  width: 100%;
+}
+
+.bb-box {
+  content: " ";
+  display: block;
+  position: absolute;
+  z-index: 999;
+}
+
+.boundaryBox {
+  content: " ";
+  position: absolute;
+  display: inline-block;
+  border: 2px solid pink;
+  z-index: 9999;
+}
+
+.boundary-box-label {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: -10;
+  left: 0;
+  background: pink;
+  font-size: .7rem;
+}

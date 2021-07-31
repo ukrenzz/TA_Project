@@ -25,8 +25,19 @@
       <div class="col-lg-6">
         <div class="row">
           <div class="col-12 mb-3">
-            <button id="startAndStop" class="btn_1"><i class="ri-live-line"></i> Start Video</button>
-            
+            <div class="camera">
+              <div class="backvideo">
+                <div class="bb-box">
+                  <div class="boundaryBoxList">
+                  </div>
+                </div>
+                <video id="video" class="videos">Video stream not available.</video>
+              </div>
+            </div>
+            <canvas id="canvas" style="display: none"></canvas>
+            <div id="canvasImage" >
+              <img alt="" id="imageResult">
+            </div>
             <form class="mt-5" action="{{route('search.visual.result')}}" method="POST" id="visual_process">
               {{-- <meta name="csrf-token" content="{{ csrf_token() }}" />   --}}
               @csrf
@@ -49,7 +60,7 @@
         </div>
       </div>
       <div class="col-lg-6">
-        <canvas id="canvasOutput" style="visibility: hidden;" width="320" height="240"></canvas>
+        <canvas id="canvasOutput" style="display: : none;" width="320" height="240"></canvas>
         <div id="status"></div>
       </div>
       <!-- /col -->
@@ -65,325 +76,189 @@
 @section('user_defined_script')
   {{-- <script src="{{ asset('ecommerce/js/sticky_sidebar.min.js') }}"></script> --}}
   {{-- <script src="{{ asset('ecommerce/js/specific_listing.js') }}"></script> --}}
-  <script async src="{{ asset('vendors/opencv/loader.js') }}" onload="onOpenCvReady()"></script>
   <script src="{{ asset('vendors/opencv/utils.js') }}"></script>
-  <script defer src="{{ asset('yolo/vs.js') }}"></script>
   <script type="text/javascript">
-  
-  function onOpenCvReady() {
-    console.log("obisa")
-    setTimeout(() => {
-      console.log(cv.getBuildInformation());
-    }, 0)
+    var width = 800; // We will scale the photo width to this
+    var height = 600; // This will be computed based on the input stream
+    var streaming = false;
+    var rt = "";
+    var req = "";
+    var video = null;
+    var canvas = null;
+    var photo = null;
     let utils = new Utils('errorMessage');
+    $('.backvideo').width(width);
+    $('.backvideo').height(height);
+    $('.bb-box').width(width);
+    $('.bb-box').height(height);
+    $('.boundaryBoxList').width(width);
+    $('.boundaryBoxList').height(height);
 
-    let videoInput = document.getElementById('videoInput');
-    let streaming = false;
-    let startAndStop = document.getElementById('startAndStop');
+    function startup() {
+      console.log("Ok");
+      video = document.getElementById('video');
+      canvas = document.getElementById('canvas');
+      photo = document.getElementById('photo');
 
-    cv['onRuntimeInitialized']=()=>{
-      console.log("ok")
-    }
-
-    loadModel = async function(e) {
-      return new Promise((resolve) => {
-      let path = e.split(/(\\|\/)/g).pop();
-      var request = new XMLHttpRequest();
-      request.open('GET', e, true);
-      request.responseType = 'arraybuffer';
-      request.onload = function(ev) {
-        request = this;
-        if (request.readyState === 4) {
-            if (request.status === 200) {
-                let data = new Uint8Array(request.response);
-                cv.FS_createDataFile('/', path, data, true, false, false);
-                resolve(path);
-            } else {
-                console.error('Failed to load ' + url + ' status: ' + request.status);
-            }
-        }
-      };
-      request.send();        
-      });
-    }
-    loadLables = async function(labelsUrl) {
-      let response = await fetch(labelsUrl);
-      let label = await response.text();
-      label = label.split('\n');
-      return label;
-    }
-
-    inputSize = [320, 240];
-    mean = [127.5, 127.5, 127.5];
-    std = 0.007843;
-    swapRB = false;
-    confThreshold = 0.5;
-    nmsThreshold = 0.4;
-
-
-    // the type of output, can be YOLO or SSD
-    outType = "YOLO";
-
-    // url for label file, can from local or Internet
-    labelsUrl = "{{ asset('yolo/yolov4.txt') }}";
-      let frame = new cv.Mat(videoInput.height, videoInput.width, cv.CV_8UC4);
-      let cap = new cv.VideoCapture(videoInput);
-      let configPath = ("{{ asset('yolo/yolov4.cfg') }}");
-      let modelPath = ("{{ asset('yolo/yolov4.weights') }}");
-      let load = 0;
-      let label = "";
-
-      init = async function() {
-        try{
-          if(load == 0){
-            configPath = await loadModel("{{ asset('yolo/yolov4.cfg') }}");
-            modelPath = await loadModel("{{ asset('yolo/yolov4.weights') }}");
-            labels = await loadLables(labelsUrl);
-            console.log(configPath);
-            console.log(modelPath);
-            startAndStop.enabled = false;
-            load = 1;
-          } 
-        } catch (e){
-          console.error(e);
-        }               
-      }
-
-      init();
-
-      
-
-      main = async function(frame) {
-        try{
-          const input = getBlobFromImage(inputSize, mean, std, swapRB, frame);
-          console.log(configPath);
-          console.log(modelPath);
-          let net = cv.readNet(configPath, modelPath);
-          net.setInput(input);
-          const start = performance.now();
-          // const result = net.forward();
-          // const time  = performance.now()-start;
-          // const output = postProcess(result, labels, frame);
-
-          // updateResult(output, time);
-          // setTimeout(processVideo, 0);
-          // input.delete();
-          // net.delete();
-          // result.delete();
-        } catch (e) {
-          console.error(e);
-        }        
-      }
-
-      function processVideo() {
-        try {
-            if (!streaming) {
-                return;
-            }
-            cap.read(frame);
-            main(frame).then().catch(e => {
-              console.error(e);
-            });
-        } catch (err) {
-            // utils.printError(err);
-            console.error(err);
-        }
-      }
-
-      setTimeout(processVideo, 0);      
-
-      getBlobFromImage = function(inputSize, mean, std, swapRB, image) {
-        let mat;
-        if (typeof(image) === 'string') {
-            mat = cv.imread(image);
-        } else {
-            mat = image;
-        }
-
-        let matC3 = new cv.Mat(mat.matSize[0], mat.matSize[1], cv.CV_8UC3);
-        cv.cvtColor(mat, matC3, cv.COLOR_RGBA2BGR);
-        let input = cv.blobFromImage(matC3, std, new cv.Size(inputSize[0], inputSize[1]),
-                                    new cv.Scalar(mean[0], mean[1], mean[2]), swapRB);
-
-        matC3.delete();
-        return input;
-      }
-
-      postProcess = function(result, labels, frame) {
-        let canvasOutput = document.getElementById('canvasOutput');
-        const outputWidth = canvasOutput.width;
-        const outputHeight = canvasOutput.height;
-        const resultData = result.data32F;
-
-        // Get the boxes(with class and confidence) from the output
-        let boxes = [];
-        const vecNum = result.matSize[0];
-        const vecLength = result.matSize[1];
-        const classNum = vecLength - 5;
-
-        for (let i = 0; i < vecNum; ++i) {
-          let vector = resultData.slice(i*vecLength, (i+1)*vecLength);
-          let scores = vector.slice(5, vecLength);
-          let classId = scores.indexOf(Math.max(...scores));
-          let confidence = scores[classId];
-          if (confidence > confThreshold) {
-            let center_x = Math.round(vector[0] * outputWidth);
-            let center_y = Math.round(vector[1] * outputHeight);
-            let width = Math.round(vector[2] * outputWidth);
-            let height = Math.round(vector[3] * outputHeight);
-            let left = Math.round(center_x - width / 2);
-            let top = Math.round(center_y - height / 2);
-
-            let box = {
-                scores: scores,
-                classId: classId,
-                confidence: confidence,
-                bounding: [left, top, width, height],
-                toDraw: true
-            }
-            boxes.push(box);
-          }
-        }
-
-        // NMS(Non Maximum Suppression) algorithm
-        let boxNum = boxes.length;
-        let tmp_boxes = [];
-        let sorted_boxes = [];
-        for (let c = 0; c < classNum; ++c) {
-          for (let i = 0; i < boxes.length; ++i) {
-            tmp_boxes[i] = [boxes[i], i];
-          }
-          sorted_boxes = tmp_boxes.sort((a, b) => { return (b[0].scores[c] - a[0].scores[c]); });
-          for (let i = 0; i < boxNum; ++i) {
-            if (sorted_boxes[i][0].scores[c] === 0) continue;
-            else {
-              for (let j = i + 1; j < boxNum; ++j) {
-                if (IOU(sorted_boxes[i][0], sorted_boxes[j][0]) >= nmsThreshold) {
-                  boxes[sorted_boxes[j][1]].toDraw = false;
-                }
-              }
-            }
-          }
-        }        
-
-        // Draw the saved box into the image
-        let output = new cv.Mat(outputWidth, outputHeight, cv.CV_8UC3);
-        cv.cvtColor(frame, output, cv.COLOR_RGBA2RGB);
-        for (let i = 0; i < boxNum; ++i) {
-            if (boxes[i].toDraw) {
-                drawBox(boxes[i]);
-            }
-        }
-
-        return output;
-
-
-        // Calculate the IOU(Intersection over Union) of two boxes
-        function IOU(box1, box2) {
-          let bounding1 = box1.bounding;
-          let bounding2 = box2.bounding;
-          let s1 = bounding1[2] * bounding1[3];
-          let s2 = bounding2[2] * bounding2[3];
-
-          let left1 = bounding1[0];
-          let right1 = left1 + bounding1[2];
-          let left2 = bounding2[0];
-          let right2 = left2 + bounding2[2];
-          let overlapW = calOverlap([left1, right1], [left2, right2]);
-
-          let top1 = bounding2[1];
-          let bottom1 = top1 + bounding1[3];
-          let top2 = bounding2[1];
-          let bottom2 = top2 + bounding2[3];
-          let overlapH = calOverlap([top1, bottom1], [top2, bottom2]);
-
-          let overlapS = overlapW * overlapH;
-          return overlapS / (s1 + s2 + overlapS);
-        }
-
-        // Calculate the overlap range of two vector
-        function calOverlap(range1, range2) {
-          let min1 = range1[0];
-          let max1 = range1[1];
-          let min2 = range2[0];
-          let max2 = range2[1];
-
-          if (min2 > min1 && min2 < max1) {
-            return max1 - min2;
-          } else if (max2 > min1 && max2 < max1) {
-            return max2 - min1;
-          } else {
-            return 0;
-          }
-        }
-
-        // Draw one predict box into the origin image
-        function drawBox(box) {
-          let bounding = box.bounding;
-          let left = bounding[0];
-          let top = bounding[1];
-          let width = bounding[2];
-          let height = bounding[3];
-
-          cv.rectangle(output, new cv.Point(left, top), new cv.Point(left + width, top + height),
-                              new cv.Scalar(0, 255, 0));
-          cv.rectangle(output, new cv.Point(left, top), new cv.Point(left + width, top + 15),
-                              new cv.Scalar(255, 255, 255), cv.FILLED);
-          let text = `${labels[box.classId]}: ${box.confidence.toFixed(4)}`;
-          cv.putText(output, text, new cv.Point(left, top + 10), cv.FONT_HERSHEY_SIMPLEX, 0.3,
-                                  new cv.Scalar(0, 0, 0));
-        }
-      }
-
-      startAndStop.addEventListener('click', () => {
-        console.log("iodi")
-          if (!streaming) {
-              // utils.clearError();
-              utils.startCamera('qvga', onVideoStarted, 'videoInput');
-          } else {
-              utils.stopCamera();
-              onVideoStopped();
-          }
-      });
+      utils.startCamera('vga', onVideoStarted, 'video');
+      var clicked = false;
 
       function onVideoStarted() {
-          streaming = true;
-          startAndStop.innerHTML = '<i class="ri-stop-fill"></i> Stop';
-          videoInput.width = videoInput.videoWidth;
-          videoInput.height = videoInput.videoHeight;
-          try {
-            processVideo();
-          } catch (e) {
-            console.error(e);
+        runRT();
+        rt = setTimeout(() => {
+          runRT()
+          onVideoStarted()
+        }, 3000);
+      }
+
+      video.addEventListener('canplay', function (ev) {
+        if (!streaming) {
+          height = video.videoHeight / (video.videoWidth / width);
+
+          // Firefox currently has a bug where the height can't be read from
+          // the video, so we will make assumptions if this happens.
+
+          if (isNaN(height)) {
+            height = width / (4 / 3);
           }
-      }
 
-      function onVideoStopped() {
-          streaming = false;
-          startAndStop.innerHTML = '<i class="ri-live-line"></i> Start Video';
-          initStatus();
-      }
+          video.setAttribute('width', width);
+          video.setAttribute('height', height);
+          canvas.setAttribute('width', width);
+          canvas.setAttribute('height', height);
+          streaming = true;
+        }
+      }, false);
+      clearphoto();
+    }
 
-      function initStatus() {
-        document.getElementById('status').innerHTML = '';
-        document.getElementById('canvasOutput').style.visibility = "hidden";
-        utils.clearError();
-      }
+    function bbClick(top, left, width, height) {
+      // Stop RT YOLO
+      clearTimeout(rt);
+      req.abort();
+      // Process BBOX from canvas Images
+      var primaryCanvas = document.getElementById("canvas");
+      var canvas = document.createElement("canvas");
+      var context = canvas.getContext("2d");
+      var canvasElement = $('#canvasImage');
 
-      function updateResult(output, time) {
-        try{
-            console.log("OK");
-            let canvasOutput = document.getElementById('canvasOutput');
-            canvasOutput.style.visibility = "visible";
-            cv.imshow('canvasOutput', output);
-            document.getElementById('status').innerHTML = `<b>Model:</b> ${modelPath}<br>
-                                                          <b>Inference time:</b> ${time.toFixed(2)} ms`;
-        } catch(e) {
-            console.log(e);
+      canvasElement.empty();
+      var imageData = new Image();
+      var imageRes = new Image();
+      dataUrl = primaryCanvas.toDataURL();
+      imageData.src = dataUrl;
+      canvas.width = width;
+      canvas.height = height;
+      imageData.onload = () => {
+          context.drawImage(imageData,
+            left, top,
+            width, height,
+            0, 0,
+            width, height
+          );
+          imageRes.src = canvas.toDataURL();
+          canvasElement.append(imageRes);
         }
       }
-  }
-    
+
+      function clearphoto() {
+        var context = canvas.getContext('2d');
+        context.fillStyle = "#AAA";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        var data = canvas.toDataURL('image/png');
+      }
+
+      function runRT() {
+        video = document.getElementById('video');
+        var context = canvas.getContext('2d');
+        if (width && height) {
+          canvas.width = width;
+          canvas.height = height;
+          context.drawImage(video, 0, 0, width, height);
+
+          var data = canvas.toDataURL('image/png');
+          data = data.replace("data:image/png;base64,", "");
+
+          req = $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:5000/api/v1/yolo",
+            contentType: 'application/json;charset=UTF-8',
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+            },
+            data: JSON.stringify({
+              imgBase64: data,
+            }),
+            cache: false,
+            success: (data) => {
+              data = JSON.parse(JSON.stringify(data))
+              if(!Object.keys(data).length) {
+                if($('.boundaryBox').length > 0)
+                  clearBoundaryBox($('.boundaryBoxList'));
+                return;
+              }
+              if($('.boundaryBox').length == Object.keys(data).length) {
+                for (var i = 0; i < Object.keys(data).length; i++) {
+                  bbox = $(`#bbox-${i}`);
+                  label = $(`#bbox-${i} > .boundary-box-label`);
+                  bbox.css("top", data[i].y + "px");
+                  bbox.css("left", data[i].x + "px");
+                  bbox.css("width", data[i].w + "px");
+                  bbox.css("height", data[i].h + "px");
+                  label.text(data[i].label);
+                }
+              }
+              else{
+                  clearBoundaryBox($('.boundaryBoxList'));
+                  for (var i = 0; i < Object.keys(data).length; i++) {
+                    console.log("creating bbox");
+                    addBoundaryBox($('.boundaryBoxList'), data[i].label, data[i].y, data[i].x, data[i].w, data[i].h, i);
+                    console.log("bbox created");
+                  }
+              }
+            },
+            failed: (data) => {
+              clearBoundaryBox($('.boundaryBoxList'));
+            }
+          });
+        } else {
+          clearphoto();
+        }
+      }
+
+      function clearBoundaryBox(videoElement){
+        videoElement.empty();
+      }
+      function addBoundaryBox(videoElement, label, top, left, width, height, numbering = 0) {
+        var el = document.createElement("div");
+        var elTitle = document.createElement("div");
+        var classAtt = document.createAttribute("class");
+        var onClickAtt = document.createAttribute("onClick");
+        var classAttElTittle = document.createAttribute("class");
+
+        classAtt.value = "boundaryBox";
+        onClickAtt.value = "bbClick(" + top + "," + left + "," + width + "," + height + ")";
+        classAttElTittle.value = "boundary-box-label";
+
+        el.setAttributeNode(classAtt);
+        el.setAttributeNode(onClickAtt);
+        el.id = "bbox-" + numbering;
+        elTitle.setAttributeNode(classAttElTittle);
+
+        // Set attribute
+        el.style.top = top + "px";
+        el.style.left = left + "px";
+        el.style.width = width + "px";
+        el.style.height = height + "px";
+
+        elTitle.innerText = label;
+
+        el.append(elTitle);
+
+        videoElement.append(el);
+      }
+      window.addEventListener('load', startup, false);
   </script>
 
   <script type="text/javascript">
@@ -392,7 +267,7 @@
 
       var _category = $('select[name="category"]').val();
       var _filename = _category + "\\" + $('input[name="filename"]').val();
-      
+
 
       // console.log($('input[name="filename"]').val(), $('input[name="category"]').val())
       // console.log(_category, _filename);

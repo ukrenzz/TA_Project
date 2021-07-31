@@ -78,7 +78,7 @@ class SearchController extends Controller
 		$data = [];
 
 		// 181, 177, 179
-		dd($_searchData);
+		// dd($_searchData);
 		if($_searchData != null){
 			foreach($_searchData as $dataProduct => $key){
 				array_push($searchData, $dataProduct);

@@ -123,35 +123,38 @@
             var data = canvas.toDataURL('image/png');
             data = data.replace("data:image/png;base64,", "");
 
-            $.ajax({
-                type: "POST",
-                url: "http://127.0.0.1:5000/api/v1/yolo",
-                contentType:'application/json;charset=UTF-8',
-                headers: {
-                  'Access-Control-Allow-Origin': '*',
-                },
-                data: JSON.stringify({
-                    imgBase64: data,
-                }),
-                cache: false,
-                success: (data) => {
-                  data = JSON.parse(JSON.stringify(data))
-                  $("div.bbox").remove();
-                  for(var i = 0; i < Object.keys(data).length; i++){
-                    var bbox = document.createElement('div');
-                    bbox.id = 'bbox' + i;
-                    bbox.className = 'bbox';
-                    bbox.style.left = data[i].x;
-                    bbox.style.top = data[i].y;
-                    bbox.style.width = data[i].w;
-                    bbox.style.height = data[i].h;
-                    video.appendChild(bbox);
-                    console.log("ok");
-                  }
-                }
-            }).done(function(o) {
-                console.log('saved');
-            });
+            // $.ajax({
+            //     type: "POST",
+            //     url: "http://127.0.0.1:5000/api/v1/yolo",
+            //     contentType:'application/json;charset=UTF-8',
+            //     headers: {
+            //       'Access-Control-Allow-Origin': '*',
+            //     },
+            //     data: JSON.stringify({
+            //         imgBase64: data,
+            //     }),
+            //     cache: false,
+            //     success: (data) => {
+            //       data = JSON.parse(JSON.stringify(data))
+            //       console.log(data)
+            //       console.log(Object.keys(data).length)
+            //       if()
+            //       $("div.bbox").remove();
+            //       for(var i = 0; i < Object.keys(data).length; i++){
+            //         var bbox = document.createElement('div');
+            //         bbox.id = 'bbox' + i;
+            //         bbox.className = 'bbox';
+            //         bbox.style.left = data[i].x;
+            //         bbox.style.top = data[i].y;
+            //         bbox.style.width = data[i].w;
+            //         bbox.style.height = data[i].h;
+            //         video.appendChild(bbox);
+            //         console.log("ok");
+            //       }
+            //     }
+            // }).done(function(o) {
+            //     console.log('saved');
+            // });
         } else {
             clearphoto();
         }

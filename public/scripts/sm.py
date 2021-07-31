@@ -5,6 +5,7 @@ from multiprocessing import Pool
 import sys
 from ast import literal_eval
 import json
+import time
 
 def get_mean_rgb(img):
   avg_color_per_row = np.average(img, axis=0)
@@ -31,7 +32,7 @@ def getColorThreshold(img, cat, db):
 	color_feat = get_ht_lt(img)
 
 	dbCur = db.cursor()
-	dbCur.execute("select images.product_id, images.shape_feature, images.edge_feature, images.id FROM `product_images` as images WHERE (images.color_feat_r >= {1} and images.color_feat_r <= {2}) or (images.color_feat_g >= {3} and images.color_feat_g <= {4}) or (images.color_feat_b >= {5} and images.color_feat_b <= {6}) and product_id in (select id from `products` where category_id = (select id from `categories` where name = '{0}'))".format(cat, color_feat[3], color_feat[0], color_feat[4], color_feat[1], color_feat[5], color_feat[2]))
+	dbCur.execute("select images.product_id, images.shape_feature, images.edge_feature, images.id FROM `product_images` as images WHERE ((images.color_feat_r >= {1} and images.color_feat_r <= {2}) or (images.color_feat_g >= {3} and images.color_feat_g <= {4}) or (images.color_feat_b >= {5} and images.color_feat_b <= {6})) and product_id in (select id from `products` where category_id = (select id from `categories` where name = '{0}'))".format(cat, color_feat[3], color_feat[0], color_feat[4], color_feat[1], color_feat[5], color_feat[2]))
 
 	return dbCur.fetchall()
 
@@ -102,18 +103,31 @@ def generate_lbp(img_lbp, width, height):
 			img_lbp[i, j] = lbp_calculated_pixel(img_gray, i, j)
 	return img_lbp
 
+def convert_array_lbp(arr):
+	res = literal_eval(arr[1])
+	return res
+
+def convert_array_ce(query):
+	res =  literal_eval(query[2])	
+	return res
+
 def sm_lbp(img_lbp, queries):
-	for query in queries:
-		query = list(query)
-		query[1] = literal_eval(query[1])
-		query[1] = np.absolute(np.array(img_lbp) - np.array(query[1]))
-	# print(len(queries))
+	with Pool() as pool :
+		res = pool.map(convert_array_lbp, queries)
+		pool.close()
+		pool.join()
+	# print(np.array(res).shape)
+	
+	for idx in range(len(queries)):
+		queries[idx] = list(queries[idx])
+		queries[idx][1] = np.absolute(np.array(img_lbp[0]) - np.array(res[idx][0]))
 	return queries
 
 def norm_sm_lbp(queries):
 	for query in queries:
 		query = list(query)
-		query[1] = np.array(literal_eval(query[1]))
+		# query[1] = np.array(literal_eval(query[1]))
+		# query[1] = np.array(query[1])
 		query[1] = (query[1] - query[1].min()) / (query[1].max() - query[1].min())
 	return queries
 
@@ -202,20 +216,18 @@ def Canny_detector(img, weak_th = None, strong_th = None):
 
 	return mag
 
+
 def sm_edge(img_edgeR, img_edgeG, img_edgeB, queries):
 	i = 0
-	# try:
+	with Pool() as pool:
+		edges_convert = pool.map(convert_array_ce, queries)
+		pool.close()
+		pool.join()
 	for idx in range(len(queries)):
 		edge_sm = np.empty(576)
 		queries[idx] = list(queries[idx])
-		edge = literal_eval(queries[idx][2])
-		edge_sm = np.absolute(img_edgeR - np.array(edge[0]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[1]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edge[2]).astype(np.float64))
+		edge_sm = np.absolute(img_edgeR - np.array(edges_convert[idx][0]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edges_convert[idx][1]).astype(np.float64)) + np.absolute(img_edgeR - np.array(edges_convert[idx][2]).astype(np.float64))
 		queries[idx][2] = edge_sm
-	# 		i+=1
-	# except:
-	# 	print(i)
-	# print(queries[0][2])
-	# print(queries[0][2].dtype)
 	return queries
 
 def norm_sm_edge(queries):
@@ -223,13 +235,11 @@ def norm_sm_edge(queries):
 		queries[idx] = list(queries[idx])
 		queries[idx][2] = np.array(queries[idx][2]).astype(np.float64)
 		queries[idx][2] = (queries[idx][2] - queries[idx][2].min()) / (queries[idx][2].max() - queries[idx][2].min())
-	# print(queries[0][2])
 	return queries
 
 def result(queries):
 	res = {}
 	for idx in range(len(queries)):
-		queries[idx][1] = literal_eval(queries[idx][1])
 		queries[idx][1] = np.array(queries[idx][1]).astype(np.float64)
 		queries[idx][2] = np.array(queries[idx][2]).astype(np.float64)
 		# print(idx, queries[idx][0])
@@ -241,6 +251,7 @@ def result(queries):
 			res[queries[idx][0]] = (np.sum(queries[idx][1] + queries[idx][2]))
 	return res
 
+start1 = time.time()
 imgInput = sys.argv[1]
 cat = sys.argv[2]
 img = cv2.imread(imgInput, 1)
@@ -255,36 +266,58 @@ db = mysql.connector.connect (
 
 height, width, _ = resized_img.shape
 
+# print("Exec1 :", time.time() - start1)
+start2 = time.time()
+
 img_gray = cv2.cvtColor(resized_img,cv2.COLOR_BGR2GRAY)
 
 img_lbp = np.zeros((height, width),np.uint8)
 
+# print("Exec2 :", time.time() - start2)
+start3 = time.time()
+
 p = Pool()
 args = [(img_lbp, width, height)]
 img_lbp = p.starmap(generate_lbp, args)
-queries = getData(db)
+p.close()
+p.join()
+# print("Exec3 :", time.time() - start3)
+start4 = time.time()
 color_queries = getColorThreshold(img, cat, db)
-sm_lbp_args = [(img_lbp, queries)]
-queries = p.starmap(sm_lbp, sm_lbp_args)[0]
-sm_norm_args = [queries]
-queries = p.map(norm_sm_lbp, sm_norm_args)[0]
-
+if(len(color_queries) > 0):
+	queries = color_queries
+	del(color_queries)
+else:
+	queries = getData(db)
+# print("Exec4 :", time.time() - start4)
+start5 = time.time()
+# print("Exec5 :", time.time() - start5)
+start6 = time.time()
+queries = sm_lbp(img_lbp, queries)
+# print("Exec6 :", time.time() - start6)
+start7 = time.time()
+queries = norm_sm_lbp(queries)
+# print("Exec7 :", time.time() - start7)
+start8 = time.time()
 imgR, imgG, imgB = cv2.split(resized_img)
 args = (imgR, imgG, imgB)
 with Pool() as pool:
 	res = pool.map(Canny_detector, args)
-imgR = res[0]
-imgG = res[1]
-imgB = res[2]
-queries = sm_edge(imgR, imgG, imgB, queries)
+	pool.close()
+	pool.join()
+# print("Exec8 :", time.time() - start8)
+start10 = time.time()
+queries = sm_edge(res[0], res[1], res[2], queries)
+# print("exec10 :", time.time() - start10)
+start11 = time.time()
 queries = norm_sm_edge(queries)
+# print("exec11 :", time.time() - start11)
+start12 = time.time()
 res = result(queries)
+# print("exec12 :", time.time() - start12)
+start13 = time.time()
 res = dict(sorted(res.items(), key=lambda item: item[1]))
-if(len(color_queries) > 0):
-	for idx in range(len(color_queries)):
-		if(color_queries[idx][0] in res):
-			res[color_queries[idx][0]] /= 10
-	res = dict(sorted(res.items(), key=lambda item: item[1]))
+# print("exec13 :", time.time() - start13)
 print(json.dumps(res))
 
 

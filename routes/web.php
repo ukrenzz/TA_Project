@@ -121,6 +121,7 @@ Route::name('search.')->group(function () {
   Route::get('/search/text', [SearchController::class, 'querySearch'])->name('text');
   Route::get('/search/visual', [SearchController::class, 'visualSearchIndex'])->name('visual');
   Route::POST('/search/visual/result', [SearchController::class, 'visualSearchProcess'])->name('visual.result');
+  Route::POST('/search/visual/test', [SearchController::class, 'vstest'])->name('visual.test');
   // Route::get('/search/visual/result', [SearchController::class, 'visualSearchRes']);
   // Route::post('/payment/store', [SearchController::class, 'store'])->name('store');
 });

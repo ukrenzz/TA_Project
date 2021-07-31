@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
+use Storage;
 
 class SearchController extends Controller
 {
@@ -61,46 +65,69 @@ class SearchController extends Controller
 	 */
 	public function visualSearchProcess(Request $req)
 	{
-		$categories = Category::orderBy('name', 'asc')->get();
-		$filename = $req->filename;
-		$category = $req->category;
+		// Process image for CTEBIR
 
-		$_imagePath = '"' . public_path('/images/search/' . $category . '/' . $filename) . '"';
-		// $_imagePath = '"' . public_path('/images/search/' . $filename) . '"';
-		$_parameter = $_imagePath . " " . strToLower($category);
+		$image = $req->images;  // your base64 encoded
+    $image = str_replace('data:image/png;base64,', '', $image);
+    $image = str_replace(' ', '+', $image);
+    $imageName = Str::random(10).'.'.'png';
+		$_imagePaths = '"' . public_path('/images/search/' . $req->category . '/' . $imageName) . '"';
 
-		// dd($_parameter);
 
-		$_searchData = shell_exec('python scripts/sm.py ' . $_parameter);
-		$_searchData = json_decode($_searchData, true);
+		$putFile = Storage::disk('public')->put('images/search/' . $imageName, base64_decode($image));
 
-		$searchData = [];
-		$data = [];
+		$fileChecked = Storage::disk('public')->exists('images/search/' . $imageName);
+		if($fileChecked){
 
-		// 181, 177, 179
-		// dd($_searchData);
-		if($_searchData != null){
-			foreach($_searchData as $dataProduct => $key){
-				array_push($searchData, $dataProduct);
+			$categories = Category::orderBy('name', 'asc')->get();
+			$filename = $imageName;
+			$category = $req->category;
+
+			$_imagePath = '"' . storage_path('app/public/images/search/' . $imageName) . '"';
+			// $_imagePath = '"' . public_path('/images/search/' . $filename) . '"';
+			$_parameter = $_imagePath . " " . strToLower($category);
+			// dd($_parameter);
+
+
+			$_searchData = shell_exec('python scripts/sm.py ' . $_parameter);
+			$_searchData = json_decode($_searchData, true);
+
+			$searchData = [];
+			$data = [];
+
+			// 181, 177, 179
+			// dd($_searchData);
+			if($_searchData != null){
+				foreach($_searchData as $dataProduct => $key){
+					array_push($searchData, $dataProduct);
+				}
+				$ids_ordered = implode(',', $searchData);
+				// dd($searchData);
+
+				$products = Product::whereIn('id', $searchData)->orderByRaw("FIELD(id, $ids_ordered)")->paginate(16);
+
+				$data = (object)[
+					'products' => $products,
+					'categories' => $categories,
+				];
+
 			}
-			$ids_ordered = implode(',', $searchData);
-			// dd($searchData);
-			
-			$products = Product::whereIn('id', $searchData)->orderByRaw("FIELD(id, $ids_ordered)")->paginate(16);
-			
-			$data = (object)[
-				'products' => $products,
-				'categories' => $categories,
-			];
-
+			else {
+				$data = (object)[
+					'products' => null,
+					'categories' => $categories,
+				];
+			}
+			return view('ecommerce/visual-search-result', ['data' => $data]);
 		}
-		else {
+		else
+		{
 			$data = (object)[
 				'products' => null,
-				'categories' => $categories,
+				'categories' => null,
 			];
+			view('ecommerce/visual-search-result', ['data' => $data]);
 		}
-		return view('ecommerce/visual-search-result', ['data' => $data]);
 	}
 
 	/**
@@ -112,6 +139,20 @@ class SearchController extends Controller
 	public function store(Request $request)
 	{
 		//
+	}
+
+	public function vstest(Request $request)
+	{
+
+		$image = $request->images;  // your base64 encoded
+    $image = str_replace('data:image/png;base64,', '', $image);
+    $image = str_replace(' ', '+', $image);
+    $imageName = Str::random(10).'.'.'png';
+
+		// dd($request->images);
+
+		$putFile = Storage::put('images/search/' . $imageName, base64_decode($image));
+
 	}
 
 	/**

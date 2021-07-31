@@ -73,6 +73,7 @@
   <!-- <script src="http://localhost:3000/assets/vendors/opencv/utils.js?v=1.0"></script> -->
   <script src="utils.js?v=1.0"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="filesaver.js" charset="utf-8"></script>
   <script>
     var width = 800; // We will scale the photo width to this
     var height = 600; // This will be computed based on the input stream
@@ -82,13 +83,22 @@
     $('.bb-box').height(height);
     $('.boundaryBoxList').width(width);
     $('.boundaryBoxList').height(height);
+
+    function sleep(milliseconds) {
+      const date = Date.now();
+      let currentDate = null;
+      do {
+        currentDate = Date.now();
+      } while (currentDate - date < milliseconds);
+    }
     // $('#myCanvas').width(width);
     // $('#myCanvas').height(height);
     // |streaming| indicates whether or not we're currently streaming
     // video from the camera. Obviously, we start at false.
 
     function bbClick(top, left, width, height) {
-
+      clearTimeout(rt);
+      req.abort();
       var primaryCanvas = document.getElementById("canvas");
       // var primaryContext = primaryCanvas.getContext("2d");
       var canvas = document.createElement("canvas");
@@ -102,7 +112,7 @@
       var imageRes = new Image();
 
 
-      dataUrl = primaryCanvas.toDataURL(),
+      dataUrl = primaryCanvas.toDataURL();
 
       imageData.src = dataUrl;
 
@@ -111,27 +121,33 @@
       canvas.width = width;
       canvas.height = height;
 
-
-
-      context.drawImage(imageData,
-        -Math.floor(left), -Math.floor(top),
-        width, height,
+      console.log(
+        left, top,
+        width, height
+      );
+      imageData.onload = () => {
+        context.drawImage(imageData,
+          left, top,
+          width, height,
+          0, 0,
+          width, height
         );
-      imageRes.src = canvas.toDataURL();
+        imageRes.src = canvas.toDataURL();
+        console.log(canvas.toDataURL());
 
-      canvasElement.append(imageRes);
+        canvasElement.append(imageRes);
+      }
 
-      // console.log(
-      //   top, left,
-      //   width, height,
-      //   0, 0,
-      //   width, height,
-      //   imageRes, imageData
-      // );
+      // canvas.toBlob((blob) => {
+      //   saveAs(blob, "search.png");
+      // })
+
+
     }
 
 
     var streaming = false;
+    var rt = ""
 
     // The various HTML elements we need to configure or control. These
     // will be set by the startup() function.
@@ -141,14 +157,6 @@
     var photo = null;
     var startbutton = null;
     let utils = new Utils('errorMessage');
-
-    function sleep(milliseconds) {
-      const date = Date.now();
-      let currentDate = null;
-      do {
-        currentDate = Date.now();
-      } while (currentDate - date < milliseconds);
-    }
 
     function startup() {
       video = document.getElementById('video');
@@ -161,7 +169,7 @@
 
       function onVideoStarted() {
         takepicture();
-        setTimeout(() => {
+        rt = setTimeout(() => {
           takepicture()
           onVideoStarted()
         }, 5000);
@@ -210,7 +218,7 @@
     // format data URL. By drawing it on an offscreen canvas and then
     // drawing that to the screen, we can change its size and/or apply
     // other changes before drawing it.
-
+    var req = "";
     function takepicture() {
       //// console.log("masuk");
       video = document.getElementById('video');
@@ -223,7 +231,7 @@
         var data = canvas.toDataURL('image/png');
         data = data.replace("data:image/png;base64,", "");
 
-        $.ajax({
+        req = $.ajax({
           type: "POST",
           url: "http://127.0.0.1:5000/api/v1/yolo",
           contentType: 'application/json;charset=UTF-8',
@@ -235,16 +243,12 @@
           }),
           cache: false,
           success: (data) => {
-            //// console.log("oke");
             data = JSON.parse(JSON.stringify(data))
             if(!Object.keys(data).length) {
               if($('.boundaryBox').length > 0)
                 clearBoundaryBox($('.boundaryBoxList'));
               return;
             }
-            //// console.log(Object.keys(data).length, data[0].label, data[0].y, data[0].x, data[0].w, data[0].h)
-            //// console.log("length1 : " + $('.boundaryBox').length );
-            //// console.log("length2 : " + Object.keys(data).length)
             if($('.boundaryBox').length == Object.keys(data).length) {
               for (var i = 0; i < Object.keys(data).length; i++) {
                 bbox = $(`#bbox-${i}`);
@@ -267,7 +271,6 @@
 
           },
           failed: (data) => {
-            //// console.log("gagal");
             clearBoundaryBox($('.boundaryBoxList'));
           }
         }

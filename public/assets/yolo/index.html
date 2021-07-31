@@ -25,6 +25,7 @@
       content: " ";
       display: block;
       position: absolute;
+      z-index: 999;
     }
 
     .boundaryBox {
@@ -32,6 +33,7 @@
       position: absolute;
       display: inline-block;
       border: 2px solid pink;
+      z-index: 9999;
     }
 
     .boundary-box-label {
@@ -62,22 +64,72 @@
     </div>
     <canvas id="canvas">
     </canvas>
+    <div id="canvasImage" >
+      <img alt="" id="imageResult">
+    </div>
+
   </div>
 
   <!-- <script src="http://localhost:3000/assets/vendors/opencv/utils.js?v=1.0"></script> -->
   <script src="utils.js?v=1.0"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    var width = 320; // We will scale the photo width to this
-    var height = 240; // This will be computed based on the input stream
+    var width = 800; // We will scale the photo width to this
+    var height = 600; // This will be computed based on the input stream
     $('.backvideo').width(width);
     $('.backvideo').height(height);
     $('.bb-box').width(width);
     $('.bb-box').height(height);
     $('.boundaryBoxList').width(width);
     $('.boundaryBoxList').height(height);
+    // $('#myCanvas').width(width);
+    // $('#myCanvas').height(height);
     // |streaming| indicates whether or not we're currently streaming
     // video from the camera. Obviously, we start at false.
+
+    function bbClick(top, left, width, height) {
+
+      var primaryCanvas = document.getElementById("canvas");
+      // var primaryContext = primaryCanvas.getContext("2d");
+      var canvas = document.createElement("canvas");
+      var context = canvas.getContext("2d");
+      var canvasElement = $('#canvasImage');
+
+      canvasElement.empty();
+      // var images = primaryContext.getImageData(0, 0, primaryCanvas.width, primaryCanvas.height);
+
+      var imageData = new Image();
+      var imageRes = new Image();
+
+
+      dataUrl = primaryCanvas.toDataURL(),
+
+      imageData.src = dataUrl;
+
+      console.log(imageData);
+
+      canvas.width = width;
+      canvas.height = height;
+
+
+
+      context.drawImage(imageData,
+        -Math.floor(left), -Math.floor(top),
+        width, height,
+        );
+      imageRes.src = canvas.toDataURL();
+
+      canvasElement.append(imageRes);
+
+      // console.log(
+      //   top, left,
+      //   width, height,
+      //   0, 0,
+      //   width, height,
+      //   imageRes, imageData
+      // );
+    }
+
 
     var streaming = false;
 
@@ -112,7 +164,7 @@
         setTimeout(() => {
           takepicture()
           onVideoStarted()
-        }, 500);
+        }, 5000);
       }
 
       video.addEventListener('canplay', function (ev) {
@@ -160,7 +212,7 @@
     // other changes before drawing it.
 
     function takepicture() {
-      console.log("masuk");
+      //// console.log("masuk");
       video = document.getElementById('video');
       var context = canvas.getContext('2d');
       if (width && height) {
@@ -183,34 +235,69 @@
           }),
           cache: false,
           success: (data) => {
+            //// console.log("oke");
             data = JSON.parse(JSON.stringify(data))
-            if(!Object.keys(data).length) return; 
-            console.log(Object.keys(data).length, data[0].label, data[0].y, data[0].x, data[0].w, data[0].h)
-            // $(".boundaryBoxList").remove();
-            for (var i = 0; i < Object.keys(data).length; i++) {
-              console.log("creating bbox");
-              addBoundaryBox($('.boundaryBoxList'), data[i].label, data[i].y, data[i].x, data[i].w, data[i].h, i);
-              console.log("bbox created");
+            if(!Object.keys(data).length) {
+              if($('.boundaryBox').length > 0)
+                clearBoundaryBox($('.boundaryBoxList'));
+              return;
             }
+            //// console.log(Object.keys(data).length, data[0].label, data[0].y, data[0].x, data[0].w, data[0].h)
+            //// console.log("length1 : " + $('.boundaryBox').length );
+            //// console.log("length2 : " + Object.keys(data).length)
+            if($('.boundaryBox').length == Object.keys(data).length) {
+              for (var i = 0; i < Object.keys(data).length; i++) {
+                bbox = $(`#bbox-${i}`);
+                label = $(`#bbox-${i} > .boundary-box-label`);
+                bbox.css("top", data[i].y + "px");
+                bbox.css("left", data[i].x + "px");
+                bbox.css("width", data[i].w + "px");
+                bbox.css("height", data[i].h + "px");
+                label.text(data[i].label);
+              }
+            }
+            else{
+                clearBoundaryBox($('.boundaryBoxList'));
+                for (var i = 0; i < Object.keys(data).length; i++) {
+                  console.log("creating bbox");
+                  addBoundaryBox($('.boundaryBoxList'), data[i].label, data[i].y, data[i].x, data[i].w, data[i].h, i);
+                  console.log("bbox created");
+                }
+            }
+
+          },
+          failed: (data) => {
+            //// console.log("gagal");
+            clearBoundaryBox($('.boundaryBoxList'));
           }
-        }).done(function (o) {
-          console.log('saved');
+        }
+      ).done(function (o) {
+
+          //// console.log('saved');
         });
       } else {
         clearphoto();
       }
     }
 
-
+    function clearBoundaryBox(videoElement){
+      videoElement.empty();
+    }
     function addBoundaryBox(videoElement, label, top, left, width, height, numbering = 0) {
-      console.log('bbox process');
+      //// console.log('bbox process');
       var el = document.createElement("div");
       var elTitle = document.createElement("div");
       var classAtt = document.createAttribute("class");
+      var onClickAtt = document.createAttribute("onClick");
       var classAttElTittle = document.createAttribute("class");
-      classAtt.value = "boundaryBox bb-" + numbering;
+
+      classAtt.value = "boundaryBox";
+      onClickAtt.value = "bbClick(" + top + "," + left + "," + width + "," + height + ")";
       classAttElTittle.value = "boundary-box-label";
+
       el.setAttributeNode(classAtt);
+      el.setAttributeNode(onClickAtt);
+      el.id = "bbox-" + numbering;
       elTitle.setAttributeNode(classAttElTittle);
 
       // Set attribute
@@ -225,6 +312,8 @@
 
       videoElement.append(el);
     }
+
+
 
     // addBoundaryBox($('.boundaryBoxList'), "Camera", 50, 40, 34, 50, 1);
     // addBoundaryBox($('.boundaryBoxList'), "Camera", 80, 90, 95, 100, 2);

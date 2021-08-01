@@ -67,7 +67,7 @@ class SearchController extends Controller
 	{
 		// Process image for CTEBIR
 
-		$image = $req->images;  // your base64 encoded
+		$image = $req->images;  // base64 encoded
     $image = str_replace('data:image/png;base64,', '', $image);
     $image = str_replace(' ', '+', $image);
     $imageName = Str::random(10).'.'.'png';
@@ -95,7 +95,7 @@ class SearchController extends Controller
 			$searchData = [];
 			$data = [];
 
-			// 181, 177, 179
+			// Checked CTEBIR data
 			// dd($_searchData);
 			if($_searchData != null){
 				foreach($_searchData as $dataProduct => $key){
@@ -130,30 +130,6 @@ class SearchController extends Controller
 		}
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
-
-	public function vstest(Request $request)
-	{
-
-		$image = $request->images;  // your base64 encoded
-    $image = str_replace('data:image/png;base64,', '', $image);
-    $image = str_replace(' ', '+', $image);
-    $imageName = Str::random(10).'.'.'png';
-
-		// dd($request->images);
-
-		$putFile = Storage::put('images/search/' . $imageName, base64_decode($image));
-
-	}
 
 	/**
 	 * Display the specified resource.
@@ -171,39 +147,5 @@ class SearchController extends Controller
 		];
 
 		return view('ecommerce/visual-search-result', ['data' => $data]);
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
 	}
 }

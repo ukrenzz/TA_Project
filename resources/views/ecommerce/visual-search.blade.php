@@ -37,23 +37,13 @@
             <meta name="csrf-token" content="{{ csrf_token() }}" />
             <canvas id="canvas" style="display: none"></canvas>
             <div id="canvasImage" style="">
-              <img alt="" id="imageResult">
+              <img alt="" id="imageResult" style="display:none;">
             </div>
             <form class="mt-5" action="{{route('search.visual.result')}}" method="POST" id="visual_process">
               @csrf
               <input type="hidden" id="imageDataInput" name="images">
               <input type="hidden" id="categoryDataInput" name="category">
-              {{-- <input type="text" name="category" value=""> --}}
-              {{-- <select name="category" id="">
-                <option value="Camera" selected>Camera</option>
-                <option value="Keyboard">Keyboard</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Mouse">Mouse</option>
-                <option value="Tablet">Tablet</option>
-                <option value="Printer">Printer</option>
-              </select> --}}
             </form>
-            <button id="processed" class="btn_1"> Testing</button>
           </div>
           <div class="col-12">
             <video id="videoInput" width="320" height="240"></video>
@@ -289,47 +279,5 @@
         videoElement.append(el);
       }
       window.addEventListener('load', startup, false);
-  </script>
-
-  <script type="text/javascript">
-    $('#processed').click(function(e){
-      e.preventDefault();
-
-      var _category = $('select[name="category"]').val();
-      var _filename = _category + "\\" + $('input[name="filename"]').val();
-
-
-      // console.log($('input[name="filename"]').val(), $('input[name="category"]').val())
-      // console.log(_category, _filename);
-      $('#visual_process').submit();
-
-      // var _token = $("meta[name='csrf-token']").attr("content"");
-      // var _filename = "testing-1.png";
-      // var _category = "camera";
-
-      // // console.log($('textarea[name="note"]').val());
-
-      // $.ajax({
-      //   url: "",
-      //   type: 'POST',
-      //   data: {
-      //     "filename": _filename,
-      //     "category": _category,
-      //     "_token": _token,
-      //   },
-      //   success: function(data) {
-      //     swal({
-      //       title: "Product added to order!",
-      //       text: "Check cart for payment.",
-      //       icon: "success",
-      //       timer: 1300
-      //     });
-
-      //     setTimeout(function() {
-      //       top.location.href = "{{route('transaction.success')}}";
-      //     }, 500);
-      //   }
-      // });
-    });
   </script>
 @endsection

@@ -242,3 +242,7 @@ a.badge:hover, a.badge:focus {
   background: pink;
   font-size: .7rem;
 }
+
+#canvasImage > img{
+  display: none;
+}

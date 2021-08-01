@@ -3,7 +3,7 @@
 @section('title', "Neko eCommerce - Best solution for Accessories")
 
 @section('user_defined_style')
-<link href="{{ asset('ecommerce/css/cart.css') }}" rel="stylesheet">
+<link href="{{ asset('ecommerce/css/order.css') }}" rel="stylesheet">
 <link href="{{ asset('ecommerce/css/custom.css') }}" rel="stylesheet">
 @endsection
 
@@ -18,11 +18,11 @@
 					<li>Order</li>
 				</ul>
 			</div>
-			<h1>Transaction page</h1>
+			<h1>Order History</h1>
 		</div>
 		@if(($data->transactions)->isNotEmpty())
 		<!-- /page_header -->
-		<table class="table table-striped cart-list">
+		<table class="table table-striped order-list">
 			<thead>
 				<tr>
 					<th>Product</th>
@@ -41,10 +41,10 @@
 				@foreach ($data->transactions as $transaction)
 				<tr>
 					<td>
-						<div class="thumb_cart">
+						<div class="thumb_order">
 							<img src="{{ asset('ecommerce/img/products/product_placeholder_square_small.jpg') }}" data-src="{{ asset('ecommerce/img/products/shoes/1.jpg') }}" class="lazy" alt="Image">
 						</div>
-						<span class="item_cart"><a href="{{ route('product.show', ['id' => $transaction->product_id]) }}" class="product-link">{{$transaction->product_name}}</a></span>
+						<span class="item_order"><a href="{{ route('product.show', ['id' => $transaction->product_id]) }}" class="product-link">{{$transaction->product_name}}</a></span>
 					</td>
 					<td>
 						<strong> {{$transaction->id}}</strong>
@@ -93,7 +93,7 @@
 				@endforeach
 			</tbody>
 		</table>
-		<!-- /cart_actions -->
+		<!-- /order_actions -->
 		@else
 		<div class="d-flex justify-content-center">
 			<h5 style="color:#dd710e">You haven't make any transaction yet.</h5>

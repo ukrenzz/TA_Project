@@ -48,21 +48,6 @@ class CartController extends Controller
     return view('ecommerce.cart', compact('data'));
   }
 
-  function create()
-  {
-    return view('ecommerce.cart');
-  }
-
-  function edit()
-  {
-    return view('ecommerce.cart');
-  }
-
-  function refresh()
-  {
-
-  }
-
   function store(Request $request)
   {
     $isInCart = DB::table('carts')->where([['product_id', '=', $request['product_id']], ['user_id', '=', Auth::id()]])->get();

@@ -3,7 +3,7 @@
 @section('title', "Neko eCommerce - Best solution for Accessories")
 
 @section('user_defined_style')
-<link href="{{ asset('ecommerce/css/cart.css') }}" rel="stylesheet">
+<link href="{{ asset('ecommerce/css/wishlist.css') }}" rel="stylesheet">
 <link href="{{ asset('ecommerce/css/custom.css') }}" rel="stylesheet">
 @endsection
 
@@ -32,6 +32,8 @@
 				<tr>
 					<th>Product</th>
 					<th>Price</th>
+					<th></th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>

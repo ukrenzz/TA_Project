@@ -32,9 +32,15 @@
               </li>
               @if(Route::has('login'))
               @auth
-              <li>
-                <a href="{{ route('transaction.order') }}">Order</a>
-              </li>
+                @if (Auth::user()->role == 0)
+                  <li>
+                    <a href="{{ @route('admin.dashboard') }}">Manage</a>
+                  </li>
+                @elseif (Auth::user()->role == 1)
+                  <li>
+                    <a href="{{ @route('transaction.order') }}">Order</a>
+                  </li>
+                @endif
               <li>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf

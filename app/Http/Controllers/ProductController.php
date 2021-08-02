@@ -11,6 +11,8 @@ use App\Models\Category;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use App\Models\Feedback;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Image;
@@ -169,7 +171,7 @@ class ProductController extends Controller
             'url'         => $named,
             'width'       => $imageThumbnail->width(),
             'height'      => $imageThumbnail->height(),
-            'size'        => $filesize,            
+            'size'        => $filesize,
             'color_feat_r' => $color->r,
             'color_feat_g' => $color->g,
             'color_feat_b' => $color->b,
@@ -286,6 +288,58 @@ class ProductController extends Controller
     ];
     // dd($product);
     return view('ecommerce.detail', ['data' => $data]);
+  }
+
+  function inspect($id)
+  {
+    $categories = Category::orderBy('name', 'asc')->get();
+
+    $product = Product::join('categories', 'products.category_id', '=', 'categories.id')
+      ->select('products.name as name', 'categories.name as category', 'products.id as id', 'brand', 'unit', 'color', 'status', 'products.description as description', 'price', 'stock', 'discount', 'products.created_at', 'products.updated_at')
+      ->orderBy('name', 'asc')
+      ->where('products.id', $id)
+      ->get()->first();
+      $product->load('product_images');
+      // dd($product);
+
+    $feedbacks = Feedback::select('id', 'product_id')
+      ->where('product_id', $id)
+      ->count();
+
+    $ratings = Feedback::join('products', 'feedbacks.product_id', '=', 'products.id')
+      ->select('rate')
+      ->where('feedbacks.product_id', $id)
+      ->sum('rate');
+
+    $wishlists = Wishlist::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
+      ->orderBy('wishlists.created_at', 'desc')->get();
+
+    $cart = Cart::where([['user_id', '=', Auth::id()], ['product_id', '=', $id]])
+      ->orderBy('carts.created_at', 'desc')->get();
+
+    $transactions = Transaction::join('transaction_details', 'transactions.id', 'transaction_details.transaction_id')
+      ->select('product_id', 'transactions.status', 'quantity')
+      ->where('product_id', $id)
+      ->where('transactions.status', "confirmed")
+      ->sum('quantity');
+      // dd($transactions);
+
+    $isWishlist = false;
+    $isCart = false;
+    if ($wishlists->isNotEmpty()) $isWishlist = true;
+    if ($cart->isNotEmpty()) $isCart = true;
+
+    $data = (object)[
+      'product'     => $product,
+      'categories'  => $categories,
+      'feedbacks'   => $feedbacks,
+      'rating'      => $ratings,
+      'sales'       => $transactions,
+      'isWishlist'  => $isWishlist,
+      'isCart'      => $isCart,
+    ];
+    // dd($product);
+    return view('admin.products.detail', ['data' => $data]);
   }
 
   function categories($cat_id)

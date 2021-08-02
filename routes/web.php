@@ -55,6 +55,7 @@ Route::group(['middleware' => 'App\Http\Middleware\Admin'], function () {
 
   Route::name('product.')->group(function () {
     Route::get('/manage/product', [ProductController::class, 'manage'])->name('manage');
+    Route::get('/manage/product/detail/{id}', [ProductController::class, 'inspect'])->name('inspect');
     Route::get('/manage/product/create', [ProductController::class, 'create'])->name('create');
     Route::get('/manage/product/edit/{id}', [ProductController::class, 'edit'])->name('edit');
     Route::post('/manage/product/store', [ProductController::class, 'store'])->name('store');

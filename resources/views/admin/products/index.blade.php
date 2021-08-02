@@ -55,15 +55,17 @@
             <th>Color</th>
             <th>Description</th>
             <th>Created at</th>
-            <th></th>
+            <th ></th>
           </tr>
         </thead>
         <tbody>
           @foreach ($data->products as $product)
             <tr>
               <td class="text-center">{{ $loop->iteration }}</td>
-              <td>
-                <?php echo $product->product_name ?>
+              <td style="white-space: wrap !important; ">
+                <a href="{{ route('product.inspect', $product->id) }}">
+                  {{$product->product_name}}
+                </a>
               </td>
               <td>{{ $product->brand }}</td>
               <td>{{ $product->product_category }}</td>
@@ -80,7 +82,7 @@
                 <?php echo substr($product->description, 0, 20) . '...' ?>
               </td>
               <td class="text-center">{{ $product->created_at }}</td>
-              <td>
+              <td style="white-space: nowrap !important; ">
                 <a href="{{route('product.edit', ['id' => $product->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
 
                 <meta name="csrf-token" content="{{ csrf_token() }}"/>

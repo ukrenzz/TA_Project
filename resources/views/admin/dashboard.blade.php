@@ -3,68 +3,75 @@
 @section('page_title', "Dashboard")
 
 @section('content')
-<div class="row">
-	<div class="col-lg-12">
-		<div class="row">
-			<div class="col-md-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center">
-							<div>
-								<p class="m-b-0 text-muted">Sales</p>
-								<h2 class="m-b-0">$23,523</h2>
+	<div class="row">
+			<div class="col-md-6 col-lg-3">
+					<div class="card">
+							<div class="card-body">
+									<div class="media align-items-center">
+											<div class="avatar avatar-icon avatar-lg avatar-blue">
+													<i class="anticon anticon-dollar"></i>
+											</div>
+											<div class="m-l-15">
+													<h2 class="m-b-0">{{ "Rp. " . number_format($data->profits, 0, ',', '.') }}</h2>
+													<p class="m-b-0 text-muted">Profit</p>
+											</div>
+									</div>
 							</div>
-							<span class="badge badge-pill badge-cyan font-size-12">
-								<i class="anticon anticon-arrow-up"></i>
-								<span class="font-weight-semibold m-l-5">6.71%</span>
-							</span>
-						</div>
-						<div class="m-t-40">
-							<div class="d-flex justify-content-between">
-								<div class="d-flex align-items-center">
-									<span class="badge badge-primary badge-dot m-r-10"></span>
-									<span class="text-gray font-weight-semibold font-size-13">Monthly Goal</span>
-								</div>
-								<span class="text-dark font-weight-semibold font-size-13">70% </span>
-							</div>
-							<div class="progress progress-sm w-100 m-b-0 m-t-10">
-								<div class="progress-bar bg-primary" style="width: 70%"></div>
-							</div>
-						</div>
 					</div>
-				</div>
 			</div>
-			<div class="col-md-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center">
-							<div>
-								<p class="m-b-0 text-muted">Orders</p>
-								<h2 class="m-b-0">1,753</h2>
+			<div class="col-md-6 col-lg-3">
+					<div class="card">
+							<div class="card-body">
+									<div class="media align-items-center">
+											<div class="avatar avatar-icon avatar-lg {{ $data->growth > 0 ? 'avatar-cyan' : 'avatar-red' }}">
+												<i class="anticon {{ $data->growth > 0 ? 'anticon-rise' : 'anticon-fall' }}"></i>
+													{{-- <i class="anticon anticon-line-chart " {{ $data->growth < 0 ? "style='color:red;'" : "" }}></i> --}}
+											</div>
+											<div class="m-l-15">
+													<h2 class="m-b-0">
+														@if ($data->growth > 0)
+															{{ "+ " . number_format($data->growth, 2, ',', '.') . "%"}}
+														@else
+															{{ "- " . number_format(($data->growth) * -1, 2, ',', '.') . "%"}}
+														@endif
+													</h2>
+													<p class="m-b-0 text-muted">Growth</p>
+											</div>
+									</div>
 							</div>
-							<span class="badge badge-pill badge-red font-size-12">
-								<i class="anticon anticon-arrow-down"></i>
-								<span class="font-weight-semibold m-l-5">2.71%</span>
-							</span>
-						</div>
-						<div class="m-t-40">
-							<div class="d-flex justify-content-between">
-								<div class="d-flex align-items-center">
-									<span class="badge badge-warning badge-dot m-r-10"></span>
-									<span class="text-gray font-weight-semibold font-size-13">Monthly Goal</span>
-								</div>
-								<span class="text-dark font-weight-semibold font-size-13">45% </span>
-							</div>
-							<div class="progress progress-sm w-100 m-b-0 m-t-10">
-								<div class="progress-bar bg-warning" style="width: 45%"></div>
-							</div>
-						</div>
 					</div>
-				</div>
 			</div>
-		</div>
+			<div class="col-md-6 col-lg-3">
+					<div class="card">
+							<div class="card-body">
+									<div class="media align-items-center">
+											<div class="avatar avatar-icon avatar-lg avatar-gold">
+													<i class="anticon anticon-profile"></i>
+											</div>
+											<div class="m-l-15">
+													<h2 class="m-b-0">{{ number_format(($data->order), 0, ',', '.') }}</h2>
+													<p class="m-b-0 text-muted">Orders</p>
+											</div>
+									</div>
+							</div>
+					</div>
+			</div>
+			<div class="col-md-6 col-lg-3">
+					<div class="card">
+							<div class="card-body">
+									<div class="media align-items-center">
+											<div class="avatar avatar-icon avatar-lg avatar-purple">
+													<i class="anticon anticon-user"></i>
+											</div>
+											<div class="m-l-15">
+													<h2 class="m-b-0">{{ number_format(count($data->customers), 0, ',', '.') }}</h2>
+													<p class="m-b-0 text-muted">Customers</p>
+											</div>
+									</div>
+							</div>
+					</div>
+			</div>
 	</div>
-</div>
 <div class="row">
 	<div class="col-lg-4">
 		<div class="card">
@@ -85,7 +92,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($data->users as $user)
+								@foreach($data->customers as $user)
 								<tr>
 									<td>{{$user->id}}</td>
 									<td>

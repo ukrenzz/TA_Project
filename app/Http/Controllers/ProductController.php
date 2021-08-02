@@ -322,7 +322,6 @@ class ProductController extends Controller
       ->where('product_id', $id)
       ->where('transactions.status', "confirmed")
       ->sum('quantity');
-      // dd($transactions);
 
     $isWishlist = false;
     $isCart = false;

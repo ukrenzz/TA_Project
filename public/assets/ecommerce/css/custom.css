@@ -246,3 +246,7 @@ a.badge:hover, a.badge:focus {
 #canvasImage > img{
   display: none;
 }
+
+.colors-danger{
+  color:#c0392b;
+}

@@ -130,6 +130,41 @@
   );
 
   $(document).ready(function() {
+    $('.btn-delete').click(function() {
+      swal({
+        title: "Anda yakin ingin menghapus data ini?",
+        text: "Setelah dihapus, data tidak dapat dikembalikan!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          var id = $(this).data("id");
+          var token = $("meta[name='csrf-token']").attr("content");
+
+          $.ajax({
+            url: "/manage/product/delete/" + id,
+            type: 'DELETE',
+            data: {
+              "id": id,
+              "_token": token,
+            },
+            success: function() {
+              swal("Data berhasil dihapus!", {
+                icon: "success",
+              });
+              setTimeout(function() {
+                top.location.href = '';
+              }, 1000);
+            }
+          });
+        } else {
+          swal("Penghapusan batal!");
+        }
+      });
+    });
+
     var products_table = $('#products-data-table').DataTable({
       "columns": [{
           'searchable': false,
@@ -175,40 +210,6 @@
 
     $('#products-search').keyup(function() {
       products_table.search($(this).val()).draw();
-    });
-    $('.btn-delete').click(function() {
-      swal({
-          title: "Anda yakin ingin menghapus data ini?",
-          text: "Setelah dihapus, data tidak dapat dikembalikan!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-            var id = $(this).data("id");
-            var token = $("meta[name='csrf-token']").attr("content");
-
-            $.ajax({
-              url: "/manage/product/delete/" + id,
-              type: 'DELETE',
-              data: {
-                "id": id,
-                "_token": token,
-              },
-              success: function() {
-                swal("Data berhasil dihapus!", {
-                  icon: "success",
-                });
-                setTimeout(function() {
-                  top.location.href = '';
-                }, 1000);
-              }
-            });
-          } else {
-            swal("Penghapusan batal!");
-          }
-        });
     });
   });
 </script>

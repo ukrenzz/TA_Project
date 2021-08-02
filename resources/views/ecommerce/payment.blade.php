@@ -4,7 +4,8 @@
 
 @section('user_defined_style')
 <link href="{{ asset('ecommerce/css/checkout.css') }}" rel="stylesheet">
-<link href="{{ asset('ecommerce/css/cart.css') }}" rel="stylesheet">
+<link href="{{ asset('ecommerce/css/checkout-table.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('ecommerce/css/cart.css') }}" rel="stylesheet"> --}}
 <link href="{{ asset('ecommerce/css/listing.css') }}" rel="stylesheet">
 <link href="{{ asset('ecommerce/css/custom.css') }}" rel="stylesheet">
 @endsection
@@ -34,7 +35,7 @@
         {{-- Item list --}}
         <div class="item-list-checkout-box box_general">
           <div class="item-list-checkout mb-3">
-            <table class="table table-striped cart-list">
+            <table class="table table-striped checkout-list">
               <thead>
                 <tr>
                   <th>Product</th>
@@ -57,14 +58,14 @@
 
                 <tr>
                   <td>
-                    <div class="thumb_cart">
+                    <div class="thumb_checkout">
                       @if ($product->thumbnail != "" || $product->thumbnail != null)
         								<img src="{{ url('images/products/' . $product->thumbnail) }}" data-src="{{ url('images/products/' . $product->thumbnail) }}" class="lazy" alt="Image">
         							@else
         								<img src="{{ url('images/products/placeholder_medium.jpg') }}" data-src="{{ url('images/products/placeholder_medium.jpg') }}" class="lazy" alt="Image">
         							@endif
                     </div>
-                    <span class="item_cart"><a href="{{ route('product.show',['id' => $product->product_id]) }}" class="product-link">
+                    <span class="item_checkout"><a href="{{ route('product.show',['id' => $product->product_id]) }}" class="product-link">
                         <?php echo substr($product->product_name, 0, 30) . '...' ?>
                       </a></span>
                   </td>

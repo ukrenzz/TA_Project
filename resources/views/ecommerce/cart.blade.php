@@ -43,7 +43,9 @@
 				<tr>
 					<td class="text-center">
 						<meta name="csrf-token" content="{{ csrf_token() }}" />
-						<input type="checkbox" name="cartbox" class="form-control" data-id="{{$cart->product_id}}" data-quantity="{{ isset($cart->quantity) ? $cart->quantity : 0 }}" style="height: 20px; width:20px;">
+						<div class="col-12 text-center">
+							<input type="checkbox" name="cartbox" class="form-control" data-id="{{$cart->product_id}}" data-quantity="{{ isset($cart->quantity) ? $cart->quantity : 0 }}" style="height: 20px; width:20px;">
+						</div>
 					</td>
 					<td>
 						<div class="thumb_cart">

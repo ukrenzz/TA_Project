@@ -1,12 +1,12 @@
 /*============================================================================================*/
-/* CART PAGE */
+/* order PAGE */
 /*============================================================================================*/
-.table.cart-list {
+.table.order-list {
   margin: 0;
 }
 
-.table.cart-list th,
-.table.options_cart th {
+.table.order-list th,
+.table.options_order th {
   background-color: transparent;
   text-transform: uppercase;
   font-weight: normal;
@@ -15,80 +15,80 @@
   padding-top: 0;
 }
 
-.table.cart-list th:nth-child(1) {
-  width: 5%;
-}
-.table.cart-list th:nth-child(2) {
+.table.order-list th:nth-child(1) {
   width: 70%;
 }
-.table.cart-list th:nth-child(3) {
+.table.order-list th:nth-child(2) {
   width: 15%;
 }
-.table.cart-list th:nth-child(4) {
+.table.order-list th:nth-child(3) {
+  width: 15%;
+}
+.table.order-list th:nth-child(4) {
   width: 20%;
 }
-.table.cart-list th:nth-child(5) {
+.table.order-list th:nth-child(5) {
   width: 5%;
 }
 
-.table.cart-list td {
+.table.order-list td {
   vertical-align: middle;
   border: 0;
 }
-.table.cart-list td strong {
+.table.order-list td strong {
   font-weight: 500;
 }
-.table.cart-list td.options a {
+.table.order-list td.options a {
   display: inline-block;
   margin-right: 10px;
 }
-.table.cart-list td.options a i {
+.table.order-list td.options a i {
   font-size: 18px;
   font-size: 1.125rem;
 }
-.table.cart-list td .numbers-row {
+.table.order-list td .numbers-row {
   background-color: #fff;
 }
 
-.table.cart-list.table-striped tbody tr:nth-of-type(odd) {
+.table.order-list.table-striped tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, 0.045);
 }
 
 @media (max-width: 767px) {
-  .table.cart-list,
-  .table.cart-list thead,
-  .table.cart-list tbody,
-  .table.cart-list th,
-  .table.cart-list td,
-  .table.cart-list tr {
+  .table.order-list,
+  .table.order-list thead,
+  .table.order-list tbody,
+  .table.order-list th,
+  .table.order-list td,
+  .table.order-list tr {
     display: block;
     border: 0;
   }
 
-  .table.cart-list thead tr {
+  .table.order-list thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
 
-  .table.cart-list tr {
+  .table.order-list tr {
     border: 1px solid #ddd;
   }
 }
 @media (max-width: 767px) and (max-width: 991px) {
-  .table.cart-list tr {
+  .table.order-list tr {
     margin-bottom: 20px;
   }
 }
 
 @media (max-width: 767px) {
-  .table.cart-list td {
+  .table.order-list td {
     border: none;
     border-bottom: 1px solid #ddd;
     position: relative;
     padding-left: 35%;
   }
-  .table.cart-list td:before {
+  .table.order-list td:before {
     position: absolute;
     top: 12px;
     left: 12px;
@@ -97,35 +97,48 @@
     white-space: nowrap;
   }
 
-  .table.cart-list td:nth-of-type(1):before, .table.cart-list td:nth-of-type(2):before, .table.cart-list td:nth-of-type(3):before, .table.cart-list td:nth-of-type(4):before, .table.cart-list td:nth-of-type(5):before {
+  .table.order-list td:nth-of-type(1):before, .table.order-list td:nth-of-type(2):before, .table.order-list td:nth-of-type(3):before, .table.order-list td:nth-of-type(4):before, .table.order-list td:nth-of-type(5):before {
     font-weight: 700;
     color: #111;
   }
 
-  .table.cart-list td:nth-of-type(1):before {
-    content: "";
-  }
-  .table.cart-list td:nth-of-type(2):before {
+  .table.order-list td:nth-of-type(1):before {
     content: "Product";
   }
+  .table.order-list td:nth-of-type(2):before {
+    content: "Transaction ID";
+  }
 
-  .table.cart-list td:nth-of-type(3):before {
+  .table.order-list td:nth-of-type(3):before {
     content: "Price";
   }
 
-  .table.cart-list td:nth-of-type(4):before {
+  .table.order-list td:nth-of-type(4):before {
     content: "Quantity";
   }
 
-  .table.cart-list td:nth-of-type(5):before {
-    content: "Subtotal";
+  .table.order-list td:nth-of-type(5):before {
+    content: "PPN";
+  }
+  .table.order-list td:nth-of-type(6):before {
+    content: "Discount";
+    font-weight: bold;
+  }
+  .table.order-list td:nth-of-type(7):before {
+    content: "Delivery";
+    font-weight: bold;
   }
 
-  .table.cart-list td:nth-of-type(6):before {
-    content: "";
+  .table.order-list td:nth-of-type(8):before {
+    content: "Status";
+    font-weight: bold;
+  }
+  .table.order-list td:nth-of-type(9):before {
+    content: "Subtotal";
+    font-weight: bold;
   }
 }
-.thumb_cart {
+.thumb_order {
   width: 60px;
   height: 60px;
   overflow: hidden;
@@ -136,7 +149,7 @@
   padding: 5px;
   box-sizing: content-box;
 }
-.thumb_cart img {
+.thumb_order img {
   width: 60px;
   height: auto;
   position: absolute;
@@ -149,12 +162,12 @@
   transform: translate(-50%, -50%) scale(1.1);
 }
 @media (max-width: 991px) {
-  .thumb_cart {
+  .thumb_order {
     display: none;
   }
 }
 
-.item_cart {
+.item_order {
   float: left;
   width: 65%;
   margin: 25px 0 0 10px;
@@ -162,51 +175,51 @@
   font-weight: 500;
 }
 @media (max-width: 991px) {
-  .item_cart {
+  .item_order {
     margin: 5px 0 0 0;
     width: 100%;
     float: none;
   }
 }
 
-.cart_actions .apply-coupon .form-control {
+.order_actions .apply-coupon .form-control {
   margin-right: 10px;
   height: 40px;
 }
 @media (max-width: 575px) {
-  .cart_actions .apply-coupon .form-control {
+  .order_actions .apply-coupon .form-control {
     margin: 0 0 5px 0;
   }
 }
 @media (max-width: 575px) {
-  .cart_actions .btn_1 {
+  .order_actions .btn_1 {
     width: 100%;
     margin-bottom: 15px;
   }
 }
 
-.box_cart {
+.box_order {
   background-color: #fff;
   padding: 30px 0;
   text-align: right;
 }
 @media (max-width: 767px) {
-  .box_cart {
+  .box_order {
     padding: 30px 0;
   }
 }
-.box_cart h5 {
+.box_order h5 {
   margin-top: 0;
   padding: 0;
   text-transform: uppercase;
 }
-.box_cart small {
+.box_order small {
   text-align: center;
   line-height: 1.1;
   display: block;
   margin-top: 10px;
 }
-.box_cart ul {
+.box_order ul {
   list-style: none;
   margin: 0 0 15px 0;
   padding: 0;
@@ -214,10 +227,10 @@
   font-size: 16px;
   font-size: 1rem;
 }
-.box_cart ul li span {
+.box_order ul li span {
   float: left;
 }
-.box_cart ul li:last-child {
+.box_order ul li:last-child {
   margin-top: 10px;
   text-transform: uppercase;
   font-weight: bold;

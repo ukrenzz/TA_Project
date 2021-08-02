@@ -201,7 +201,7 @@
 
           req = $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:5000/api/v1/yolo",
+            url: "https://neko.project:5000/api/v1/yolo",
             contentType: 'application/json;charset=UTF-8',
             headers: {
               'Access-Control-Allow-Origin': '*',

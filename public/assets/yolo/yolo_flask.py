@@ -56,4 +56,4 @@ def api_all():
   res = process2(image)
   return jsonify(res)
 
-app.run()
+app.run('neko.project', 5000)
